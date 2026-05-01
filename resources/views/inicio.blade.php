@@ -2,35 +2,104 @@
 
 @section('contenido')
 
-<div class="container py-5">
-    <div class="row align-items-center" style="min-height: 80vh;">
-        <div class="col-md-6">
-            <p style="letter-spacing: 4px; color: #aaa; font-size: 0.8rem;">NUEVA COLECCIÓN 2026</p>
-            <h1 style="font-size: 4rem; font-weight: 300; letter-spacing: 4px;">LISBON</h1>
-            <p style="color: #aaa; line-height: 1.8;">Ropa minimalista para quienes valoran la calidad y el estilo atemporal. Cada prenda es una declaración de elegancia.</p>
-            <a href="/catalogo" class="btn mt-3" style="border: 1px solid #f0f0f0; color: #f0f0f0; letter-spacing: 3px; border-radius: 0;">VER COLECCIÓN</a>
-        </div>
-        <div class="col-md-6 text-center">
-            <img src="/img/Gemini_Generated_Image_vbanc9vbanc9vban.png" style="width: 100%; height: 500px; object-fit: contain; background: #f5f5f0;">
-        </div>
+{{-- HERO PANTALLA COMPLETA --}}
+<div style="position: relative; width: 100%; height: 90vh; overflow: hidden;">
+    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600" 
+         style="width: 100%; height: 100%; object-fit: cover;">
+    <div style="position: absolute; bottom: 40px; left: 40px;">
+        <a href="/catalogo" class="btn me-2" style="background: #fff; color: #000; letter-spacing: 3px; border-radius: 0; font-size: 0.8rem;">SHOP MEN</a>
+        <a href="/catalogo" class="btn" style="background: #fff; color: #000; letter-spacing: 3px; border-radius: 0; font-size: 0.8rem;">SHOP WOMEN</a>
     </div>
+</div>
 
-    <hr style="border-color: #222; margin: 5rem 0;">
+{{-- SECCION NEW IN --}}
+<div style="background: #0a0a0a; padding: 4rem 0;">
+    <div style="background: #fff; padding: 12px 0; margin-bottom: 3rem;">
+        <p class="text-center" style="letter-spacing: 6px; font-size: 0.9rem; color: #000; margin: 0;">NEW IN</p>
+    </div>
+        <div class="row g-4">
+            <div class="col-md-3">
+                <img src="/img/campera1.jpg" style="width: 100%; height: 500px; object-fit: cover;">
+                <p class="mt-2 text-center" style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">CAMPERA OVERSIZE</p>
+            </div>
+            <div class="col-md-3">
+                <img src="/img/remera1.jpg" style="width: 100%; height: 500px; object-fit: cover;">
+                <p class="mt-2 text-center" style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">REMERA NEGRA</p>
+            </div>
+            <div class="col-md-3">
+                <img src="/img/pantalon1.jpeg" style="width: 100%; height: 500px; object-fit: cover;">
+                <p class="mt-2 text-center" style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">JEAN SLIM</p>
+            </div>
+            <div class="col-md-3">
+                <img src="/img/buzo1.jpg" style="width: 100%; height: 500px; object-fit: cover;">
+                <p class="mt-2 text-center" style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">BUZO ZIP NEGRO</p>
+            </div>
+        </div>
+</div>
 
-    <div class="row text-center g-4">
-        <div class="col-md-4">
-            <p style="letter-spacing: 3px; font-size: 0.8rem; color: #aaa;">ENVÍOS</p>
-            <p style="color: #555; font-size: 0.9rem;">Envíos a todo el país en 48hs</p>
+{{-- CINTA DE PRODUCTOS --}}
+<div style="background: #0a0a0a; padding: 4rem 0; overflow: hidden;">
+    <div style="background: #fff; padding: 12px 0; margin-bottom: 3rem;">
+        <p class="text-center" style="letter-spacing: 6px; font-size: 0.9rem; color: #000; margin: 0;">TAMBIÉN TE PUEDE GUSTAR</p>
+    </div>
+    <div style="display: flex; animation: cinta 20s linear infinite; width: max-content;">
+        <div style="width: 400px; padding: 0 10px;">
+            <img src="/img/campera2.jpg" style="width: 100%; height: 450px; object-fit: cover;">
+            <p class="mt-2 text-center" style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">CAMPERA CUERO</p>
         </div>
-        <div class="col-md-4">
-            <p style="letter-spacing: 3px; font-size: 0.8rem; color: #aaa;">CALIDAD</p>
-            <p style="color: #555; font-size: 0.9rem;">Materiales premium seleccionados</p>
+        <div style="width: 400px; padding: 0 10px;">
+            <img src="/img/remera2.jpg" style="width: 100%; height: 450px; object-fit: cover;">
+            <p class="mt-2 text-center" style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">REMERA OFF WHITE</p>
         </div>
-        <div class="col-md-4">
-            <p style="letter-spacing: 3px; font-size: 0.8rem; color: #aaa;">DEVOLUCIONES</p>
-            <p style="color: #555; font-size: 0.9rem;">30 días para cambios y devoluciones</p>
+        <div style="width: 400px; padding: 0 10px;">
+            <img src="/img/buzo2.jpg" style="width: 100%; height: 450px; object-fit: cover;">
+            <p class="mt-2 text-center" style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">BUZO ZIP BLANCO</p>
+        </div>
+        <div style="width: 400px; padding: 0 10px;">
+            <img src="/img/pantalon2.jpeg" style="width: 100%; height: 450px; object-fit: cover;">
+            <p class="mt-2 text-center" style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">JEAN WIDE LEG</p>
+        </div>
+        <div style="width: 400px; padding: 0 10px;">
+            <img src="/img/campera3.jpg" style="width: 100%; height: 450px; object-fit: cover;">
+            <p class="mt-2 text-center" style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">CAMPERA DENIM</p>
+        </div>
+        <div style="width: 400px; padding: 0 10px;">
+            <img src="/img/remera3.jpeg" style="width: 100%; height: 450px; object-fit: cover;">
+            <p class="mt-2 text-center" style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">REMERA BALENCIAGA</p>
+        </div>
+        {{-- Repetimos para que sea infinito --}}
+        <div style="width: 400px; padding: 0 10px;">
+            <img src="/img/campera2.jpg" style="width: 100%; height: 450px; object-fit: cover;">
+            <p class="mt-2 text-center" style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">CAMPERA CUERO</p>
+        </div>
+        <div style="width: 400px; padding: 0 10px;">
+            <img src="/img/remera2.jpg" style="width: 100%; height: 450px; object-fit: cover;">
+            <p class="mt-2 text-center" style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">REMERA OFF WHITE</p>
+        </div>
+        <div style="width: 400px; padding: 0 10px;">
+            <img src="/img/buzo2.jpg" style="width: 100%; height: 450px; object-fit: cover;">
+            <p class="mt-2 text-center" style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">BUZO ZIP BLANCO</p>
+        </div>
+        <div style="width: 400px; padding: 0 10px;">
+            <img src="/img/pantalon2.jpeg" style="width: 100%; height: 450px; object-fit: cover;">
+            <p class="mt-2 text-center" style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">JEAN WIDE LEG</p>
+        </div>
+        <div style="width: 400px; padding: 0 10px;">
+            <img src="/img/campera3.jpg" style="width: 100%; height: 450px; object-fit: cover;">
+            <p class="mt-2 text-center" style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">CAMPERA DENIM</p>
+        </div>
+        <div style="width: 400px; padding: 0 10px;">
+            <img src="/img/remera3.jpeg" style="width: 100%; height: 450px; object-fit: cover;">
+            <p class="mt-2 text-center" style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">REMERA BALENCIAGA</p>
         </div>
     </div>
 </div>
+
+<style>
+@keyframes cinta {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+</style>
 
 @endsection
