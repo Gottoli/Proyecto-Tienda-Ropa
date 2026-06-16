@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\ConsultaController;
 
 // Rutas públicas del sitio
 Route::get('/', function () { return view('inicio'); });
@@ -15,7 +16,8 @@ Route::get('/contacto', function () { return view('contacto'); });
 Route::get('/terminos', function () { return view('terminos'); });
 Route::get('/catalogo', [ProductController::class, 'index']);
 Route::get('/catalogo/{id}', [ProductController::class, 'show']);
-Route::get('/consultas', function () { return view('consultas'); });
+Route::get('/consultas', [ConsultaController::class, 'index']);
+Route::post('/consultas', [ConsultaController::class, 'store']);
 
 // Rutas de autenticación (públicas)
 Route::get('/registro', [AuthController::class, 'formularioRegistro']);
@@ -27,9 +29,19 @@ Route::post('/logout', [AuthController::class, 'logout']);
 // Rutas protegidas - solo admin
 Route::middleware(['auth', 'rol:admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'dashboard']);
+     // CRUD productos
+    Route::get('/admin/productos', [AdminController::class, 'productos']);
+    Route::get('/admin/productos/crear', [AdminController::class, 'crearProducto']);
+    Route::post('/admin/productos', [AdminController::class, 'guardarProducto']);
+    Route::get('/admin/productos/{id}/editar', [AdminController::class, 'editarProducto']);
+    Route::put('/admin/productos/{id}', [AdminController::class, 'actualizarProducto']);
+    Route::delete('/admin/productos/{id}', [AdminController::class, 'eliminarProducto']);
+    Route::put('/admin/productos/{id}/activar', [AdminController::class, 'activarProducto']);
+    Route::get('/admin/consultas', [AdminController::class, 'consultas']);
+    Route::put('/admin/consultas/{id}/leer', [AdminController::class, 'marcarLeida']);
 });
 
-// Rutas protegidas - solo cliente
+ //Rutas protegidas - solo cliente
 Route::middleware(['auth', 'rol:cliente'])->group(function () {
     Route::get('/cliente', [ClienteController::class, 'index']);
     Route::get('/carrito', [CartController::class, 'index']);
