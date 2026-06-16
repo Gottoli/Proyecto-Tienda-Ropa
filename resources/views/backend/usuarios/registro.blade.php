@@ -1,61 +1,67 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro - Lisbon</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-dark text-white">
+@extends('layout')
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <h2 class="mb-4">Registrarse</h2>
+@section('contenido')
 
-            {{-- Errores generales --}}
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
+<div style="min-height: 75vh; display: flex; align-items: center; background: var(--bone);">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5 col-lg-4">
+
+                <div style="background: var(--cream); border: 1px solid var(--border); padding: 3rem;">
+
+                    <p class="page-eyebrow text-center" style="margin-bottom: 0.4rem;">ACCESO</p>
+                    <h2 class="page-title text-center" style="font-size: 1.7rem; margin-bottom: 2.5rem;">CREAR CUENTA</h2>
+
+                    @if($errors->any())
+                        <div class="lisbon-error">
+                            @foreach($errors->all() as $error)
+                                <div>{{ $error }}</div>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    <form action="/registrar" method="POST">
+                        @csrf
+
+                        <div class="mb-4">
+                            <label class="lisbon-label">NOMBRE Y APELLIDO</label>
+                            <input type="text" name="name" value="{{ old('name') }}" class="lisbon-input">
+                            @error('name') <small style="color: #8A4A3A; font-size: 0.78rem;">{{ $message }}</small> @enderror
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="lisbon-label">CORREO ELECTRÓNICO</label>
+                            <input type="email" name="email" value="{{ old('email') }}" class="lisbon-input">
+                            @error('email') <small style="color: #8A4A3A; font-size: 0.78rem;">{{ $message }}</small> @enderror
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="lisbon-label">CONTRASEÑA</label>
+                            <input type="password" name="password" class="lisbon-input">
+                            @error('password') <small style="color: #8A4A3A; font-size: 0.78rem;">{{ $message }}</small> @enderror
+                        </div>
+
+                        <div class="mb-5">
+                            <label class="lisbon-label">CONFIRMAR CONTRASEÑA</label>
+                            <input type="password" name="password_confirmation" class="lisbon-input">
+                        </div>
+
+                        <button type="submit" class="btn-lisbon-filled" style="width: 100%; text-align: center; padding: 14px;">
+                            REGISTRARSE
+                        </button>
+                    </form>
+
+                    <hr class="lisbon-hr">
+
+                    <p style="color: var(--text-3); font-size: 0.82rem; text-align: center; letter-spacing: 1px; margin: 0;">
+                        ¿Ya tenés cuenta?
+                        <a href="/login" style="color: var(--olive); letter-spacing: 2px; text-decoration: none;">INICIÁ SESIÓN</a>
+                    </p>
+
                 </div>
-            @endif
-
-            <form action="/registrar" method="POST">
-                @csrf
-
-                <div class="mb-3">
-                    <label>Nombre y Apellido</label>
-                    <input type="text" name="name" class="form-control" value="{{ old('name') }}">
-                    @error('name') <small class="text-danger">{{ $message }}</small> @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label>Correo electrónico</label>
-                    <input type="email" name="email" class="form-control" value="{{ old('email') }}">
-                    @error('email') <small class="text-danger">{{ $message }}</small> @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label>Contraseña</label>
-                    <input type="password" name="password" class="form-control">
-                    @error('password') <small class="text-danger">{{ $message }}</small> @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label>Confirmar contraseña</label>
-                    <input type="password" name="password_confirmation" class="form-control">
-                </div>
-
-                <button type="submit" class="btn btn-primary">Registrarse</button>
-                <a href="/login" class="btn btn-secondary">Ya tengo cuenta</a>
-            </form>
+            </div>
         </div>
     </div>
 </div>
 
-</body>
-</html>
+@endsection

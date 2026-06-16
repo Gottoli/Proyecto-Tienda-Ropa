@@ -1,60 +1,58 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Lisbon</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-dark text-white">
+@extends('layout')
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <h2 class="mb-4">Iniciar sesión</h2>
+@section('contenido')
 
-            @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
+<div style="min-height: 75vh; display: flex; align-items: center; background: var(--bone);">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-5 col-lg-4">
+
+                <div style="background: var(--cream); border: 1px solid var(--border); padding: 3rem;">
+
+                    <p class="page-eyebrow text-center" style="margin-bottom: 0.4rem;">BIENVENIDO</p>
+                    <h2 class="page-title text-center" style="font-size: 1.7rem; margin-bottom: 2.5rem;">INICIAR SESIÓN</h2>
+
+                    @if(session('success'))
+                        <div class="lisbon-success">{{ session('success') }}</div>
+                    @endif
+
+                    @if($errors->any())
+                        <div class="lisbon-error">
+                            @foreach($errors->all() as $error)
+                                <div>{{ $error }}</div>
+                            @endforeach
+                        </div>
+                    @endif
+
+                    <form action="/autenticar" method="POST">
+                        @csrf
+
+                        <div class="mb-4">
+                            <label class="lisbon-label">CORREO ELECTRÓNICO</label>
+                            <input type="email" name="email" value="{{ old('email') }}" class="lisbon-input">
+                        </div>
+
+                        <div class="mb-5">
+                            <label class="lisbon-label">CONTRASEÑA</label>
+                            <input type="password" name="password" class="lisbon-input">
+                        </div>
+
+                        <button type="submit" class="btn-lisbon-filled" style="width: 100%; text-align: center; padding: 14px;">
+                            INICIAR SESIÓN
+                        </button>
+                    </form>
+
+                    <hr class="lisbon-hr">
+
+                    <p style="color: var(--text-3); font-size: 0.82rem; text-align: center; letter-spacing: 1px; margin: 0;">
+                        ¿No tenés cuenta?
+                        <a href="/registro" style="color: var(--olive); letter-spacing: 2px; text-decoration: none;">REGISTRATE</a>
+                    </p>
+
                 </div>
-            @endif
-
-            @if ($errors->any())
-                <div class="alert alert-danger">
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-
-            <form action="/autenticar" method="POST">
-                @csrf
-
-                <div class="mb-3">
-                    <label>Correo electrónico</label>
-                    <input type="email" name="email" class="form-control" value="{{ old('email') }}">
-                    @error('email') <small class="text-danger">{{ $message }}</small> @enderror
-                </div>
-
-                <div class="mb-3">
-                    <label>Contraseña</label>
-                    <input type="password" name="password" class="form-control">
-                </div>
-
-                <button type="submit" class="btn btn-primary">Iniciar sesión</button>
-                <a href="/registro" class="btn btn-outline-light ms-2">Crear cuenta</a>
-
-                <p class="mt-3" style="color: #aaa; font-size: 0.85rem;">
-                    ¿No tenés cuenta? 
-                    <a href="/registro" style="color: #fff; letter-spacing: 2px;">REGISTRATE</a>
-                </p>
-
-            </form>
+            </div>
         </div>
     </div>
 </div>
 
-</body>
-</html>
+@endsection

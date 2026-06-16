@@ -1,36 +1,30 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consultas - Admin Lisbon</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-dark text-white">
+@extends('layout')
 
-<nav class="navbar navbar-dark bg-black px-4">
-    <span class="navbar-brand">Lisbon Admin</span>
-    <div>
-        <a href="/admin" class="btn btn-sm btn-outline-light me-2">DASHBOARD</a>
-        <span class="me-3">{{ auth()->user()->name }}</span>
-        <form action="/logout" method="POST" class="d-inline">
-            @csrf
-            <button type="submit" class="btn btn-sm btn-danger">Cerrar sesión</button>
-        </form>
+@section('contenido')
+
+<div class="admin-subnav">
+    <div class="container d-flex align-items-center gap-4">
+        <span class="subnav-label">ADMIN</span>
+        <a href="/admin">DASHBOARD</a>
+        <a href="/admin/productos">PRODUCTOS</a>
+        <a href="/admin/consultas" class="is-active">CONSULTAS</a>
+        <a href="/admin/usuarios">USUARIOS</a>
     </div>
-</nav>
+</div>
 
-<div class="container mt-5">
-    <h2 class="mb-4">Consultas Recibidas</h2>
+<div class="container py-5">
+
+    <p class="page-eyebrow">ADMIN</p>
+    <h2 class="page-title" style="font-size: 2rem; margin-bottom: 2.5rem;">CONSULTAS</h2>
 
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="lisbon-success">{{ session('success') }}</div>
     @endif
 
     @if($consultas->isEmpty())
-        <p style="color: #aaa; letter-spacing: 2px;">NO HAY CONSULTAS AÚN.</p>
+        <p style="color: var(--text-3); letter-spacing: 3px; font-size: 0.85rem; margin-top: 2rem;">NO HAY CONSULTAS AÚN.</p>
     @else
-        <table class="table table-dark table-bordered">
+        <table class="lisbon-table">
             <thead>
                 <tr>
                     <th>#</th>
@@ -45,18 +39,18 @@
             </thead>
             <tbody>
                 @foreach($consultas as $consulta)
-                <tr style="{{ !$consulta->leida ? 'border-left: 3px solid #fff;' : '' }}">
-                    <td>{{ $consulta->id }}</td>
-                    <td>{{ $consulta->nombre }}</td>
+                <tr style="{{ !$consulta->leida ? 'border-left: 2px solid var(--olive);' : '' }}">
+                    <td style="color: var(--text-3);">{{ $consulta->id }}</td>
+                    <td style="color: var(--text-1); letter-spacing: 1px;">{{ $consulta->nombre }}</td>
                     <td>{{ $consulta->email }}</td>
-                    <td>{{ $consulta->motivo }}</td>
-                    <td style="max-width: 250px;">{{ Str::limit($consulta->consulta, 80) }}</td>
-                    <td>{{ $consulta->created_at->format('d/m/Y H:i') }}</td>
+                    <td style="letter-spacing: 1px;">{{ $consulta->motivo }}</td>
+                    <td style="max-width: 240px; color: var(--text-3);">{{ Str::limit($consulta->consulta, 70) }}</td>
+                    <td style="color: var(--text-3); white-space: nowrap; font-size: 0.8rem;">{{ $consulta->created_at->format('d/m/Y H:i') }}</td>
                     <td>
                         @if($consulta->leida)
-                            <span class="badge bg-secondary">LEÍDA</span>
+                            <span class="badge-muted">LEÍDA</span>
                         @else
-                            <span class="badge bg-warning text-dark">NUEVA</span>
+                            <span class="badge-warm">NUEVA</span>
                         @endif
                     </td>
                     <td>
@@ -64,7 +58,7 @@
                             <form action="/admin/consultas/{{ $consulta->id }}/leer" method="POST">
                                 @csrf
                                 @method('PUT')
-                                <button type="submit" class="btn btn-sm btn-outline-light">MARCAR LEÍDA</button>
+                                <button type="submit" class="btn-lisbon-ghost" style="white-space: nowrap; font-family: 'Georgia', serif;">MARCAR LEÍDA</button>
                             </form>
                         @endif
                     </td>
@@ -73,7 +67,7 @@
             </tbody>
         </table>
     @endif
+
 </div>
 
-</body>
-</html>
+@endsection

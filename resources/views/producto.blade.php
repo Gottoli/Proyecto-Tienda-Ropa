@@ -3,70 +3,91 @@
 @section('contenido')
 
 <div class="container py-5">
-    <a href="/catalogo" style="color: #aaa; letter-spacing: 3px; font-size: 0.75rem; text-decoration: none;">← VOLVER AL CATÁLOGO</a>
 
-    <hr style="border-color: #222; margin: 2rem 0;">
+    <a href="/catalogo" style="color: var(--text-3); letter-spacing: 3px; font-size: 0.72rem; text-decoration: none; transition: color 0.2s;"
+       onmouseover="this.style.color='var(--olive)'" onmouseout="this.style.color='var(--text-3)'">
+        ← VOLVER AL CATÁLOGO
+    </a>
 
-    <div class="row">
+    <hr class="lisbon-hr">
+
+    <div class="row g-5">
+        {{-- Imagen --}}
         <div class="col-md-6">
             @if($product->image)
-                <img src="/img/{{ $product->image }}" style="width: 100%; height: 600px; object-fit: contain; background: #111;">
+                <img src="/img/{{ $product->image }}"
+                     style="width: 100%; height: 620px; object-fit: contain; background: var(--bone); display: block;">
             @else
-                <div style="width: 100%; height: 600px; background: #111; display: flex; align-items: center; justify-content: center;">
-                    <span style="color: #333; letter-spacing: 3px; font-size: 0.8rem;">SIN IMAGEN</span>
+                <div style="width: 100%; height: 620px; background: var(--bone); display: flex; align-items: center; justify-content: center;">
+                    <span style="color: var(--border); letter-spacing: 3px; font-size: 0.72rem;">SIN IMAGEN</span>
                 </div>
             @endif
         </div>
 
-        <div class="col-md-6 ps-5">
-            <p style="letter-spacing: 4px; font-size: 0.75rem; color: #aaa;">{{ strtoupper($product->category->name) }}</p>
-            <h2 style="font-weight: 300; letter-spacing: 4px;">{{ strtoupper($product->name) }}</h2>
-            <h4 style="font-weight: 300; letter-spacing: 3px; color: #aaa; margin: 1.5rem 0;">${{ number_format($product->price, 0, ',', '.') }}</h4>
+        {{-- Info --}}
+        <div class="col-md-6">
+            <p style="letter-spacing: 5px; font-size: 0.72rem; color: var(--olive-light);">{{ strtoupper($product->category->name) }}</p>
+            <h2 style="font-weight: 300; letter-spacing: 5px; color: var(--olive-dark); font-size: 1.9rem; line-height: 1.4; margin: 1rem 0;">{{ strtoupper($product->name) }}</h2>
+            <p style="font-weight: 300; letter-spacing: 3px; color: var(--olive); font-size: 1.3rem; margin-bottom: 2rem;">${{ number_format($product->price, 0, ',', '.') }}</p>
 
-            <p style="color: #aaa; font-size: 0.9rem; line-height: 1.8;">{{ $product->description }}</p>
+            <p style="color: var(--text-2); font-size: 0.95rem; line-height: 1.9; margin-bottom: 1.5rem;">{{ $product->description }}</p>
 
-            <p style="color: #555; font-size: 0.8rem; letter-spacing: 2px; margin-top: 1rem;">STOCK: {{ $product->stock }} unidades</p>
+            <p style="color: var(--text-3); font-size: 0.72rem; letter-spacing: 3px;">STOCK DISPONIBLE: {{ $product->stock }}</p>
 
-            <hr style="border-color: #222; margin: 2rem 0;">
+            <hr class="lisbon-hr">
 
-           @auth
-    @if(auth()->user()->rol === 'cliente')
-        <form action="/carrito/agregar/{{ $product->id }}" method="POST">
-            @csrf
+            @auth
+                @if(auth()->user()->rol === 'cliente')
+                    <form action="/carrito/agregar/{{ $product->id }}" method="POST">
+                        @csrf
 
-            @if($product->talles)
-                <div class="mb-3">
-                    <p style="color: #aaa; font-size: 0.8rem; letter-spacing: 2px;">TALLE</p>
-                    <div class="d-flex gap-2 flex-wrap">
-                        @foreach(explode(',', $product->talles) as $talle)
-                            <label style="cursor: pointer;">
-                                <input type="radio" name="talle" value="{{ trim($talle) }}" style="display: none;" required>
-                                <span class="talle-btn" style="border: 1px solid #333; color: #aaa; padding: 8px 16px; font-size: 0.75rem; letter-spacing: 2px; display: inline-block; cursor: pointer;">{{ trim($talle) }}</span>
-                            </label>
-                        @endforeach
-                    </div>
-                </div>
-            @endif
+                        @if($product->talles)
+                            <div class="mb-4">
+                                <p class="lisbon-label">SELECCIONÁ TALLE</p>
+                                <div class="d-flex gap-2 flex-wrap">
+                                    @foreach(explode(',', $product->talles) as $talle)
+                                        <label style="cursor: pointer;">
+                                            <input type="radio" name="talle" value="{{ trim($talle) }}" style="display: none;" required>
+                                            <span class="talle-btn">{{ trim($talle) }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
 
-            <button type="submit" style="background: #fff; color: #000; border: none; padding: 14px 40px; letter-spacing: 4px; font-size: 0.8rem; cursor: pointer; width: 100%;">AGREGAR AL CARRITO</button>
-        </form>
-    @endif
-@else
-    <a href="/login" style="background: #fff; color: #000; padding: 14px 40px; letter-spacing: 4px; font-size: 0.8rem; width: 100%; text-align: center; text-decoration: none; display: block;">AGREGAR AL CARRITO</a>
-@endauth
-
-<style>
-input[type="radio"]:checked + .talle-btn {
-    border-color: #fff;
-    color: #fff;
-}
-.talle-btn:hover {
-    border-color: #aaa;
-    color: #fff;
-}
-</style>
+                        <button type="submit" class="btn-lisbon-filled" style="width: 100%; text-align: center; padding: 15px;">
+                            AGREGAR AL CARRITO
+                        </button>
+                    </form>
+                @endif
+            @else
+                <a href="/login" class="btn-lisbon-filled d-block text-center" style="padding: 15px;">
+                    AGREGAR AL CARRITO
+                </a>
+            @endauth
         </div>
     </div>
+
 </div>
+
+<style>
+.talle-btn {
+    border: 1px solid var(--border);
+    color: var(--text-2);
+    padding: 9px 18px;
+    font-size: 0.78rem;
+    letter-spacing: 2px;
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Georgia', serif;
+}
+.talle-btn:hover { border-color: var(--olive); color: var(--olive); }
+input[type="radio"]:checked + .talle-btn {
+    border-color: var(--olive);
+    background: var(--olive);
+    color: var(--cream);
+}
+</style>
 
 @endsection

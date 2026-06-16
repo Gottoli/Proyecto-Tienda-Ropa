@@ -1,36 +1,32 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productos - Admin Lisbon</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-dark text-white">
+@extends('layout')
 
-<nav class="navbar navbar-dark bg-black px-4">
-    <span class="navbar-brand">Lisbon Admin</span>
-    <div>
-        <a href="/admin" class="btn btn-sm btn-outline-light me-2">DASHBOARD</a>
-        <span class="me-3">{{ auth()->user()->name }}</span>
-        <form action="/logout" method="POST" class="d-inline">
-            @csrf
-            <button type="submit" class="btn btn-sm btn-danger">Cerrar sesión</button>
-        </form>
+@section('contenido')
+
+<div class="admin-subnav">
+    <div class="container d-flex align-items-center gap-4">
+        <span class="subnav-label">ADMIN</span>
+        <a href="/admin">DASHBOARD</a>
+        <a href="/admin/productos" class="is-active">PRODUCTOS</a>
+        <a href="/admin/consultas">CONSULTAS</a>
+        <a href="/admin/usuarios">USUARIOS</a>
     </div>
-</nav>
+</div>
 
-<div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Gestión de Productos</h2>
-        <a href="/admin/productos/crear" class="btn btn-light" style="letter-spacing: 2px; border-radius: 0;">+ NUEVO PRODUCTO</a>
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+            <p class="page-eyebrow">ADMIN</p>
+            <h2 class="page-title" style="font-size: 2rem;">PRODUCTOS</h2>
+        </div>
+        <a href="/admin/productos/crear" class="btn-lisbon-filled" style="margin-top: 1.5rem;">+ NUEVO PRODUCTO</a>
     </div>
 
     @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
+        <div class="lisbon-success">{{ session('success') }}</div>
     @endif
 
-    <table class="table table-dark table-bordered">
+    <table class="lisbon-table">
         <thead>
             <tr>
                 <th>#</th>
@@ -45,40 +41,49 @@
         <tbody>
             @foreach($products as $product)
             <tr>
-                <td>{{ $product->id }}</td>
-                <td>{{ $product->name }}</td>
+                <td style="color: var(--text-3);">{{ $product->id }}</td>
+                <td style="color: var(--text-1); letter-spacing: 1px;">{{ $product->name }}</td>
                 <td>{{ $product->category->name }}</td>
-                <td>${{ number_format($product->price, 0, ',', '.') }}</td>
+                <td style="color: var(--olive); letter-spacing: 1px;">${{ number_format($product->price, 0, ',', '.') }}</td>
                 <td>{{ $product->stock }}</td>
                 <td>
                     @if($product->active)
-                        <span class="badge bg-success">ACTIVO</span>
+                        <span class="badge-olive">ACTIVO</span>
                     @else
-                        <span class="badge bg-danger">INACTIVO</span>
+                        <span class="badge-muted">INACTIVO</span>
                     @endif
                 </td>
                 <td>
-                    <a href="/admin/productos/{{ $product->id }}/editar" class="btn btn-sm btn-outline-light me-1">EDITAR</a>
+                    <div class="d-flex gap-2">
+                        <a href="/admin/productos/{{ $product->id }}/editar" class="btn-lisbon-ghost">EDITAR</a>
 
-                    @if($product->active)
-                        <form action="/admin/productos/{{ $product->id }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Desactivar este producto?')">DESACTIVAR</button>
-                        </form>
-                    @else
-                        <form action="/admin/productos/{{ $product->id }}/activar" method="POST" class="d-inline">
-                            @csrf
-                            @method('PUT')
-                            <button type="submit" class="btn btn-sm btn-success">ACTIVAR</button>
-                        </form>
-                    @endif
+                        @if($product->active)
+                            <form action="/admin/productos/{{ $product->id }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-lisbon-ghost"
+                                    style="color: #8A4A3A; border-color: #C4A09A; font-family: 'Georgia', serif;"
+                                    onclick="return confirm('¿Desactivar este producto?')">
+                                    DESACTIVAR
+                                </button>
+                            </form>
+                        @else
+                            <form action="/admin/productos/{{ $product->id }}/activar" method="POST" class="d-inline">
+                                @csrf
+                                @method('PUT')
+                                <button type="submit" class="btn-lisbon-ghost"
+                                    style="color: var(--olive); border-color: var(--olive); font-family: 'Georgia', serif;">
+                                    ACTIVAR
+                                </button>
+                            </form>
+                        @endif
+                    </div>
                 </td>
             </tr>
             @endforeach
         </tbody>
     </table>
+
 </div>
 
-</body>
-</html>
+@endsection

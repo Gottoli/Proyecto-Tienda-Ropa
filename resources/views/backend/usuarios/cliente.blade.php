@@ -1,134 +1,125 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mi cuenta - Lisbon</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-dark text-white">
+@extends('layout')
 
-<nav class="navbar navbar-dark bg-black px-4">
-    <span class="navbar-brand">Lisbon</span>
-    <div>
-        <span class="me-3">{{ auth()->user()->name }}</span>
-        <form action="/logout" method="POST" class="d-inline">
-            @csrf
-            <button type="submit" class="btn btn-sm btn-danger">Cerrar sesión</button>
-        </form>
+@section('contenido')
+
+<div class="admin-subnav">
+    <div class="container d-flex align-items-center gap-4">
+        <span class="subnav-label">MI CUENTA</span>
+        <a href="/cliente" class="is-active">PERFIL</a>
+        <a href="/carrito">CARRITO</a>
+        <a href="/catalogo">CATÁLOGO</a>
     </div>
-</nav>
+</div>
 
-<div class="container mt-5">
-    <h2>Mi cuenta</h2>
-    <span class="badge bg-primary mb-4">Cliente</span>
+<div class="container py-5">
+
+    <p class="page-eyebrow">PANEL PERSONAL</p>
+    <h2 class="page-title" style="font-size: 2rem; margin-bottom: 2.5rem;">MI CUENTA</h2>
 
     {{-- Info del usuario --}}
-    <div class="card bg-black text-white p-4 mt-3" style="border: 1px solid #333;">
+    <div class="lisbon-card" style="padding: 2rem; margin-bottom: 2rem;">
         <div class="row">
-            <div class="col-md-6">
-                <p style="color: #aaa; font-size: 0.8rem; letter-spacing: 2px;">NOMBRE</p>
-                <p>{{ auth()->user()->name }}</p>
+            <div class="col-md-4">
+                <p class="lisbon-label">NOMBRE</p>
+                <p style="color: var(--text-1); font-size: 1rem; letter-spacing: 1px;">{{ auth()->user()->name }}</p>
             </div>
-            <div class="col-md-6">
-                <p style="color: #aaa; font-size: 0.8rem; letter-spacing: 2px;">EMAIL</p>
-                <p>{{ auth()->user()->email }}</p>
+            <div class="col-md-4">
+                <p class="lisbon-label">EMAIL</p>
+                <p style="color: var(--text-1); font-size: 1rem;">{{ auth()->user()->email }}</p>
             </div>
-            <div class="col-md-6">
-                <p style="color: #aaa; font-size: 0.8rem; letter-spacing: 2px;">CLIENTE DESDE</p>
-                <p>{{ auth()->user()->created_at->format('d/m/Y') }}</p>
-            </div>
-        </div>
-    </div>
-
-    {{-- Métricas del carrito --}}
-    <div class="row mt-4">
-        <div class="col-md-4">
-            <div class="card bg-secondary text-white text-center p-4">
-                <h5>Productos en carrito</h5>
-                <h2>{{ $totalItems }}</h2>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card bg-secondary text-white text-center p-4">
-                <h5>Total en carrito</h5>
-                <h2>${{ number_format($totalImporte, 0, ',', '.') }}</h2>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card bg-secondary text-white text-center p-4">
-                <h5>Items distintos</h5>
-                <h2>{{ $cartItems->count() }}</h2>
+            <div class="col-md-4">
+                <p class="lisbon-label">CLIENTE DESDE</p>
+                <p style="color: var(--text-1); font-size: 1rem;">{{ auth()->user()->created_at->format('d/m/Y') }}</p>
             </div>
         </div>
     </div>
 
-    {{-- Accesos rápidos --}}
-    <div class="row mt-4">
+    {{-- Métricas --}}
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="lisbon-card" style="padding: 2rem; text-align: center;">
+                <p style="letter-spacing: 3px; font-size: 0.68rem; color: var(--text-3); margin-bottom: 1rem;">PRODUCTOS EN CARRITO</p>
+                <h2 style="font-weight: 300; letter-spacing: 4px; font-size: 2.8rem; color: var(--olive-dark); margin: 0;">{{ $totalItems }}</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="lisbon-card" style="padding: 2rem; text-align: center;">
+                <p style="letter-spacing: 3px; font-size: 0.68rem; color: var(--text-3); margin-bottom: 1rem;">TOTAL EN CARRITO</p>
+                <h2 style="font-weight: 300; letter-spacing: 3px; font-size: 2rem; color: var(--olive-dark); margin: 0;">${{ number_format($totalImporte, 0, ',', '.') }}</h2>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="lisbon-card" style="padding: 2rem; text-align: center;">
+                <p style="letter-spacing: 3px; font-size: 0.68rem; color: var(--text-3); margin-bottom: 1rem;">ITEMS DISTINTOS</p>
+                <h2 style="font-weight: 300; letter-spacing: 4px; font-size: 2.8rem; color: var(--olive-dark); margin: 0;">{{ $cartItems->count() }}</h2>
+            </div>
+        </div>
+    </div>
+
+    {{-- Accesos --}}
+    <div class="row g-3 mb-5">
         <div class="col-md-6">
-            <div class="card bg-black text-white p-4" style="border: 1px solid #333;">
-                <h5 style="letter-spacing: 3px; font-size: 0.9rem;">MI CARRITO</h5>
-                <p style="color: #aaa; font-size: 0.85rem;">Revisá los productos que agregaste</p>
-                <a href="/carrito" class="btn btn-outline-light" style="letter-spacing: 2px; border-radius: 0;">VER CARRITO</a>
+            <div class="lisbon-card" style="padding: 2rem;">
+                <p style="letter-spacing: 4px; font-size: 0.72rem; color: var(--olive); margin-bottom: 0.5rem;">MI CARRITO</p>
+                <p style="color: var(--text-3); font-size: 0.85rem; margin-bottom: 1.5rem;">Revisá los productos que agregaste</p>
+                <a href="/carrito" class="btn-lisbon">VER CARRITO</a>
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card bg-black text-white p-4" style="border: 1px solid #333;">
-                <h5 style="letter-spacing: 3px; font-size: 0.9rem;">CATÁLOGO</h5>
-                <p style="color: #aaa; font-size: 0.85rem;">Explorá nuestros productos</p>
-                <a href="/catalogo" class="btn btn-outline-light" style="letter-spacing: 2px; border-radius: 0;">VER PRODUCTOS</a>
+            <div class="lisbon-card" style="padding: 2rem;">
+                <p style="letter-spacing: 4px; font-size: 0.72rem; color: var(--olive); margin-bottom: 0.5rem;">CATÁLOGO</p>
+                <p style="color: var(--text-3); font-size: 0.85rem; margin-bottom: 1.5rem;">Explorá nuestros productos</p>
+                <a href="/catalogo" class="btn-lisbon">VER PRODUCTOS</a>
             </div>
         </div>
     </div>
 
-    {{-- Compras realizadas --}}
-@if($orders->count() > 0)
-<div class="mt-5">
-    <h5 style="letter-spacing: 3px; font-size: 0.9rem;">MIS COMPRAS</h5>
-    <hr style="border-color: #333;">
+    {{-- Historial de compras --}}
+    @if($orders->count() > 0)
+    <hr class="lisbon-hr">
+    <p class="page-eyebrow" style="margin-bottom: 1.5rem;">HISTORIAL</p>
+    <h5 style="font-weight: 300; letter-spacing: 4px; color: var(--olive-dark); margin-bottom: 2rem;">MIS COMPRAS</h5>
 
     @foreach($orders as $order)
-    <div class="card bg-black text-white p-3 mb-3" style="border: 1px solid #333;">
-        <div class="d-flex justify-content-between align-items-center">
+    <div class="lisbon-card" style="padding: 1.5rem; margin-bottom: 1rem;">
+        <div class="d-flex justify-content-between align-items-start mb-3">
             <div>
-                <p class="mb-1" style="color: #aaa; font-size: 0.8rem; letter-spacing: 2px;">ORDEN #{{ $order->id }}</p>
-                <p class="mb-1" style="font-size: 0.85rem;">{{ $order->created_at->format('d/m/Y H:i') }}</p>
+                <p class="lisbon-label" style="margin-bottom: 4px;">ORDEN #{{ $order->id }}</p>
+                <p style="color: var(--text-2); font-size: 0.85rem;">{{ $order->created_at->format('d/m/Y H:i') }}</p>
             </div>
             <div class="text-end">
-                <p class="mb-1" style="color: #aaa; font-size: 0.8rem; letter-spacing: 2px;">TOTAL</p>
-                <p class="mb-1">${{ number_format($order->total, 0, ',', '.') }}</p>
+                <p class="lisbon-label" style="margin-bottom: 4px;">TOTAL</p>
+                <p style="color: var(--olive-dark); font-size: 1rem; letter-spacing: 2px;">${{ number_format($order->total, 0, ',', '.') }}</p>
             </div>
-            <span class="badge bg-success">{{ strtoupper($order->estado) }}</span>
+            <span class="badge-olive">{{ strtoupper($order->estado) }}</span>
         </div>
 
-        <hr style="border-color: #222;">
+        <hr class="lisbon-hr" style="margin: 1rem 0;">
 
-        <table class="table table-dark table-sm mb-0">
+        <table class="lisbon-table">
             <thead>
                 <tr>
-                    <th style="font-size: 0.75rem;">PRODUCTO</th>
-                    <th style="font-size: 0.75rem;">CANTIDAD</th>
-                    <th style="font-size: 0.75rem;">PRECIO</th>
-                    <th style="font-size: 0.75rem;">SUBTOTAL</th>
+                    <th>PRODUCTO</th>
+                    <th>CANTIDAD</th>
+                    <th>PRECIO</th>
+                    <th>SUBTOTAL</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach($order->items as $item)
                 <tr>
-                    <td style="font-size: 0.85rem;">{{ $item->product->name }}</td>
-                    <td style="font-size: 0.85rem;">{{ $item->quantity }}</td>
-                    <td style="font-size: 0.85rem;">${{ number_format($item->price, 0, ',', '.') }}</td>
-                    <td style="font-size: 0.85rem;">${{ number_format($item->price * $item->quantity, 0, ',', '.') }}</td>
+                    <td>{{ $item->product->name }}</td>
+                    <td>{{ $item->quantity }}</td>
+                    <td>${{ number_format($item->price, 0, ',', '.') }}</td>
+                    <td style="color: var(--olive);">${{ number_format($item->price * $item->quantity, 0, ',', '.') }}</td>
                 </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
     @endforeach
-</div>
-@endif
+    @endif
 
 </div>
 
-</body>
-</html>
+@endsection

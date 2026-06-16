@@ -1,59 +1,53 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Usuarios - Admin Lisbon</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-dark text-white">
+@extends('layout')
 
-<nav class="navbar navbar-dark bg-black px-4">
-    <span class="navbar-brand">Lisbon Admin</span>
-    <div>
-        <a href="/admin" class="btn btn-sm btn-outline-light me-2">DASHBOARD</a>
-        <span class="me-3">{{ auth()->user()->name }}</span>
-        <form action="/logout" method="POST" class="d-inline">
-            @csrf
-            <button type="submit" class="btn btn-sm btn-danger">Cerrar sesión</button>
-        </form>
+@section('contenido')
+
+<div class="admin-subnav">
+    <div class="container d-flex align-items-center gap-4">
+        <span class="subnav-label">ADMIN</span>
+        <a href="/admin">DASHBOARD</a>
+        <a href="/admin/productos">PRODUCTOS</a>
+        <a href="/admin/consultas">CONSULTAS</a>
+        <a href="/admin/usuarios" class="is-active">USUARIOS</a>
     </div>
-</nav>
+</div>
 
-<div class="container mt-5">
-    <h2 class="mb-4">Usuarios Registrados</h2>
+<div class="container py-5">
 
-    <table class="table table-dark table-bordered">
+    <p class="page-eyebrow">ADMIN</p>
+    <h2 class="page-title" style="font-size: 2rem; margin-bottom: 2.5rem;">USUARIOS</h2>
+
+    <table class="lisbon-table">
         <thead>
             <tr>
                 <th>#</th>
                 <th>NOMBRE</th>
                 <th>EMAIL</th>
                 <th>ROL</th>
-                <th>ITEMS EN CARRITO</th>
+                <th style="text-align: center;">ITEMS EN CARRITO</th>
                 <th>REGISTRO</th>
             </tr>
         </thead>
         <tbody>
             @foreach($usuarios as $usuario)
             <tr>
-                <td>{{ $usuario->id }}</td>
-                <td>{{ $usuario->name }}</td>
+                <td style="color: var(--text-3);">{{ $usuario->id }}</td>
+                <td style="color: var(--text-1); letter-spacing: 1px;">{{ $usuario->name }}</td>
                 <td>{{ $usuario->email }}</td>
                 <td>
                     @if($usuario->rol === 'admin')
-                        <span class="badge bg-danger">Admin</span>
+                        <span class="badge-admin">ADMIN</span>
                     @else
-                        <span class="badge bg-primary">Cliente</span>
+                        <span class="badge-client">CLIENTE</span>
                     @endif
                 </td>
-                <td>{{ $usuario->cart_items_count }}</td>
-                <td>{{ $usuario->created_at->format('d/m/Y H:i') }}</td>
+                <td style="text-align: center;">{{ $usuario->cart_items_count }}</td>
+                <td style="color: var(--text-3); font-size: 0.82rem;">{{ $usuario->created_at->format('d/m/Y H:i') }}</td>
             </tr>
             @endforeach
         </tbody>
     </table>
+
 </div>
 
-</body>
-</html>
+@endsection
