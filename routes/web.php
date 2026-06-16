@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
 
 // Rutas públicas del sitio
 Route::get('/', function () { return view('inicio'); });
@@ -31,4 +32,8 @@ Route::middleware(['auth', 'rol:admin'])->group(function () {
 // Rutas protegidas - solo cliente
 Route::middleware(['auth', 'rol:cliente'])->group(function () {
     Route::get('/cliente', [ClienteController::class, 'index']);
+    Route::get('/carrito', [CartController::class, 'index']);
+    Route::post('/carrito/agregar/{productId}', [CartController::class, 'agregar']);
+    Route::delete('/carrito/eliminar/{id}', [CartController::class, 'eliminar']);
+    Route::post('/carrito/vaciar', [CartController::class, 'vaciar']);
 });

@@ -29,27 +29,37 @@
 
     <div class="row g-4" id="productos">
 
-    @foreach($products as $product)
-    <div class="col-md-4 producto" data-categoria="{{ strtolower($product->category->name) }}" data-genero="hombre mujer">
-        <div style="position: relative;">
-            @if($product->image)
-                <img src="/img/{{ $product->image }}" style="width: 100%; height: 450px; object-fit: contain; background: #111;">
-            @else
-                <div style="width: 100%; height: 450px; background: #111; display: flex; align-items: center; justify-content: center;">
-                    <span style="color: #333; letter-spacing: 3px; font-size: 0.8rem;">SIN IMAGEN</span>
-                </div>
-            @endif
-        </div>
-        <p class="mt-2" style="letter-spacing: 2px; font-size: 0.9rem;">{{ strtoupper($product->name) }}</p>
-        <p style="color: #aaa;">${{ number_format($product->price, 0, ',', '.') }}</p>
-        <a href="/catalogo/{{ $product->id }}" style="color: #aaa; letter-spacing: 2px; font-size: 0.75rem; text-decoration: none;">VER DETALLE →</a>
+   @foreach($products as $product)
+<div class="col-md-4 producto" data-categoria="{{ strtolower($product->category->name) }}" data-genero="hombre mujer">
+    <div style="position: relative;">
+        @if($product->image)
+            <img src="/img/{{ $product->image }}" style="width: 100%; height: 450px; object-fit: contain; background: #111;">
+        @else
+            <div style="width: 100%; height: 450px; background: #111; display: flex; align-items: center; justify-content: center;">
+                <span style="color: #333; letter-spacing: 3px; font-size: 0.8rem;">SIN IMAGEN</span>
+            </div>
+        @endif
     </div>
-    @endforeach
+    <p class="mt-2" style="letter-spacing: 2px; font-size: 0.9rem;">{{ strtoupper($product->name) }}</p>
+    <p style="color: #aaa;">${{ number_format($product->price, 0, ',', '.') }}</p>
+    <a href="/catalogo/{{ $product->id }}" style="color: #aaa; letter-spacing: 2px; font-size: 0.75rem; text-decoration: none;">VER DETALLE →</a>
 
-</div>
+    @auth
+        @if(auth()->user()->rol === 'cliente')
+            <form action="/carrito/agregar/{{ $product->id }}" method="POST" class="mt-2">
+                @csrf
+                <button type="submit" style="background: #fff; color: #000; border: none; padding: 8px 24px; letter-spacing: 3px; font-size: 0.75rem; cursor: pointer; width: 100%;">AGREGAR AL CARRITO</button>
+            </form>
+        @endif
+    @else
+        <a href="/login" class="mt-2 d-block" style="background: #fff; color: #000; padding: 8px 24px; letter-spacing: 3px; font-size: 0.75rem; width: 100%; text-align: center; text-decoration: none;">AGREGAR AL CARRITO</a>
+    @endauth
 
+    </div>
+@endforeach
+    </div>
 
-</div>
+</div> 
 
 <style>
 .btn-filtro {

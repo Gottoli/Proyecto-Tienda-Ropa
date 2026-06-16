@@ -13,14 +13,12 @@
         <div class="col-md-5">
             <h2 class="mb-4">Iniciar sesión</h2>
 
-            {{-- Mensaje de éxito al registrarse --}}
             @if (session('success'))
                 <div class="alert alert-success">
                     {{ session('success') }}
                 </div>
             @endif
 
-            {{-- Errores --}}
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul class="mb-0">
@@ -46,3 +44,17 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Iniciar sesión</button>
+                <a href="/registro" class="btn btn-outline-light ms-2">Crear cuenta</a>
+
+                <p class="mt-3" style="color: #aaa; font-size: 0.85rem;">
+                    ¿No tenés cuenta? 
+                    <a href="/registro" style="color: #fff; letter-spacing: 2px;">REGISTRATE</a>
+                </p>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

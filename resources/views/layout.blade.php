@@ -76,6 +76,42 @@
                 <li class="nav-item"><a class="nav-link" href="/contacto">CONTACTO</a></li>
                 <li class="nav-item"><a class="nav-link" href="/consultas">CONSULTAS</a></li>
                 <li class="nav-item"><a class="nav-link" href="/terminos">TÉRMINOS</a></li>
+
+                {{-- Botones de auth en el navbar --}}
+                @auth
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 6px;">
+                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4z"/>
+                            </svg>
+                            {{ auth()->user()->name }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" style="background: #0a0a0a; border: 1px solid #222; border-radius: 0;">
+                            @if(auth()->user()->rol === 'admin')
+                                <li><a class="dropdown-item" href="/admin" style="color: #aaa; letter-spacing: 2px; font-size: 0.8rem;">PANEL ADMIN</a></li>
+                            @else
+                                <li><a class="dropdown-item" href="/cliente" style="color: #aaa; letter-spacing: 2px; font-size: 0.8rem;">MI CUENTA</a></li>
+                                <li><a class="dropdown-item" href="/carrito" style="color: #aaa; letter-spacing: 2px; font-size: 0.8rem;">MI CARRITO</a></li>
+                            @endif
+                            <li><hr class="dropdown-divider" style="border-color: #222;"></li>
+                            <li>
+                                <form action="/logout" method="POST">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item" style="color: #aaa; letter-spacing: 2px; font-size: 0.8rem; background: none; border: none; width: 100%; text-align: left;">CERRAR SESIÓN</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                @else
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login" style="border: 1px solid #333; padding: 6px 16px !important; margin-left: 10px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 6px;">
+                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4z"/>
+                            </svg>
+                            LOGIN
+                        </a>
+                    </li>
+                @endauth
             </ul>
         </div>
     </div>
