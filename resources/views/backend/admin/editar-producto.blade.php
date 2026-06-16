@@ -49,19 +49,24 @@
                     <label style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">DESCRIPCIÓN</label>
                     <textarea name="description" rows="3" class="form-control mt-1" style="background: #111; border: 1px solid #333; color: #fff; border-radius: 0;">{{ old('description', $product->description) }}</textarea>
                 </div>
+            <div class="row">
+            <div class="col-md-6 mb-3">
+                 <label style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">PRECIO</label>
+             <input type="number" name="price" value="{{ old('price', $product->price) }}" class="form-control mt-1" style="background: #111; border: 1px solid #333; color: #fff; border-radius: 0;">
+                 @error('price') <small class="text-danger">{{ $message }}</small> @enderror
+            </div>
+            <div class="col-md-6 mb-3">
+             <label style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">STOCK</label>
+            <input type="number" name="stock" value="{{ old('stock', $product->stock) }}" class="form-control mt-1" style="background: #111; border: 1px solid #333; color: #fff; border-radius: 0;">
+             @error('stock') <small class="text-danger">{{ $message }}</small> @enderror
+            </div>
+            </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">PRECIO</label>
-                        <input type="number" name="price" value="{{ old('price', $product->price) }}" class="form-control mt-1" style="background: #111; border: 1px solid #333; color: #fff; border-radius: 0;">
-                        @error('price') <small class="text-danger">{{ $message }}</small> @enderror
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">STOCK</label>
-                        <input type="number" name="stock" value="{{ old('stock', $product->stock) }}" class="form-control mt-1" style="background: #111; border: 1px solid #333; color: #fff; border-radius: 0;">
-                        @error('stock') <small class="text-danger">{{ $message }}</small> @enderror
-                    </div>
-                </div>
+            <div class="mb-3">
+                <label style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">TALLES DISPONIBLES</label>
+                <input type="text" name="talles" value="{{ old('talles', $product->talles) }}" class="form-control mt-1" style="background: #111; border: 1px solid #333; color: #fff; border-radius: 0;" placeholder="Ej: XS,S,M,L,XL">
+                <small style="color: #555;">Separados por coma</small>
+            </div>
 
                 <div class="mb-3">
                     <label style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">CATEGORÍA</label>

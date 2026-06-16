@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $fillable = [
-        'name',
-        'description',
-        'price',
-        'stock',
-        'image',
-        'category_id',
-        'active',
+    'name',
+    'description',
+    'price',
+    'stock',
+    'talles',
+    'image',
+    'category_id',
+    'active',
     ];
 
     protected $casts = [

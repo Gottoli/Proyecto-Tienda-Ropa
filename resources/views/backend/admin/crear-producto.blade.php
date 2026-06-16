@@ -60,6 +60,11 @@
                         <input type="number" name="stock" value="{{ old('stock') }}" class="form-control mt-1" style="background: #111; border: 1px solid #333; color: #fff; border-radius: 0;">
                         @error('stock') <small class="text-danger">{{ $message }}</small> @enderror
                     </div>
+                    <div class="mb-3">
+                         <label style="letter-spacing: 2px; font-size: 0.8rem; color: #aaa;">TALLES DISPONIBLES</label>
+                         <input type="text" name="talles" value="{{ old('talles') }}" class="form-control mt-1" style="background: #111; border: 1px solid #333; color: #fff; border-radius: 0;" placeholder="Ej: XS,S,M,L,XL">
+                         <small style="color: #555;">Separados por coma</small>
+                    </div>
                 </div>
 
                 <div class="mb-3">

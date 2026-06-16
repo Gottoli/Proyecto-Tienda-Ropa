@@ -15,8 +15,9 @@ class AdminController extends Controller
         $usuarios  = User::count();
         $productos = Product::count();
         $consultas = Consulta::where('leida', false)->count();
+        $itemsCarrito  = \App\Models\CartItem::count();
 
-        return view('backend.admin.dashboard', compact('usuarios', 'productos', 'consultas'));
+        return view('backend.admin.dashboard', compact('usuarios', 'productos', 'consultas', 'itemsCarrito'));
     }
 
     public function productos()
@@ -41,14 +42,15 @@ class AdminController extends Controller
             'category_id' => 'required|exists:categories,id',
         ]);
 
-        Product::create([
-            'name'        => $request->name,
-            'description' => $request->description,
-            'price'       => $request->price,
-            'stock'       => $request->stock,
-            'category_id' => $request->category_id,
-            'active'      => $request->has('active'),
-        ]);
+       Product::create([
+        'name'        => $request->name,
+        'description' => $request->description,
+        'price'       => $request->price,
+        'stock'       => $request->stock,
+        'talles'      => $request->talles,
+        'category_id' => $request->category_id,
+        'active'      => $request->has('active'),
+    ]);
 
         return redirect('/admin/productos')->with('success', 'Producto creado correctamente.');
     }
@@ -113,5 +115,13 @@ class AdminController extends Controller
     $consulta->save();
 
     return redirect()->back()->with('success', 'Consulta marcada como leída.');
+    }
+
+    public function usuarios()
+    {
+       $usuarios = User::withCount('cartItems')
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+    return view('backend.admin.usuarios', compact('usuarios'));
     }
 }

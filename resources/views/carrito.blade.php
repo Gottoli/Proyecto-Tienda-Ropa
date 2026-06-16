@@ -29,9 +29,25 @@
             <tbody>
                 @foreach($cartItems as $item)
                 <tr>
-                    <td>{{ strtoupper($item->product->name) }}</td>
+                    <td>{{ strtoupper($item->product->name) }}
+                     @if($item->talle)
+                         <br><small style="color: #aaa; letter-spacing: 2px; font-size: 0.7rem;">TALLE: {{ $item->talle }}</small>
+                        @endif
+                    </td>
                     <td>${{ number_format($item->product->price, 0, ',', '.') }}</td>
-                    <td>{{ $item->quantity }}</td>
+                    <td>
+                    <div class="d-flex align-items-center gap-2">
+                    <form action="/carrito/restar/{{ $item->id }}" method="POST">
+                     @csrf
+                    <button type="submit" style="background: none; border: 1px solid #555; color: #aaa; padding: 2px 10px; cursor: pointer;">-</button>
+                    </form>
+                     <span>{{ $item->quantity }}</span>
+                     <form action="/carrito/agregar/{{ $item->product->id }}" method="POST">
+                     @csrf
+                     <button type="submit" style="background: none; border: 1px solid #555; color: #aaa; padding: 2px 10px; cursor: pointer;">+</button>
+                     </form>
+                     </div>
+                    </td>
                     <td>${{ number_format($item->product->price * $item->quantity, 0, ',', '.') }}</td>
                     <td>
                         <form action="/carrito/eliminar/{{ $item->id }}" method="POST">
@@ -54,7 +70,10 @@
             <div style="text-align: right;">
                 <p style="color: #aaa; letter-spacing: 2px; font-size: 0.9rem;">TOTAL</p>
                 <h3 style="font-weight: 300; letter-spacing: 4px;">${{ number_format($total, 0, ',', '.') }}</h3>
-                <button style="background: #fff; color: #000; border: none; padding: 12px 40px; letter-spacing: 4px; font-size: 0.8rem; cursor: pointer; margin-top: 1rem;">CONFIRMAR COMPRA</button>
+                <form action="/carrito/confirmar" method="POST">
+                    @csrf
+                    <button type="submit" style="background: #fff; color: #000; border: none; padding: 12px 40px; letter-spacing: 4px; font-size: 0.8rem; cursor: pointer; margin-top: 1rem;">CONFIRMAR COMPRA</button>
+                </form>
             </div>
         </div>
     @endif

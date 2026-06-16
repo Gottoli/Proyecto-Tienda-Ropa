@@ -39,13 +39,18 @@ Route::middleware(['auth', 'rol:admin'])->group(function () {
     Route::put('/admin/productos/{id}/activar', [AdminController::class, 'activarProducto']);
     Route::get('/admin/consultas', [AdminController::class, 'consultas']);
     Route::put('/admin/consultas/{id}/leer', [AdminController::class, 'marcarLeida']);
+    Route::get('/admin/usuarios', [AdminController::class, 'usuarios']);
+    Route::get('/compra-exitosa', [CartController::class, 'exitosa']);
 });
 
  //Rutas protegidas - solo cliente
 Route::middleware(['auth', 'rol:cliente'])->group(function () {
+    Route::get('/compra-exitosa', [CartController::class, 'exitosa']);
     Route::get('/cliente', [ClienteController::class, 'index']);
     Route::get('/carrito', [CartController::class, 'index']);
     Route::post('/carrito/agregar/{productId}', [CartController::class, 'agregar']);
     Route::delete('/carrito/eliminar/{id}', [CartController::class, 'eliminar']);
     Route::post('/carrito/vaciar', [CartController::class, 'vaciar']);
+    Route::post('/carrito/confirmar', [CartController::class, 'confirmar']);
+    Route::post('/carrito/restar/{id}', [CartController::class, 'restar']);
 });
