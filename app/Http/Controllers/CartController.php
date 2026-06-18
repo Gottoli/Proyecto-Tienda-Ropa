@@ -44,6 +44,10 @@ class CartController extends Controller
         ]);
     }
 
+    if ($request->wantsJson()) {
+        return response()->json(['message' => 'PRODUCTO AGREGADO →']);
+    }
+
     return redirect()->back()->with('success', 'Producto agregado al carrito.');
     }
 

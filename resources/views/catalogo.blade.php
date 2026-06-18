@@ -2,15 +2,15 @@
 
 @section('contenido')
 
-<div class="container py-5">
+<div class="container-fluid px-lg-5 py-5">
 
-    <div style="margin-bottom: 3.5rem;">
+    <div style="max-width: 1400px; margin: 0 auto 3.5rem;">
         <p class="page-eyebrow">"COLECCIÓN 2026"</p>
         <h1 class="page-title" style="margin-bottom: 0;">CATÁLOGO</h1>
     </div>
 
     {{-- ── Filtros ── --}}
-    <div style="border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 0; margin-bottom: 4.5rem; display: flex; align-items: center; flex-wrap: wrap; gap: 4px;">
+    <div style="max-width: 1400px; margin: 0 auto; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 0; margin-bottom: 4.5rem; display: flex; align-items: center; flex-wrap: wrap; gap: 4px;">
         <button onclick="filtrar('todos','todos')" class="btn-filtro is-active" id="btn-todos">TODOS</button>
         <span style="color: var(--border); padding: 0 12px; font-size: 18px; user-select: none;">|</span>
         <span style="font-size: 12px; font-weight: 500; letter-spacing: 0.2em; color: var(--text-3); padding: 0 8px;">HOMBRE</span>
@@ -27,36 +27,36 @@
     </div>
 
     {{-- ── Grid ── --}}
-    <div class="row g-0" id="productos">
+    <div class="row g-0" id="productos" style="max-width: 1400px; margin: 0 auto;">
         @foreach($products as $product)
-        <div class="col-md-4 col-sm-6 producto" style="padding: 0 10px 48px;" data-categoria="{{ strtolower($product->category->name) }}" data-genero="hombre mujer">
+        <div class="col-6 col-lg-4 producto" style="padding: 0 3px 56px;" data-categoria="{{ $product->category->slug }}" data-genero="hombre mujer">
             <a href="/catalogo/{{ $product->id }}" style="text-decoration: none; color: inherit; display: block;">
                 @if($product->image)
                     <img src="/img/{{ $product->image }}"
-                         style="width: 100%; height: 500px; object-fit: contain; background: var(--bg-off); display: block;">
+                         style="width: 100%; height: clamp(380px, 38vw, 640px); object-fit: contain; background: var(--bg-off); display: block;">
                 @else
-                    <div style="width: 100%; height: 500px; background: var(--bg-off); display: flex; align-items: center; justify-content: center;">
+                    <div style="width: 100%; height: clamp(380px, 38vw, 640px); background: var(--bg-off); display: flex; align-items: center; justify-content: center;">
                         <span style="color: var(--border); font-size: 12px; letter-spacing: 0.28em;">SIN IMAGEN</span>
                     </div>
                 @endif
             </a>
-            <div style="padding: 16px 0 12px;">
+            <div style="padding: 18px 4px 14px;">
                 <a href="/catalogo/{{ $product->id }}" style="text-decoration: none; color: inherit;">
-                    <p style="font-size: 14px; font-weight: 500; letter-spacing: 0.1em; color: var(--text); margin: 0 0 5px;">{{ strtoupper($product->name) }}</p>
+                    <p style="font-size: 16px; font-weight: 500; letter-spacing: 0.08em; color: var(--text); margin: 0 0 7px;">{{ strtoupper($product->name) }}</p>
                 </a>
-                <p style="font-size: 14px; color: var(--text-3); letter-spacing: 0.06em; margin-bottom: 14px;">${{ number_format($product->price, 0, ',', '.') }}</p>
-                <a href="/catalogo/{{ $product->id }}" style="font-size: 12px; letter-spacing: 0.15em; color: var(--text-3); text-decoration: none; transition: opacity 0.15s;"
+                <p style="font-size: 17px; font-weight: 300; color: var(--text-3); letter-spacing: 0.04em; margin-bottom: 16px;">${{ number_format($product->price, 0, ',', '.') }}</p>
+                <a href="/catalogo/{{ $product->id }}" style="font-size: 12px; letter-spacing: 0.18em; color: var(--text-3); text-decoration: none; transition: opacity 0.15s;"
                    onmouseover="this.style.opacity='.5'" onmouseout="this.style.opacity='1'">VER DETALLE →</a>
             </div>
             @auth
                 @if(auth()->user()->rol === 'cliente')
-                    <form action="/carrito/agregar/{{ $product->id }}" method="POST">
+                    <form action="/carrito/agregar/{{ $product->id }}" method="POST" data-add-to-cart style="padding: 0 4px;">
                         @csrf
-                        <button type="submit" class="btn-lisbon" style="width: 100%; text-align: center; margin-top: 6px;">AGREGAR AL CARRITO</button>
+                        <button type="submit" class="btn-lisbon" style="width: 100%; text-align: center; margin-top: 4px;">AGREGAR AL CARRITO</button>
                     </form>
                 @endif
             @else
-                <a href="/login" class="btn-lisbon d-block text-center" style="margin-top: 6px;">AGREGAR AL CARRITO</a>
+                <a href="/login" class="btn-lisbon d-block text-center" style="margin-top: 4px;">AGREGAR AL CARRITO</a>
             @endauth
         </div>
         @endforeach

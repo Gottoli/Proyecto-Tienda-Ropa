@@ -22,7 +22,7 @@ Route::post('/consultas', [ConsultaController::class, 'store']);
 // Rutas de autenticación (públicas)
 Route::get('/registro', [AuthController::class, 'formularioRegistro']);
 Route::post('/registrar', [AuthController::class, 'registrar']);
-Route::get('/login', [AuthController::class, 'formularioLogin']);
+Route::get('/login', [AuthController::class, 'formularioLogin'])->name('login');
 Route::post('/autenticar', [AuthController::class, 'autenticar']);
 Route::post('/logout', [AuthController::class, 'logout']);
 

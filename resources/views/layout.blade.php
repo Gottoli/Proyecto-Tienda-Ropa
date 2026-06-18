@@ -464,6 +464,29 @@
         /* Quote marks — Off-White signature */
         .ow-quote::before { content: '"'; margin-right: 2px; }
         .ow-quote::after  { content: '"'; margin-left: 2px; }
+
+        /* Toast */
+        #lisbonToast {
+            position: fixed;
+            bottom: 36px;
+            right: 36px;
+            background: #000;
+            color: #fff;
+            padding: 16px 28px;
+            font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+        #lisbonToast.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
     </style>
 </head>
 <body>
@@ -561,6 +584,9 @@
 
 @yield('contenido')
 
+{{-- Toast de notificación global --}}
+<div id="lisbonToast"><span id="lisbonToastMsg"></span></div>
+
 {{-- ── Footer ── --}}
 <footer class="site-footer">
     <div class="container">
@@ -614,6 +640,32 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    // Toast
+    function showToast(msg) {
+        const t = document.getElementById('lisbonToast');
+        document.getElementById('lisbonToastMsg').textContent = msg;
+        t.classList.add('is-visible');
+        clearTimeout(window._toastTimer);
+        window._toastTimer = setTimeout(function() { t.classList.remove('is-visible'); }, 3200);
+    }
+
+    // Interceptar formularios de agregar al carrito
+    document.addEventListener('submit', function(e) {
+        var form = e.target;
+        if (!form.hasAttribute('data-add-to-cart')) return;
+        e.preventDefault();
+        fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' },
+        })
+        .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
+        .then(function(data) {
+            showToast(data.message || 'PRODUCTO AGREGADO →');
+        })
+        .catch(function() { form.submit(); });
+    });
+
     // Mobile menu toggle básico
     document.getElementById('mobileToggle')?.addEventListener('click', function () {
         const menu = document.querySelector('.site-nav__menu');
