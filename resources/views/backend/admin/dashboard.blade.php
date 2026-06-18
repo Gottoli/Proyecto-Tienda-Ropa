@@ -27,8 +27,8 @@
         ] as $metric)
         <div class="col-md-3">
             <div class="lisbon-card" style="padding: 2rem; text-align: center;">
-                <p style="letter-spacing: 3px; font-size: 0.68rem; color: var(--text-3); margin-bottom: 1rem;">{{ $metric['label'] }}</p>
-                <h2 style="font-weight: 300; letter-spacing: 4px; font-size: 2.8rem; color: var(--olive-dark); margin: 0;">{{ $metric['valor'] }}</h2>
+                <p style="letter-spacing: 0.14em; font-size: 0.72rem; color: var(--text-3); margin-bottom: 1rem;">{{ $metric['label'] }}</p>
+                <h2 style="font-weight: 300; letter-spacing: 0.1em; font-size: 3.2rem; color: var(--text); margin: 0;">{{ $metric['valor'] }}</h2>
             </div>
         </div>
         @endforeach

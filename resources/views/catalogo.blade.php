@@ -4,60 +4,59 @@
 
 <div class="container py-5">
 
-    <p class="page-eyebrow">COLECCIÓN 2026</p>
-    <h2 class="page-title" style="font-size: 2.2rem; margin-bottom: 0.5rem;">CATÁLOGO</h2>
-    <hr class="lisbon-hr">
-
-    {{-- Filtros --}}
-    <div class="mb-5">
-        <button onclick="filtrar('todos','todos')" class="btn-filtro is-active" id="btn-todos">TODOS</button>
-        <span style="color: var(--border); margin: 0 12px;">|</span>
-        <span style="color: var(--text-3); letter-spacing: 3px; font-size: 0.72rem; margin-right: 10px;">HOMBRE:</span>
-        <button onclick="filtrar('camperas','hombre')"  class="btn-filtro" id="btn-camperas-hombre">CAMPERAS</button>
-        <button onclick="filtrar('remeras','hombre')"   class="btn-filtro" id="btn-remeras-hombre">REMERAS</button>
-        <button onclick="filtrar('pantalones','hombre')"class="btn-filtro" id="btn-pantalones-hombre">PANTALONES</button>
-        <button onclick="filtrar('buzos','hombre')"     class="btn-filtro" id="btn-buzos-hombre">BUZOS</button>
-        <span style="color: var(--border); margin: 0 12px;">|</span>
-        <span style="color: var(--text-3); letter-spacing: 3px; font-size: 0.72rem; margin-right: 10px;">MUJER:</span>
-        <button onclick="filtrar('camperas','mujer')"   class="btn-filtro" id="btn-camperas-mujer">CAMPERAS</button>
-        <button onclick="filtrar('remeras','mujer')"    class="btn-filtro" id="btn-remeras-mujer">REMERAS</button>
-        <button onclick="filtrar('pantalones','mujer')" class="btn-filtro" id="btn-pantalones-mujer">PANTALONES</button>
-        <button onclick="filtrar('buzos','mujer')"      class="btn-filtro" id="btn-buzos-mujer">BUZOS</button>
+    <div style="margin-bottom: 3.5rem;">
+        <p class="page-eyebrow">"COLECCIÓN 2026"</p>
+        <h1 class="page-title" style="margin-bottom: 0;">CATÁLOGO</h1>
     </div>
 
-    {{-- Grid --}}
-    <div class="row g-4" id="productos">
+    {{-- ── Filtros ── --}}
+    <div style="border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 0; margin-bottom: 4.5rem; display: flex; align-items: center; flex-wrap: wrap; gap: 4px;">
+        <button onclick="filtrar('todos','todos')" class="btn-filtro is-active" id="btn-todos">TODOS</button>
+        <span style="color: var(--border); padding: 0 12px; font-size: 18px; user-select: none;">|</span>
+        <span style="font-size: 12px; font-weight: 500; letter-spacing: 0.2em; color: var(--text-3); padding: 0 8px;">HOMBRE</span>
+        <button onclick="filtrar('camperas','hombre')"   class="btn-filtro" id="btn-camperas-hombre">CAMPERAS</button>
+        <button onclick="filtrar('remeras','hombre')"    class="btn-filtro" id="btn-remeras-hombre">REMERAS</button>
+        <button onclick="filtrar('pantalones','hombre')" class="btn-filtro" id="btn-pantalones-hombre">PANTALONES</button>
+        <button onclick="filtrar('buzos','hombre')"      class="btn-filtro" id="btn-buzos-hombre">BUZOS</button>
+        <span style="color: var(--border); padding: 0 12px; font-size: 18px; user-select: none;">|</span>
+        <span style="font-size: 12px; font-weight: 500; letter-spacing: 0.2em; color: var(--text-3); padding: 0 8px;">MUJER</span>
+        <button onclick="filtrar('camperas','mujer')"    class="btn-filtro" id="btn-camperas-mujer">CAMPERAS</button>
+        <button onclick="filtrar('remeras','mujer')"     class="btn-filtro" id="btn-remeras-mujer">REMERAS</button>
+        <button onclick="filtrar('pantalones','mujer')"  class="btn-filtro" id="btn-pantalones-mujer">PANTALONES</button>
+        <button onclick="filtrar('buzos','mujer')"       class="btn-filtro" id="btn-buzos-mujer">BUZOS</button>
+    </div>
+
+    {{-- ── Grid ── --}}
+    <div class="row g-0" id="productos">
         @foreach($products as $product)
-        <div class="col-md-4 producto" data-categoria="{{ strtolower($product->category->name) }}" data-genero="hombre mujer">
+        <div class="col-md-4 col-sm-6 producto" style="padding: 0 10px 48px;" data-categoria="{{ strtolower($product->category->name) }}" data-genero="hombre mujer">
             <a href="/catalogo/{{ $product->id }}" style="text-decoration: none; color: inherit; display: block;">
                 @if($product->image)
                     <img src="/img/{{ $product->image }}"
-                         style="width: 100%; height: 460px; object-fit: contain; background: var(--bone); display: block;">
+                         style="width: 100%; height: 500px; object-fit: contain; background: var(--bg-off); display: block;">
                 @else
-                    <div style="width: 100%; height: 460px; background: var(--bone); display: flex; align-items: center; justify-content: center;">
-                        <span style="color: var(--border); letter-spacing: 3px; font-size: 0.72rem;">SIN IMAGEN</span>
+                    <div style="width: 100%; height: 500px; background: var(--bg-off); display: flex; align-items: center; justify-content: center;">
+                        <span style="color: var(--border); font-size: 12px; letter-spacing: 0.28em;">SIN IMAGEN</span>
                     </div>
                 @endif
-                <div class="mt-3">
-                    <p style="letter-spacing: 3px; font-size: 0.82rem; color: var(--text-1); margin-bottom: 4px;">{{ strtoupper($product->name) }}</p>
-                    <p style="color: var(--olive); font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 8px;">${{ number_format($product->price, 0, ',', '.') }}</p>
-                </div>
             </a>
-            <p style="color: var(--text-3); letter-spacing: 2px; font-size: 0.72rem; margin-bottom: 10px;">
-                <a href="/catalogo/{{ $product->id }}" style="color: var(--text-3); text-decoration: none; transition: color 0.2s;"
-                   onmouseover="this.style.color='var(--olive)'" onmouseout="this.style.color='var(--text-3)'">
-                    VER DETALLE →
+            <div style="padding: 16px 0 12px;">
+                <a href="/catalogo/{{ $product->id }}" style="text-decoration: none; color: inherit;">
+                    <p style="font-size: 14px; font-weight: 500; letter-spacing: 0.1em; color: var(--text); margin: 0 0 5px;">{{ strtoupper($product->name) }}</p>
                 </a>
-            </p>
+                <p style="font-size: 14px; color: var(--text-3); letter-spacing: 0.06em; margin-bottom: 14px;">${{ number_format($product->price, 0, ',', '.') }}</p>
+                <a href="/catalogo/{{ $product->id }}" style="font-size: 12px; letter-spacing: 0.15em; color: var(--text-3); text-decoration: none; transition: opacity 0.15s;"
+                   onmouseover="this.style.opacity='.5'" onmouseout="this.style.opacity='1'">VER DETALLE →</a>
+            </div>
             @auth
                 @if(auth()->user()->rol === 'cliente')
                     <form action="/carrito/agregar/{{ $product->id }}" method="POST">
                         @csrf
-                        <button type="submit" class="btn-lisbon" style="width: 100%; text-align: center;">AGREGAR AL CARRITO</button>
+                        <button type="submit" class="btn-lisbon" style="width: 100%; text-align: center; margin-top: 6px;">AGREGAR AL CARRITO</button>
                     </form>
                 @endif
             @else
-                <a href="/login" class="btn-lisbon d-block text-center">AGREGAR AL CARRITO</a>
+                <a href="/login" class="btn-lisbon d-block text-center" style="margin-top: 6px;">AGREGAR AL CARRITO</a>
             @endauth
         </div>
         @endforeach
@@ -68,35 +67,47 @@
 <style>
 .btn-filtro {
     background: none;
-    border: 1px solid var(--border);
+    border: none;
     color: var(--text-3);
-    letter-spacing: 3px;
-    font-size: 0.72rem;
-    padding: 8px 18px;
-    margin-right: 6px;
-    margin-bottom: 8px;
+    font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    padding: 7px 15px;
     cursor: pointer;
-    transition: all 0.2s;
-    font-family: 'Georgia', serif;
+    transition: color 0.15s;
+    position: relative;
 }
-.btn-filtro:hover, .btn-filtro.is-active {
-    border-color: var(--olive);
-    color: var(--olive);
+.btn-filtro::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 15px;
+    right: 15px;
+    height: 1px;
+    background: var(--text);
+    opacity: 0;
+    transition: opacity 0.15s;
 }
+.btn-filtro:hover { color: var(--text); }
+.btn-filtro.is-active { color: var(--text); }
+.btn-filtro.is-active::after { opacity: 1; }
 </style>
 
 <script>
 function filtrar(categoria, genero) {
     document.querySelectorAll('.btn-filtro').forEach(b => b.classList.remove('is-active'));
     document.querySelectorAll('.producto').forEach(p => {
-        const catOk  = categoria === 'todos' || p.dataset.categoria === categoria;
-        const genOk  = genero === 'todos' || p.dataset.genero.includes(genero);
+        const catOk = categoria === 'todos' || p.dataset.categoria === categoria;
+        const genOk = genero === 'todos' || p.dataset.genero.includes(genero);
         p.style.display = (catOk && genOk) ? '' : 'none';
     });
+    const clicked = document.getElementById('btn-' + (categoria === 'todos' ? 'todos' : categoria + '-' + genero));
+    if (clicked) clicked.classList.add('is-active');
 }
-const params   = new URLSearchParams(window.location.search);
-const catUrl   = params.get('categoria');
-const genUrl   = params.get('genero');
+const params = new URLSearchParams(window.location.search);
+const catUrl = params.get('categoria');
+const genUrl = params.get('genero');
 if (catUrl || genUrl) filtrar(catUrl || 'todos', genUrl || 'todos');
 </script>
 

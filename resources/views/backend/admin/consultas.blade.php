@@ -58,7 +58,7 @@
                             <form action="/admin/consultas/{{ $consulta->id }}/leer" method="POST">
                                 @csrf
                                 @method('PUT')
-                                <button type="submit" class="btn-lisbon-ghost" style="white-space: nowrap; font-family: 'Georgia', serif;">MARCAR LEÍDA</button>
+                                <button type="submit" class="btn-lisbon-ghost" style="white-space: nowrap;">MARCAR LEÍDA</button>
                             </form>
                         @endif
                     </td>

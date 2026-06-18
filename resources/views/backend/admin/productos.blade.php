@@ -62,7 +62,7 @@
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn-lisbon-ghost"
-                                    style="color: #8A4A3A; border-color: #C4A09A; font-family: 'Georgia', serif;"
+                                    style="color: #8A4A3A; border-color: #C4A09A;"
                                     onclick="return confirm('¿Desactivar este producto?')">
                                     DESACTIVAR
                                 </button>
@@ -72,7 +72,7 @@
                                 @csrf
                                 @method('PUT')
                                 <button type="submit" class="btn-lisbon-ghost"
-                                    style="color: var(--olive); border-color: var(--olive); font-family: 'Georgia', serif;">
+                                    style="color: var(--text); border-color: var(--text);">
                                     ACTIVAR
                                 </button>
                             </form>

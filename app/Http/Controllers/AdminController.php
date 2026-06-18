@@ -75,12 +75,13 @@ class AdminController extends Controller
         ]);
 
         $product->update([
-            'name'        => $request->name,
-            'description' => $request->description,
-            'price'       => $request->price,
-            'stock'       => $request->stock,
-            'category_id' => $request->category_id,
-            'active'      => $request->has('active'),
+        'name'        => $request->name,
+        'description' => $request->description,
+        'price'       => $request->price,
+        'stock'       => $request->stock,
+        'talles'      => $request->talles,
+        'category_id' => $request->category_id,
+        'active'      => $request->has('active'),
         ]);
 
         return redirect('/admin/productos')->with('success', 'Producto actualizado correctamente.');

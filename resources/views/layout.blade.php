@@ -3,368 +3,634 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LISBON</title>
+    <title>LISBON™</title>
+
+    {{-- Space Grotesk: grotesca geométrica limpia, cercana al PP Neue Montreal de Off-White --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
+        /* ══════════════════════════════════════
+           DESIGN TOKENS — Off-White inspired
+           ══════════════════════════════════════ */
         :root {
-            --cream:       #FAFAF7;
-            --bone:        #F5F0E8;
-            --olive:       #4A5240;
-            --olive-dark:  #2E3228;
-            --olive-light: #6B7260;
-            --text-1:      #1A1814;
-            --text-2:      #5A5848;
-            --text-3:      #9A9688;
-            --border:      #D8D3C8;
-            --border-sub:  #E8E4DC;
+            --bg:          #FFFFFF;
+            --bg-off:      #F4F4F2;   /* casi blanco, para secciones de contraste */
+            --bg-black:    #000000;
+            --text:        #000000;
+            --text-2:      #1C1C1C;
+            --text-3:      #777777;
+            --border:      #DEDEDE;
+            --border-sub:  #F0F0F0;
+
+            /* aliases para compatibilidad con vistas anteriores */
+            --cream:       var(--bg);
+            --bone:        var(--bg-off);
+            --olive:       var(--bg-black);
+            --olive-dark:  var(--bg-black);
+            --olive-light: #555555;
+            --text-1:      var(--text);
         }
 
-        * { box-sizing: border-box; }
+        /* ── Reset & Base ── */
+        *, *::before, *::after { box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
 
         body {
-            background-color: var(--cream);
-            color: var(--text-1);
-            font-family: 'Georgia', serif;
-            font-size: 16px;
-            line-height: 1.7;
-        }
-
-        /* ── Navbar ── */
-        .navbar { background-color: var(--cream) !important; border-bottom: 1px solid var(--border); }
-        .navbar-brand {
-            font-size: 1.7rem;
-            letter-spacing: 10px;
-            color: var(--olive-dark) !important;
+            background:  var(--bg);
+            color:       var(--text);
+            font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size:   19px;
             font-weight: 400;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-        .navbar-nav .nav-link {
-            color: var(--olive) !important;
-            letter-spacing: 3px;
-            font-size: 0.78rem;
-            padding: 1rem 1.1rem !important;
-            transition: color 0.2s;
-        }
-        .navbar-nav .nav-link:hover { color: var(--olive-dark) !important; }
-        .dropdown-menu {
-            background: var(--cream) !important;
-            border: 1px solid var(--border) !important;
-            border-radius: 0 !important;
-            margin-top: 0 !important;
-            padding: 1.2rem !important;
-            min-width: 200px;
-        }
-        .dropdown-item {
-            color: var(--olive) !important;
-            letter-spacing: 2px;
-            font-size: 0.78rem;
-            padding: 0.5rem 1rem !important;
-            transition: background 0.2s, color 0.2s;
-        }
-        .dropdown-item:hover {
-            background-color: var(--bone) !important;
-            color: var(--olive-dark) !important;
-        }
-        .dropdown:hover > .dropdown-menu { display: block; }
-        .dropend:hover > .dropdown-menu { display: block; }
-        .navbar-toggler { border-color: var(--border); }
-        .navbar-toggler-icon { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%234A5240' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"); }
-        .dropdown-divider { border-color: var(--border) !important; }
 
-        /* ── Footer ── */
-        footer {
-            background-color: var(--cream);
-            border-top: 1px solid var(--border);
-            color: var(--text-3);
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-weight: 300;
+            letter-spacing: 0.04em;
         }
-        footer a { color: var(--text-2); text-decoration: none; transition: color 0.2s; }
-        footer a:hover { color: var(--olive-dark); }
 
-        /* ── Marquee ── */
-        @keyframes marquee {
+        /* ══════════════════════════════════════
+           ANNOUNCEMENT BAR
+           ══════════════════════════════════════ */
+        .announcement-bar {
+            background: var(--bg-black);
+            color: #fff;
+            text-align: center;
+            padding: 10px 20px;
+            font-size: 12px;
+            letter-spacing: 0.22em;
+            font-weight: 400;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .announcement-inner {
+            display: inline-block;
+            animation: ticker 22s linear infinite;
+        }
+        @keyframes ticker {
             0%   { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
 
-        /* ══ Design System ══ */
+        /* ══════════════════════════════════════
+           NAVBAR — estilo Off-White
+           ══════════════════════════════════════ */
+        .site-nav {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--bg);
+            border-bottom: 1px solid var(--border);
+        }
+        .site-nav__inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 58px;
+            padding: 0 32px;
+        }
+        .site-nav__logo {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.35em;
+            color: var(--text) !important;
+            text-decoration: none;
+            flex-shrink: 0;
+        }
+        .site-nav__logo sup {
+            font-size: 11px;
+            letter-spacing: 0;
+            vertical-align: super;
+            font-weight: 400;
+        }
 
-        /* Buttons */
-        .btn-lisbon {
-            border: 1px solid var(--olive);
-            color: var(--olive);
-            background: transparent;
-            padding: 11px 28px;
-            letter-spacing: 3px;
-            font-size: 0.78rem;
-            font-family: 'Georgia', serif;
+        /* centro — lista de nav items */
+        .site-nav__menu {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .site-nav__menu li { position: relative; }
+        .site-nav__menu a,
+        .site-nav__menu button {
+            display: flex;
+            align-items: center;
+            height: 58px;
+            padding: 0 14px;
+            font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.16em;
+            color: var(--text);
+            text-decoration: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: opacity 0.15s;
+            white-space: nowrap;
+        }
+        .site-nav__menu a:hover,
+        .site-nav__menu button:hover { opacity: 0.5; }
+        .site-nav__menu .active-link {
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        /* dropdown */
+        .nav-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-top: none;
+            min-width: 200px;
+            padding: 0;
+            z-index: 999;
+        }
+        .site-nav__menu li:hover > .nav-dropdown { display: block; }
+        .nav-dropdown a {
+            display: block;
+            height: auto;
+            padding: 13px 20px;
+            font-size: 13px;
+            letter-spacing: 0.13em;
+            border-bottom: 1px solid var(--border-sub);
+        }
+        .nav-dropdown a:last-child { border-bottom: none; }
+
+        /* sub-dropdown (género) */
+        .nav-sub-dropdown {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            min-width: 180px;
+            padding: 0;
+        }
+        .nav-dropdown li:hover > .nav-sub-dropdown { display: block; }
+        .nav-dropdown li { list-style: none; position: relative; }
+
+        /* lado derecho — auth */
+        .site-nav__right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        .nav-auth-link {
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.13em;
+            color: var(--text);
+            text-decoration: none;
+            padding: 7px 13px;
+            transition: opacity 0.15s;
+        }
+        .nav-auth-link:hover { opacity: 0.5; color: var(--text); }
+        .nav-auth-sep { color: var(--border); font-size: 16px; user-select: none; }
+        .nav-auth-pill {
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.13em;
+            color: var(--bg);
+            background: var(--text);
+            padding: 7px 18px;
+            text-decoration: none;
+            transition: opacity 0.15s;
+            border: 1px solid var(--text);
+        }
+        .nav-auth-pill:hover { opacity: 0.7; color: var(--bg); }
+
+        /* dropdown usuario */
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            top: calc(100% + 1px);
+            right: 0;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            min-width: 180px;
+            padding: 0;
+            z-index: 999;
+        }
+        .site-nav__right .user-wrap:hover .user-dropdown { display: block; }
+        .user-wrap { position: relative; }
+        .user-dropdown a,
+        .user-dropdown button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 13px 18px;
+            font-size: 13px;
+            letter-spacing: 0.13em;
+            color: var(--text);
+            background: none;
+            border: none;
+            border-bottom: 1px solid var(--border-sub);
             cursor: pointer;
             text-decoration: none;
-            display: inline-block;
-            transition: background 0.2s, color 0.2s;
+            font-family: inherit;
+            transition: opacity 0.15s;
         }
-        .btn-lisbon:hover { background: var(--olive); color: var(--cream); text-decoration: none; }
+        .user-dropdown a:last-child,
+        .user-dropdown button:last-child { border-bottom: none; }
+        .user-dropdown a:hover,
+        .user-dropdown button:hover { opacity: 0.5; }
+
+        /* mobile toggle */
+        .nav-mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+        @media (max-width: 991px) {
+            .site-nav__menu { display: none; }
+            .nav-mobile-toggle { display: block; }
+            .site-nav__inner { padding: 0 16px; }
+        }
+
+        /* ══════════════════════════════════════
+           FOOTER
+           ══════════════════════════════════════ */
+        .site-footer {
+            background: var(--bg);
+            border-top: 1px solid var(--border);
+            padding: 4rem 0 2.5rem;
+        }
+        .site-footer a {
+            color: var(--text-2);
+            text-decoration: none;
+            font-size: 15px;
+            letter-spacing: 0.04em;
+            transition: opacity 0.15s;
+        }
+        .site-footer a:hover { opacity: 0.5; }
+
+        /* ══════════════════════════════════════
+           DESIGN SYSTEM — componentes reutilizables
+           ══════════════════════════════════════ */
+
+        /* Botones */
+        .btn-lisbon {
+            display: inline-block;
+            border: 1px solid var(--text);
+            color: var(--text);
+            background: transparent;
+            padding: 13px 30px;
+            font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.16em;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.18s, color 0.18s;
+        }
+        .btn-lisbon:hover { background: var(--text); color: var(--bg); text-decoration: none; }
 
         .btn-lisbon-filled {
-            border: 1px solid var(--olive);
-            background: var(--olive);
-            color: var(--cream);
-            padding: 13px 32px;
-            letter-spacing: 4px;
-            font-size: 0.78rem;
-            font-family: 'Georgia', serif;
+            display: inline-block;
+            border: 1px solid var(--text);
+            background: var(--text);
+            color: var(--bg);
+            padding: 15px 34px;
+            font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 0.16em;
             cursor: pointer;
             text-decoration: none;
-            display: inline-block;
-            transition: background 0.2s, border-color 0.2s;
+            transition: opacity 0.18s;
         }
-        .btn-lisbon-filled:hover { background: var(--olive-dark); border-color: var(--olive-dark); color: var(--cream); text-decoration: none; }
+        .btn-lisbon-filled:hover { opacity: 0.75; color: var(--bg); text-decoration: none; }
 
         .btn-lisbon-ghost {
+            display: inline-block;
             border: 1px solid var(--border);
-            color: var(--text-2);
+            color: var(--text-3);
             background: transparent;
-            padding: 8px 18px;
-            letter-spacing: 2px;
-            font-size: 0.72rem;
-            font-family: 'Georgia', serif;
+            padding: 10px 20px;
+            font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 0.12em;
             cursor: pointer;
             text-decoration: none;
-            display: inline-block;
-            transition: border-color 0.2s, color 0.2s;
+            transition: border-color 0.18s, color 0.18s;
         }
-        .btn-lisbon-ghost:hover { border-color: var(--olive); color: var(--olive); text-decoration: none; }
+        .btn-lisbon-ghost:hover { border-color: var(--text); color: var(--text); text-decoration: none; }
 
-        /* Forms */
+        /* Formularios */
         .lisbon-input {
             width: 100%;
-            background: #fff;
+            background: var(--bg);
             border: 1px solid var(--border);
-            color: var(--text-1);
-            padding: 12px 16px;
-            font-family: 'Georgia', serif;
-            font-size: 0.95rem;
-            outline: none;
             border-radius: 0;
+            color: var(--text);
+            padding: 15px 18px;
+            font-family: 'Space Grotesk', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            outline: none;
             transition: border-color 0.2s;
+            -webkit-appearance: none;
         }
-        .lisbon-input:focus { border-color: var(--olive); }
+        .lisbon-input:focus { border-color: var(--text); }
+        .lisbon-input::placeholder { color: var(--text-3); }
+
         .lisbon-label {
-            letter-spacing: 2px;
-            font-size: 0.72rem;
-            color: var(--text-3);
             display: block;
-            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            color: var(--text-3);
+            margin-bottom: 10px;
+            text-transform: uppercase;
         }
 
-        /* Alerts */
+        /* Alertas */
         .lisbon-success {
-            border: 1px solid var(--olive);
-            background: #F0F2EE;
-            color: var(--olive);
-            padding: 12px 16px;
-            letter-spacing: 1px;
-            font-size: 0.85rem;
+            border: 1px solid #000;
+            background: #F0F4EE;
+            color: #000;
+            padding: 15px 20px;
+            font-size: 14px;
+            letter-spacing: 0.08em;
             margin-bottom: 1.5rem;
         }
         .lisbon-error {
-            border: 1px solid #8A4A3A;
-            background: #FBF3F0;
-            color: #8A4A3A;
-            padding: 12px 16px;
-            letter-spacing: 1px;
-            font-size: 0.85rem;
+            border: 1px solid #000;
+            background: #FBF0EE;
+            color: #000;
+            padding: 15px 20px;
+            font-size: 14px;
+            letter-spacing: 0.08em;
             margin-bottom: 1.5rem;
         }
 
         /* Cards */
-        .lisbon-card { background: var(--bone); border: 1px solid var(--border); }
-        .lisbon-card-white { background: #fff; border: 1px solid var(--border); }
+        .lisbon-card { background: var(--bg-off); border: 1px solid var(--border); }
+        .lisbon-card-white { background: var(--bg); border: 1px solid var(--border); }
 
-        /* Tables */
+        /* Tablas */
         .lisbon-table { width: 100%; border-collapse: collapse; }
         .lisbon-table th {
-            padding: 12px 16px;
+            padding: 14px 18px;
             text-align: left;
-            letter-spacing: 2px;
-            font-size: 0.7rem;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.18em;
             color: var(--text-3);
-            font-weight: normal;
             border-bottom: 1px solid var(--border);
         }
         .lisbon-table td {
-            padding: 14px 16px;
-            font-size: 0.88rem;
+            padding: 18px 18px;
+            font-size: 15px;
+            letter-spacing: 0.02em;
             color: var(--text-2);
             border-bottom: 1px solid var(--border-sub);
             vertical-align: middle;
         }
-        .lisbon-table tr:hover td { background: var(--bone); }
+        .lisbon-table tr:hover td { background: var(--bg-off); }
 
         /* Badges */
-        .badge-olive { border: 1px solid var(--olive); color: var(--olive); padding: 3px 10px; font-size: 0.7rem; letter-spacing: 2px; }
-        .badge-muted { border: 1px solid var(--border); color: var(--text-3); padding: 3px 10px; font-size: 0.7rem; letter-spacing: 2px; }
-        .badge-warm  { border: 1px solid #8A6A2A; color: #8A6A2A; padding: 3px 10px; font-size: 0.7rem; letter-spacing: 2px; }
-        .badge-error { border: 1px solid #8A4A3A; color: #8A4A3A; padding: 3px 10px; font-size: 0.7rem; letter-spacing: 2px; }
-        .badge-admin { border: 1px solid #6B4A3A; color: #6B4A3A; padding: 3px 10px; font-size: 0.7rem; letter-spacing: 2px; }
-        .badge-client { border: 1px solid var(--olive-light); color: var(--olive-light); padding: 3px 10px; font-size: 0.7rem; letter-spacing: 2px; }
+        .badge-olive  { border: 1px solid #000; color: #000; padding: 3px 10px; font-size: 11px; font-weight: 500; letter-spacing: 0.18em; }
+        .badge-muted  { border: 1px solid var(--border); color: var(--text-3); padding: 3px 10px; font-size: 11px; font-weight: 500; letter-spacing: 0.18em; }
+        .badge-warm   { border: 1px solid #8A6A2A; color: #8A6A2A; padding: 3px 10px; font-size: 11px; font-weight: 500; letter-spacing: 0.18em; }
+        .badge-error  { border: 1px solid #B03020; color: #B03020; padding: 3px 10px; font-size: 11px; font-weight: 500; letter-spacing: 0.18em; }
+        .badge-admin  { border: 1px solid #000; color: #000; padding: 3px 10px; font-size: 11px; font-weight: 500; letter-spacing: 0.18em; }
+        .badge-client { border: 1px solid var(--text-3); color: var(--text-3); padding: 3px 10px; font-size: 11px; font-weight: 500; letter-spacing: 0.18em; }
 
         /* Admin subnav */
-        .admin-subnav { background: var(--bone); border-bottom: 1px solid var(--border); padding: 10px 0; }
-        .admin-subnav .sep { color: var(--border); }
-        .admin-subnav a { color: var(--text-3); text-decoration: none; letter-spacing: 2px; font-size: 0.72rem; transition: color 0.2s; }
-        .admin-subnav a.is-active { color: var(--olive); }
-        .admin-subnav a:hover { color: var(--olive-dark); }
-        .admin-subnav .subnav-label { color: var(--border); letter-spacing: 3px; font-size: 0.65rem; }
+        .admin-subnav { background: var(--bg-off); border-bottom: 1px solid var(--border); padding: 0; }
+        .admin-subnav .container { display: flex; align-items: center; height: 40px; gap: 0; }
+        .admin-subnav .subnav-label { font-size: 11px; font-weight: 500; letter-spacing: 0.28em; color: var(--border); margin-right: 16px; text-transform: uppercase; }
+        .admin-subnav a {
+            display: flex; align-items: center; height: 44px;
+            padding: 0 16px;
+            font-size: 12px; font-weight: 500; letter-spacing: 0.18em;
+            color: var(--text-3); text-decoration: none;
+            border-right: 1px solid var(--border-sub);
+            transition: color 0.15s;
+        }
+        .admin-subnav a:first-of-type { border-left: 1px solid var(--border-sub); }
+        .admin-subnav a.is-active { color: var(--text); background: var(--bg); }
+        .admin-subnav a:hover { color: var(--text); }
 
-        /* Dividers */
+        /* Dividers / helpers */
         .lisbon-hr { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
 
-        /* Page headers */
-        .page-eyebrow { letter-spacing: 5px; font-size: 0.72rem; color: var(--text-3); margin-bottom: 0.4rem; }
-        .page-title { font-weight: 300; letter-spacing: 6px; color: var(--olive-dark); }
-        .section-label { letter-spacing: 4px; font-size: 0.72rem; color: var(--text-3); }
+        /* Typography helpers */
+        .page-eyebrow {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.28em;
+            color: var(--text-3);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .page-title {
+            font-size: clamp(36px, 5.5vw, 72px);
+            font-weight: 300;
+            letter-spacing: 0.06em;
+            color: var(--text);
+            line-height: 1.05;
+        }
+        .section-label {
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.28em;
+            color: var(--text-3);
+            text-transform: uppercase;
+        }
+
+        /* Quote marks — Off-White signature */
+        .ow-quote::before { content: '"'; margin-right: 2px; }
+        .ow-quote::after  { content: '"'; margin-left: 2px; }
     </style>
 </head>
 <body>
 
-{{-- Marquee olive --}}
-<div style="background: var(--olive); color: var(--cream); padding: 9px 0; overflow: hidden;">
-    <div style="white-space: nowrap; animation: marquee 18s linear infinite; display: inline-block; letter-spacing: 4px; font-size: 0.72rem;">
-        &nbsp;&nbsp;&nbsp;&nbsp; NUEVA COLECCIÓN INVIERNO 2026 &nbsp;&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;&nbsp; ENVÍOS GRATIS EN COMPRAS MAYORES A $50.000 &nbsp;&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;&nbsp; HASTA 40% OFF EN SELECCIONADOS &nbsp;&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;&nbsp; NUEVA COLECCIÓN INVIERNO 2026 &nbsp;&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;&nbsp; ENVÍOS GRATIS EN COMPRAS MAYORES A $50.000 &nbsp;&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;&nbsp; HASTA 40% OFF EN SELECCIONADOS &nbsp;&nbsp;&nbsp;&nbsp;
-    </div>
+{{-- ── Announcement bar ── --}}
+<div class="announcement-bar">
+    <span class="announcement-inner">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NUEVA COLECCIÓN INVIERNO 2026 &nbsp;&nbsp;&nbsp; · &nbsp;&nbsp;&nbsp; ENVÍOS GRATIS EN COMPRAS +$50.000 &nbsp;&nbsp;&nbsp; · &nbsp;&nbsp;&nbsp; HASTA 40% OFF EN SELECCIONADOS &nbsp;&nbsp;&nbsp; · &nbsp;&nbsp;&nbsp; NUEVA COLECCIÓN INVIERNO 2026 &nbsp;&nbsp;&nbsp; · &nbsp;&nbsp;&nbsp; ENVÍOS GRATIS EN COMPRAS +$50.000 &nbsp;&nbsp;&nbsp; · &nbsp;&nbsp;&nbsp; HASTA 40% OFF EN SELECCIONADOS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    </span>
 </div>
 
-<nav class="navbar navbar-expand-lg">
-    <div class="container">
-        <a class="navbar-brand" href="/">LISBON</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="menu">
-            <ul class="navbar-nav ms-auto align-items-lg-center">
-                <li class="nav-item"><a class="nav-link" href="/">INICIO</a></li>
-                <li class="nav-item"><a class="nav-link" href="/quienes-somos">NOSOTROS</a></li>
+{{-- ── Navbar ── --}}
+<header class="site-nav">
+    <div class="site-nav__inner">
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="/catalogo" role="button" data-bs-toggle="dropdown">CATÁLOGO</a>
-                    <ul class="dropdown-menu">
-                        <li class="dropend">
-                            <a class="dropdown-item dropdown-toggle" href="#">HOMBRE</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/catalogo?categoria=camperas&genero=hombre">CAMPERAS</a></li>
-                                <li><a class="dropdown-item" href="/catalogo?categoria=remeras&genero=hombre">REMERAS</a></li>
-                                <li><a class="dropdown-item" href="/catalogo?categoria=pantalones&genero=hombre">PANTALONES</a></li>
-                                <li><a class="dropdown-item" href="/catalogo?categoria=buzos&genero=hombre">BUZOS</a></li>
-                            </ul>
+        {{-- Logo --}}
+        <a href="/" class="site-nav__logo">LISBON<sup>™</sup></a>
+
+        {{-- Nav links (desktop) --}}
+        <ul class="site-nav__menu">
+            <li><a href="/">INICIO</a></li>
+            <li><a href="/quienes-somos">NOSOTROS</a></li>
+
+            {{-- Catálogo con dropdown --}}
+            <li>
+                <a href="/catalogo">CATÁLOGO</a>
+                <div class="nav-dropdown">
+                    <ul style="list-style:none; margin:0; padding:0;">
+                        <li>
+                            <a href="#">HOMBRE ›</a>
+                            <div class="nav-sub-dropdown">
+                                <a href="/catalogo?categoria=camperas&genero=hombre">CAMPERAS</a>
+                                <a href="/catalogo?categoria=remeras&genero=hombre">REMERAS</a>
+                                <a href="/catalogo?categoria=pantalones&genero=hombre">PANTALONES</a>
+                                <a href="/catalogo?categoria=buzos&genero=hombre">BUZOS</a>
+                            </div>
                         </li>
-                        <li class="dropend">
-                            <a class="dropdown-item dropdown-toggle" href="#">MUJER</a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/catalogo?categoria=camperas&genero=mujer">CAMPERAS</a></li>
-                                <li><a class="dropdown-item" href="/catalogo?categoria=remeras&genero=mujer">REMERAS</a></li>
-                                <li><a class="dropdown-item" href="/catalogo?categoria=pantalones&genero=mujer">PANTALONES</a></li>
-                                <li><a class="dropdown-item" href="/catalogo?categoria=buzos&genero=mujer">BUZOS</a></li>
-                            </ul>
+                        <li>
+                            <a href="#">MUJER ›</a>
+                            <div class="nav-sub-dropdown">
+                                <a href="/catalogo?categoria=camperas&genero=mujer">CAMPERAS</a>
+                                <a href="/catalogo?categoria=remeras&genero=mujer">REMERAS</a>
+                                <a href="/catalogo?categoria=pantalones&genero=mujer">PANTALONES</a>
+                                <a href="/catalogo?categoria=buzos&genero=mujer">BUZOS</a>
+                            </div>
                         </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/catalogo">VER TODO</a></li>
+                        <li style="border-top: 1px solid var(--border-sub); margin-top: 4px; padding-top: 4px;">
+                            <a href="/catalogo">VER TODO →</a>
+                        </li>
                     </ul>
-                </li>
+                </div>
+            </li>
 
-                <li class="nav-item"><a class="nav-link" href="/comercializacion">COMPRAS</a></li>
-                <li class="nav-item"><a class="nav-link" href="/contacto">CONTACTO</a></li>
-                <li class="nav-item"><a class="nav-link" href="/consultas">CONSULTAS</a></li>
-                <li class="nav-item"><a class="nav-link" href="/terminos">TÉRMINOS</a></li>
+            <li><a href="/comercializacion">COMPRAS</a></li>
+            <li><a href="/consultas">CONSULTAS</a></li>
+            <li><a href="/contacto">CONTACTO</a></li>
+        </ul>
 
-                @auth
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 5px; opacity: 0.7;">
-                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4z"/>
-                            </svg>
-                            {{ auth()->user()->name }}
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            @if(auth()->user()->rol === 'admin')
-                                <li><a class="dropdown-item" href="/admin">PANEL ADMIN</a></li>
-                            @else
-                                <li><a class="dropdown-item" href="/cliente">MI CUENTA</a></li>
-                                <li><a class="dropdown-item" href="/carrito">MI CARRITO</a></li>
-                            @endif
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <form action="/logout" method="POST">
-                                    @csrf
-                                    <button type="submit" class="dropdown-item" style="background: none; border: none; width: 100%; text-align: left; font-family: 'Georgia', serif;">CERRAR SESIÓN</button>
-                                </form>
-                            </li>
-                        </ul>
-                    </li>
-                @else
-                    <li class="nav-item ms-2">
-                        <a class="nav-link btn-lisbon" href="/login" style="padding: 7px 20px !important; font-size: 0.72rem;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 5px;">
-                                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4z"/>
-                            </svg>
-                            LOGIN
-                        </a>
-                    </li>
-                @endauth
-            </ul>
+        {{-- Botón hamburguesa mobile --}}
+        <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Menú">
+            <svg width="22" height="14" viewBox="0 0 22 14" fill="none">
+                <path d="M0 1H22M0 7H22M0 13H22" stroke="black" stroke-width="1.4"/>
+            </svg>
+        </button>
+
+        {{-- Lado derecho: Auth --}}
+        <div class="site-nav__right">
+            @auth
+                <div class="user-wrap">
+                    <button class="nav-auth-link" style="background:none; border:none; cursor:pointer; font-family:inherit;">
+                        {{ strtoupper(explode(' ', auth()->user()->name)[0]) }} ↓
+                    </button>
+                    <div class="user-dropdown">
+                        @if(auth()->user()->rol === 'admin')
+                            <a href="/admin">PANEL ADMIN</a>
+                        @else
+                            <a href="/cliente">MI CUENTA</a>
+                            <a href="/carrito">MI CARRITO</a>
+                        @endif
+                        <form action="/logout" method="POST" style="margin:0;">
+                            @csrf
+                            <button type="submit">CERRAR SESIÓN</button>
+                        </form>
+                    </div>
+                </div>
+            @else
+                <a href="/registro" class="nav-auth-link">REGISTRO</a>
+                <span class="nav-auth-sep">|</span>
+                <a href="/login" class="nav-auth-pill">LOGIN</a>
+            @endauth
         </div>
+
     </div>
-</nav>
+</header>
 
 @yield('contenido')
 
-<footer class="py-5 mt-5">
+{{-- ── Footer ── --}}
+<footer class="site-footer">
     <div class="container">
-        <div class="row text-center mb-4">
+        <div class="row mb-5">
             <div class="col-md-4" style="border-right: 1px solid var(--border);">
-                <p style="letter-spacing: 4px; font-size: 0.8rem; color: var(--olive); margin-bottom: 0.4rem;">ENVIAMOS TU COMPRA</p>
-                <p style="color: var(--text-2); font-size: 0.95rem;">Entregas a todo el país</p>
+                <p style="font-size: 12px; font-weight: 500; letter-spacing: 0.28em; color: var(--text); margin-bottom: 8px;">"ENVIAMOS TU COMPRA"</p>
+                <p style="font-size: 16px; color: var(--text-3);">Entregas a todo el país</p>
             </div>
-            <div class="col-md-4" style="border-right: 1px solid var(--border);">
-                <p style="letter-spacing: 4px; font-size: 0.8rem; color: var(--olive); margin-bottom: 0.4rem;">PAGÁ COMO QUIERAS</p>
-                <p style="color: var(--text-2); font-size: 0.95rem;">Tarjetas, transferencia y Mercado Pago</p>
+            <div class="col-md-4 ps-md-5" style="border-right: 1px solid var(--border);">
+                <p style="font-size: 12px; font-weight: 500; letter-spacing: 0.28em; color: var(--text); margin-bottom: 8px;">"PAGÁ COMO QUIERAS"</p>
+                <p style="font-size: 16px; color: var(--text-3);">Tarjetas, transferencia y Mercado Pago</p>
             </div>
-            <div class="col-md-4">
-                <p style="letter-spacing: 4px; font-size: 0.8rem; color: var(--olive); margin-bottom: 0.4rem;">COMPRÁ CON SEGURIDAD</p>
-                <p style="color: var(--text-2); font-size: 0.95rem;">Tus datos siempre protegidos</p>
+            <div class="col-md-4 ps-md-5">
+                <p style="font-size: 12px; font-weight: 500; letter-spacing: 0.28em; color: var(--text); margin-bottom: 8px;">"COMPRÁ CON SEGURIDAD"</p>
+                <p style="font-size: 16px; color: var(--text-3);">Tus datos siempre protegidos</p>
             </div>
         </div>
 
-        <hr class="lisbon-hr">
+        <hr class="lisbon-hr" style="margin: 0 0 3rem;">
 
-        <div class="row mt-4">
+        <div class="row">
             <div class="col-md-4">
-                <p style="letter-spacing: 5px; font-size: 0.72rem; color: var(--olive); margin-bottom: 1.2rem;">NAVEGACIÓN</p>
-                <p><a href="/">Inicio</a></p>
-                <p><a href="/catalogo">Catálogo</a></p>
-                <p><a href="/quienes-somos">Quiénes Somos</a></p>
-                <p><a href="/contacto">Contacto</a></p>
-                <p><a href="/terminos">Términos y Condiciones</a></p>
+                <p style="font-size: 12px; font-weight: 500; letter-spacing: 0.28em; color: var(--text); margin-bottom: 1.2rem;">NAVEGACIÓN</p>
+                @foreach([['/', 'Inicio'], ['/catalogo', 'Catálogo'], ['/quienes-somos', 'Quiénes Somos'], ['/contacto', 'Contacto'], ['/terminos', 'Términos']] as [$url, $label])
+                    <p style="margin-bottom: 6px;"><a href="{{ $url }}" style="font-size:16px; color: var(--text-3);">{{ $label }}</a></p>
+                @endforeach
             </div>
             <div class="col-md-4">
-                <p style="letter-spacing: 5px; font-size: 0.72rem; color: var(--olive); margin-bottom: 1.2rem;">REDES SOCIALES</p>
-                <p>Instagram: @lisbon.store</p>
-                <p>Facebook: /lisbonstore</p>
+                <p style="font-size: 12px; font-weight: 500; letter-spacing: 0.28em; color: var(--text); margin-bottom: 1.2rem;">REDES SOCIALES</p>
+                <p style="font-size: 16px; color: var(--text-3); margin-bottom: 6px;">Instagram: @lisbon.store</p>
+                <p style="font-size: 16px; color: var(--text-3);">Facebook: /lisbonstore</p>
             </div>
             <div class="col-md-4">
-                <p style="letter-spacing: 5px; font-size: 0.72rem; color: var(--olive); margin-bottom: 1.2rem;">NEWSLETTER</p>
+                <p style="font-size: 12px; font-weight: 500; letter-spacing: 0.28em; color: var(--text); margin-bottom: 1.2rem;">NEWSLETTER</p>
                 <div class="d-flex">
                     <input type="email" placeholder="Tu email"
-                        style="flex: 1; background: #fff; border: 1px solid var(--border); border-right: none; color: var(--text-1); padding: 10px 14px; font-family: 'Georgia', serif; font-size: 0.85rem; outline: none; border-radius: 0;">
-                    <button style="border: 1px solid var(--olive); background: var(--olive); color: var(--cream); padding: 10px 18px; font-family: 'Georgia', serif; cursor: pointer; border-radius: 0; font-size: 0.85rem;">→</button>
+                        style="flex:1; background:#fff; border:1px solid var(--border); border-right:none; color:var(--text); padding:13px 16px; font-family:'Space Grotesk',sans-serif; font-size:15px; outline:none; border-radius:0;">
+                    <button style="background:var(--text); color:#fff; border:1px solid var(--text); padding:13px 20px; font-family:'Space Grotesk',sans-serif; font-size:15px; cursor:pointer;">→</button>
                 </div>
             </div>
         </div>
 
         <hr class="lisbon-hr">
 
-        <p class="text-center" style="color: var(--text-3); font-size: 0.75rem; letter-spacing: 3px;">© 2026 LISBON. TODOS LOS DERECHOS RESERVADOS.</p>
+        <div class="d-flex justify-content-between align-items-center">
+            <p style="font-size: 13px; letter-spacing: 0.13em; color: var(--text-3); margin: 0;">© 2026 LISBON™</p>
+            <p style="font-size: 13px; letter-spacing: 0.13em; color: var(--text-3); margin: 0;">TODOS LOS DERECHOS RESERVADOS.</p>
+        </div>
     </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Mobile menu toggle básico
+    document.getElementById('mobileToggle')?.addEventListener('click', function () {
+        const menu = document.querySelector('.site-nav__menu');
+        if (menu) {
+            const open = menu.style.display === 'flex';
+            menu.style.display = open ? 'none' : 'flex';
+            menu.style.flexDirection = 'column';
+            menu.style.position = 'absolute';
+            menu.style.top = '100%';
+            menu.style.left = '0';
+            menu.style.right = '0';
+            menu.style.background = '#fff';
+            menu.style.borderBottom = '1px solid var(--border)';
+            menu.style.padding = '1rem';
+            menu.style.zIndex = '998';
+        }
+    });
+</script>
 </body>
 </html>

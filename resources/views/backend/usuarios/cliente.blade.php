@@ -38,20 +38,20 @@
     <div class="row g-3 mb-4">
         <div class="col-md-4">
             <div class="lisbon-card" style="padding: 2rem; text-align: center;">
-                <p style="letter-spacing: 3px; font-size: 0.68rem; color: var(--text-3); margin-bottom: 1rem;">PRODUCTOS EN CARRITO</p>
-                <h2 style="font-weight: 300; letter-spacing: 4px; font-size: 2.8rem; color: var(--olive-dark); margin: 0;">{{ $totalItems }}</h2>
+                <p style="letter-spacing: 0.14em; font-size: 0.72rem; color: var(--text-3); margin-bottom: 1rem;">PRODUCTOS EN CARRITO</p>
+                <h2 style="font-weight: 300; letter-spacing: 0.1em; font-size: 3.2rem; color: var(--text); margin: 0;">{{ $totalItems }}</h2>
             </div>
         </div>
         <div class="col-md-4">
             <div class="lisbon-card" style="padding: 2rem; text-align: center;">
-                <p style="letter-spacing: 3px; font-size: 0.68rem; color: var(--text-3); margin-bottom: 1rem;">TOTAL EN CARRITO</p>
-                <h2 style="font-weight: 300; letter-spacing: 3px; font-size: 2rem; color: var(--olive-dark); margin: 0;">${{ number_format($totalImporte, 0, ',', '.') }}</h2>
+                <p style="letter-spacing: 0.14em; font-size: 0.72rem; color: var(--text-3); margin-bottom: 1rem;">TOTAL EN CARRITO</p>
+                <h2 style="font-weight: 300; letter-spacing: 0.08em; font-size: 2.4rem; color: var(--text); margin: 0;">${{ number_format($totalImporte, 0, ',', '.') }}</h2>
             </div>
         </div>
         <div class="col-md-4">
             <div class="lisbon-card" style="padding: 2rem; text-align: center;">
-                <p style="letter-spacing: 3px; font-size: 0.68rem; color: var(--text-3); margin-bottom: 1rem;">ITEMS DISTINTOS</p>
-                <h2 style="font-weight: 300; letter-spacing: 4px; font-size: 2.8rem; color: var(--olive-dark); margin: 0;">{{ $cartItems->count() }}</h2>
+                <p style="letter-spacing: 0.14em; font-size: 0.72rem; color: var(--text-3); margin-bottom: 1rem;">ITEMS DISTINTOS</p>
+                <h2 style="font-weight: 300; letter-spacing: 0.1em; font-size: 3.2rem; color: var(--text); margin: 0;">{{ $cartItems->count() }}</h2>
             </div>
         </div>
     </div>
