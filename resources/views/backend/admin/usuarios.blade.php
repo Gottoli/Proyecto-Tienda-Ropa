@@ -1,4 +1,4 @@
-@extends('layout')
+﻿@extends('layout')
 
 @section('contenido')
 
@@ -7,7 +7,7 @@
         <span class="subnav-label">ADMIN</span>
         <a href="/admin">DASHBOARD</a>
         <a href="/admin/productos">PRODUCTOS</a>
-        <a href="/admin/consultas">CONSULTAS</a>
+        <a href="/admin/ventas">VENTAS</a><a href="/admin/consultas">CONSULTAS</a>
         <a href="/admin/usuarios" class="is-active">USUARIOS</a>
     </div>
 </div>
@@ -51,3 +51,4 @@
 </div>
 
 @endsection
+

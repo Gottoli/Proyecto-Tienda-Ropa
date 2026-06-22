@@ -147,43 +147,99 @@
             text-underline-offset: 4px;
         }
 
-        /* dropdown */
-        .nav-dropdown {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-top: none;
-            min-width: 200px;
-            padding: 0;
-            z-index: 999;
-        }
-        .site-nav__menu li:hover > .nav-dropdown { display: block; }
-        .nav-dropdown a {
-            display: block;
-            height: auto;
-            padding: 13px 20px;
-            font-size: 13px;
-            letter-spacing: 0.13em;
-            border-bottom: 1px solid var(--border-sub);
-        }
-        .nav-dropdown a:last-child { border-bottom: none; }
+        /* ── Mega-dropdown ── */
+        .site-nav__menu li.has-dropdown { position: static; }
 
-        /* sub-dropdown (género) */
-        .nav-sub-dropdown {
-            display: none;
+        .nav-mega {
             position: absolute;
-            left: 100%;
-            top: 0;
+            top: 58px;
+            left: 0;
+            right: 0;
             background: var(--bg);
-            border: 1px solid var(--border);
-            min-width: 180px;
-            padding: 0;
+            border-top: 2px solid var(--text);
+            border-bottom: 1px solid var(--border);
+            z-index: 997;
+            padding: 2.8rem 3rem;
+            /* hidden state */
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-6px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
         }
-        .nav-dropdown li:hover > .nav-sub-dropdown { display: block; }
-        .nav-dropdown li { list-style: none; position: relative; }
+        .has-dropdown.is-open .nav-mega {
+            opacity: 1;
+            pointer-events: all;
+            transform: translateY(0);
+        }
+        .nav-mega-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            gap: 0;
+        }
+        .nav-mega-col {
+            flex: 1;
+            padding-right: 3rem;
+            border-right: 1px solid var(--border);
+            margin-right: 3rem;
+        }
+        .nav-mega-col:last-child {
+            border-right: none;
+            margin-right: 0;
+            display: flex;
+            align-items: flex-end;
+            padding-bottom: 4px;
+        }
+        .nav-mega-label {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            color: var(--text-3);
+            margin: 0 0 1.2rem;
+            padding: 0;
+            height: auto;
+        }
+        .nav-mega a {
+            display: block;
+            height: auto !important;
+            padding: 9px 0 !important;
+            font-size: 20px !important;
+            font-weight: 300;
+            letter-spacing: 0.08em;
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: none !important;
+            opacity: 1;
+            transition: opacity 0.15s;
+        }
+        .nav-mega a:hover { opacity: 0.45 !important; }
+        .nav-mega-all {
+            font-size: 13px !important;
+            font-weight: 500;
+            letter-spacing: 0.22em !important;
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 1px solid var(--text) !important;
+            padding-bottom: 2px !important;
+        }
+
+        /* flecha indicador */
+        .nav-arrow {
+            display: inline-block;
+            margin-left: 5px;
+            font-size: 11px;
+            transition: transform 0.2s ease;
+        }
+        .has-dropdown.is-open .nav-arrow { transform: rotate(90deg); }
+
+        /* backdrop */
+        #navBackdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 996;
+        }
+        #navBackdrop.is-visible { display: block; }
 
         /* lado derecho — auth */
         .site-nav__right {
@@ -252,18 +308,103 @@
         .user-dropdown a:hover,
         .user-dropdown button:hover { opacity: 0.5; }
 
-        /* mobile toggle */
+        /* ── Mobile ── */
         .nav-mobile-toggle {
             display: none;
             background: none;
             border: none;
             cursor: pointer;
             padding: 8px;
+            z-index: 1001;
         }
+
+        /* Mobile overlay menu */
+        #mobileMenu {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 0;
+        }
+        #mobileMenu.is-open { display: block; }
+
+        .mobile-menu-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            height: 58px;
+            border-bottom: 1px solid var(--border);
+        }
+        .mobile-menu-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 22px;
+            padding: 8px;
+            color: var(--text);
+            line-height: 1;
+        }
+        .mobile-nav-item {
+            border-bottom: 1px solid var(--border);
+        }
+        .mobile-nav-link {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 20px;
+            font-size: 18px;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            color: var(--text);
+            text-decoration: none;
+            background: none;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .mobile-nav-link .mob-arrow {
+            font-size: 14px;
+            transition: transform 0.2s;
+            color: var(--text-3);
+        }
+        .mobile-nav-item.is-open .mob-arrow { transform: rotate(90deg); }
+
+        .mobile-submenu {
+            display: none;
+            background: var(--bg-off);
+            padding: 4px 0 8px;
+        }
+        .mobile-nav-item.is-open .mobile-submenu { display: block; }
+
+        .mobile-sub-label {
+            font-size: 11px;
+            font-weight: 500;
+            letter-spacing: 0.28em;
+            color: var(--text-3);
+            padding: 16px 28px 8px;
+        }
+        .mobile-sub-link {
+            display: block;
+            padding: 12px 28px;
+            font-size: 16px;
+            font-weight: 300;
+            letter-spacing: 0.06em;
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border-sub);
+        }
+        .mobile-sub-link:last-child { border-bottom: none; }
+        .mobile-sub-link:hover { opacity: 0.55; }
+
         @media (max-width: 991px) {
-            .site-nav__menu { display: none; }
+            .site-nav__menu { display: none !important; }
             .nav-mobile-toggle { display: block; }
             .site-nav__inner { padding: 0 16px; }
+            .nav-mega { display: none !important; }
         }
 
         /* ══════════════════════════════════════
@@ -461,6 +602,23 @@
             text-transform: uppercase;
         }
 
+        /* Talle agotado */
+        .talle-agotado {
+            opacity: 0.3 !important;
+            position: relative;
+            cursor: not-allowed !important;
+        }
+        .talle-agotado::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 4px;
+            right: 4px;
+            height: 1px;
+            background: var(--text-3);
+            transform: rotate(-20deg);
+        }
+
         /* Quote marks — Off-White signature */
         .ow-quote::before { content: '"'; margin-right: 2px; }
         .ow-quote::after  { content: '"'; margin-left: 2px; }
@@ -498,6 +656,64 @@
     </span>
 </div>
 
+{{-- Backdrop para cerrar mega-menu --}}
+<div id="navBackdrop"></div>
+
+{{-- ── Mobile overlay menu ── --}}
+<div id="mobileMenu" role="dialog" aria-modal="true">
+    <div class="mobile-menu-header">
+        <a href="/" class="site-nav__logo">LISBON<sup>™</sup></a>
+        <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Cerrar menú">✕</button>
+    </div>
+
+    {{-- Catálogo expandible --}}
+    <div class="mobile-nav-item" id="mobCatalogo">
+        <button class="mobile-nav-link" onclick="toggleMobSection('mobCatalogo')">
+            CATÁLOGO <span class="mob-arrow">›</span>
+        </button>
+        <div class="mobile-submenu">
+            <p class="mobile-sub-label">HOMBRE</p>
+            <a href="/catalogo?categoria=camperas&genero=hombre"   class="mobile-sub-link">CAMPERAS</a>
+            <a href="/catalogo?categoria=remeras&genero=hombre"    class="mobile-sub-link">REMERAS</a>
+            <a href="/catalogo?categoria=pantalones&genero=hombre" class="mobile-sub-link">PANTALONES</a>
+            <a href="/catalogo?categoria=buzos&genero=hombre"      class="mobile-sub-link">BUZOS</a>
+            <p class="mobile-sub-label" style="margin-top: 8px;">MUJER</p>
+            <a href="/catalogo?categoria=camperas&genero=mujer"    class="mobile-sub-link">CAMPERAS</a>
+            <a href="/catalogo?categoria=remeras&genero=mujer"     class="mobile-sub-link">REMERAS</a>
+            <a href="/catalogo?categoria=pantalones&genero=mujer"  class="mobile-sub-link">PANTALONES</a>
+            <a href="/catalogo?categoria=buzos&genero=mujer"       class="mobile-sub-link">BUZOS</a>
+            <a href="/catalogo" class="mobile-sub-link" style="font-weight:500; letter-spacing:0.16em; font-size:13px; padding-top:16px;">VER TODO →</a>
+        </div>
+    </div>
+
+    <div class="mobile-nav-item"><a href="/"                class="mobile-nav-link">INICIO</a></div>
+    <div class="mobile-nav-item"><a href="/quienes-somos"   class="mobile-nav-link">NOSOTROS</a></div>
+    <div class="mobile-nav-item"><a href="/comercializacion" class="mobile-nav-link">COMPRAS</a></div>
+    <div class="mobile-nav-item"><a href="/consultas"        class="mobile-nav-link">CONSULTAS</a></div>
+    <div class="mobile-nav-item"><a href="/contacto"         class="mobile-nav-link">CONTACTO</a></div>
+
+    {{-- Auth en mobile --}}
+    <div style="padding: 32px 20px; border-top: 1px solid var(--border); margin-top: auto;">
+        @auth
+            <p style="font-size:13px; letter-spacing:0.15em; color:var(--text-3); margin-bottom:16px;">
+                {{ strtoupper(auth()->user()->name) }}
+            </p>
+            @if(auth()->user()->rol === 'admin')
+                <a href="/admin" class="btn-lisbon d-block text-center" style="margin-bottom:12px;">PANEL ADMIN</a>
+            @else
+                <a href="/cliente" class="btn-lisbon d-block text-center" style="margin-bottom:12px;">MI CUENTA</a>
+                <a href="/carrito" class="btn-lisbon d-block text-center" style="margin-bottom:12px;">MI CARRITO</a>
+            @endif
+            <form action="/logout" method="POST">@csrf
+                <button type="submit" class="btn-lisbon" style="width:100%; text-align:center;">CERRAR SESIÓN</button>
+            </form>
+        @else
+            <a href="/registro" class="btn-lisbon d-block text-center" style="margin-bottom:12px;">REGISTRO</a>
+            <a href="/login"    class="btn-lisbon-filled d-block text-center">LOGIN</a>
+        @endauth
+    </div>
+</div>
+
 {{-- ── Navbar ── --}}
 <header class="site-nav">
     <div class="site-nav__inner">
@@ -510,33 +726,31 @@
             <li><a href="/">INICIO</a></li>
             <li><a href="/quienes-somos">NOSOTROS</a></li>
 
-            {{-- Catálogo con dropdown --}}
-            <li>
-                <a href="/catalogo">CATÁLOGO</a>
-                <div class="nav-dropdown">
-                    <ul style="list-style:none; margin:0; padding:0;">
-                        <li>
-                            <a href="#">HOMBRE ›</a>
-                            <div class="nav-sub-dropdown">
-                                <a href="/catalogo?categoria=camperas&genero=hombre">CAMPERAS</a>
-                                <a href="/catalogo?categoria=remeras&genero=hombre">REMERAS</a>
-                                <a href="/catalogo?categoria=pantalones&genero=hombre">PANTALONES</a>
-                                <a href="/catalogo?categoria=buzos&genero=hombre">BUZOS</a>
-                            </div>
-                        </li>
-                        <li>
-                            <a href="#">MUJER ›</a>
-                            <div class="nav-sub-dropdown">
-                                <a href="/catalogo?categoria=camperas&genero=mujer">CAMPERAS</a>
-                                <a href="/catalogo?categoria=remeras&genero=mujer">REMERAS</a>
-                                <a href="/catalogo?categoria=pantalones&genero=mujer">PANTALONES</a>
-                                <a href="/catalogo?categoria=buzos&genero=mujer">BUZOS</a>
-                            </div>
-                        </li>
-                        <li style="border-top: 1px solid var(--border-sub); margin-top: 4px; padding-top: 4px;">
-                            <a href="/catalogo">VER TODO →</a>
-                        </li>
-                    </ul>
+            {{-- Catálogo con mega-menu --}}
+            <li class="has-dropdown" id="navCatalogo">
+                <button onclick="toggleMegaMenu('navCatalogo')" style="background:none;border:none;cursor:pointer;font-family:inherit;font-size:13px;font-weight:500;letter-spacing:0.16em;color:var(--text);display:flex;align-items:center;height:58px;padding:0 14px;white-space:nowrap;">
+                    CATÁLOGO <span class="nav-arrow">›</span>
+                </button>
+                <div class="nav-mega">
+                    <div class="nav-mega-inner">
+                        <div class="nav-mega-col">
+                            <p class="nav-mega-label">HOMBRE</p>
+                            <a href="/catalogo?categoria=camperas&genero=hombre">CAMPERAS</a>
+                            <a href="/catalogo?categoria=remeras&genero=hombre">REMERAS</a>
+                            <a href="/catalogo?categoria=pantalones&genero=hombre">PANTALONES</a>
+                            <a href="/catalogo?categoria=buzos&genero=hombre">BUZOS</a>
+                        </div>
+                        <div class="nav-mega-col">
+                            <p class="nav-mega-label">MUJER</p>
+                            <a href="/catalogo?categoria=camperas&genero=mujer">CAMPERAS</a>
+                            <a href="/catalogo?categoria=remeras&genero=mujer">REMERAS</a>
+                            <a href="/catalogo?categoria=pantalones&genero=mujer">PANTALONES</a>
+                            <a href="/catalogo?categoria=buzos&genero=mujer">BUZOS</a>
+                        </div>
+                        <div class="nav-mega-col">
+                            <a href="/catalogo" class="nav-mega-all">VER TODA LA COLECCIÓN →</a>
+                        </div>
+                    </div>
                 </div>
             </li>
 
@@ -666,22 +880,42 @@
         .catch(function() { form.submit(); });
     });
 
-    // Mobile menu toggle básico
-    document.getElementById('mobileToggle')?.addEventListener('click', function () {
-        const menu = document.querySelector('.site-nav__menu');
-        if (menu) {
-            const open = menu.style.display === 'flex';
-            menu.style.display = open ? 'none' : 'flex';
-            menu.style.flexDirection = 'column';
-            menu.style.position = 'absolute';
-            menu.style.top = '100%';
-            menu.style.left = '0';
-            menu.style.right = '0';
-            menu.style.background = '#fff';
-            menu.style.borderBottom = '1px solid var(--border)';
-            menu.style.padding = '1rem';
-            menu.style.zIndex = '998';
+    // ── Mega-menu desktop ──
+    function toggleMegaMenu(id) {
+        var li = document.getElementById(id);
+        var isOpen = li.classList.contains('is-open');
+        // cierra todos
+        document.querySelectorAll('.has-dropdown.is-open').forEach(function(el) { el.classList.remove('is-open'); });
+        document.getElementById('navBackdrop').classList.remove('is-visible');
+        if (!isOpen) {
+            li.classList.add('is-open');
+            document.getElementById('navBackdrop').classList.add('is-visible');
         }
+    }
+    document.getElementById('navBackdrop').addEventListener('click', function() {
+        document.querySelectorAll('.has-dropdown.is-open').forEach(function(el) { el.classList.remove('is-open'); });
+        this.classList.remove('is-visible');
+    });
+
+    // ── Mobile accordion ──
+    function toggleMobSection(id) {
+        var item = document.getElementById(id);
+        item.classList.toggle('is-open');
+    }
+
+    // Abrir / cerrar menú mobile
+    document.getElementById('mobileToggle').addEventListener('click', function() {
+        document.getElementById('mobileMenu').classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+    });
+    function closeMobileMenu() {
+        document.getElementById('mobileMenu').classList.remove('is-open');
+        document.body.style.overflow = '';
+    }
+    document.getElementById('mobileMenuClose').addEventListener('click', closeMobileMenu);
+    // Cerrar al hacer click en link del menú mobile
+    document.querySelectorAll('#mobileMenu a').forEach(function(a) {
+        a.addEventListener('click', closeMobileMenu);
     });
 </script>
 </body>

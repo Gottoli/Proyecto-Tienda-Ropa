@@ -68,8 +68,32 @@ class CartController extends Controller
         return redirect()->back()->with('success', 'Carrito vaciado.');
     }
 
-    public function confirmar()
+    public function checkout()
     {
+        $cartItems = CartItem::where('user_id', auth()->id())
+                            ->with('product')
+                            ->get();
+
+        if ($cartItems->isEmpty()) {
+            return redirect('/carrito')->with('error', 'Tu carrito está vacío.');
+        }
+
+        $total = $cartItems->sum(fn($item) => $item->product->price * $item->quantity);
+
+        return view('checkout', compact('cartItems', 'total'));
+    }
+
+    public function confirmar(Request $request)
+    {
+        $request->validate([
+            'nombre_completo' => 'required|string|max:150',
+            'dni'             => 'required|string|max:20',
+            'direccion'       => 'required|string|max:200',
+            'ciudad'          => 'required|string|max:100',
+            'localidad'       => 'nullable|string|max:100',
+            'metodo_pago'     => 'required|in:transferencia,tarjeta',
+        ]);
+
         $cartItems = CartItem::where('user_id', auth()->id())
                             ->with('product')
                             ->get();
@@ -83,9 +107,15 @@ class CartController extends Controller
         });
 
         $order = Order::create([
-            'user_id' => auth()->id(),
-            'total'   => $total,
-            'estado'  => 'confirmado',
+            'user_id'         => auth()->id(),
+            'total'           => $total,
+            'estado'          => 'confirmado',
+            'nombre_completo' => $request->nombre_completo,
+            'dni'             => $request->dni,
+            'direccion'       => $request->direccion,
+            'ciudad'          => $request->ciudad,
+            'localidad'       => $request->localidad,
+            'metodo_pago'     => $request->metodo_pago,
         ]);
 
         foreach ($cartItems as $item) {
@@ -93,11 +123,20 @@ class CartController extends Controller
                 'order_id'   => $order->id,
                 'product_id' => $item->product_id,
                 'quantity'   => $item->quantity,
+                'talle'      => $item->talle,
                 'price'      => $item->product->price,
             ]);
 
-            $item->product->stock -= $item->quantity;
-            $item->product->save();
+            $prod = $item->product;
+            if ($prod->stock_talles && $item->talle && isset($prod->stock_talles[$item->talle])) {
+                $st = $prod->stock_talles;
+                $st[$item->talle] = max(0, $st[$item->talle] - $item->quantity);
+                $prod->stock_talles = $st;
+                $prod->stock = array_sum($st);
+            } else {
+                $prod->stock = max(0, $prod->stock - $item->quantity);
+            }
+            $prod->save();
         }
 
         CartItem::where('user_id', auth()->id())->delete();

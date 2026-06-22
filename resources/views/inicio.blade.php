@@ -35,31 +35,37 @@
 </div>
 
 {{-- ── "NEW IN" ── --}}
-<div style="background: var(--bg-off); padding: 5rem 0;">
-    <div class="container">
-        <div style="display: flex; align-items: baseline; gap: 2.5rem; margin-bottom: 4rem;">
-            <p style="font-size: 12px; font-weight: 500; letter-spacing: 0.28em; color: var(--text); margin: 0; white-space: nowrap;">"NEW IN"</p>
-            <hr style="flex: 1; border-color: var(--border); margin: 0;">
-            <a href="/catalogo" style="font-size: 12px; font-weight: 400; letter-spacing: 0.2em; color: var(--text-3); text-decoration: none; white-space: nowrap; transition: opacity 0.15s;"
-               onmouseover="this.style.opacity='.5'" onmouseout="this.style.opacity='1'">VER TODO →</a>
-        </div>
-        <div class="row g-0">
-            @foreach([
-                ['img' => 'campera1.jpg',  'nombre' => 'CAMPERA OVERSIZE'],
-                ['img' => 'remera1.jpg',   'nombre' => 'REMERA CLÁSICA'],
-                ['img' => 'pantalon1.jpeg','nombre' => 'JEAN SLIM'],
-                ['img' => 'buzo1.jpg',     'nombre' => 'BUZO ZIP'],
-            ] as $item)
-            <div class="col-md-3" style="padding: 0 8px;">
-                <img src="/img/{{ $item['img'] }}"
-                     style="width: 100%; height: 500px; object-fit: cover; background: var(--border-sub); display: block;">
-                <div style="padding: 16px 0 0;">
-                    <p style="font-size: 13px; font-weight: 500; letter-spacing: 0.1em; color: var(--text); margin: 0 0 2px;">{{ $item['nombre'] }}</p>
-                    <p style="font-size: 13px; color: var(--text-3); margin: 0; letter-spacing: 0.05em;">—</p>
-                </div>
+<div style="background: var(--bg-off); padding: 4rem 0 0;">
+
+    {{-- Header --}}
+    <div style="padding: 0 2.5rem 3rem; display: flex; align-items: baseline; gap: 2.5rem;">
+        <p style="font-size: 12px; font-weight: 500; letter-spacing: 0.28em; color: var(--text); margin: 0; white-space: nowrap;">"NEW IN"</p>
+        <hr style="flex: 1; border-color: var(--border); margin: 0;">
+        <a href="/catalogo" style="font-size: 12px; font-weight: 400; letter-spacing: 0.2em; color: var(--text-3); text-decoration: none; white-space: nowrap; transition: opacity 0.15s;"
+           onmouseover="this.style.opacity='.5'" onmouseout="this.style.opacity='1'">VER TODO →</a>
+    </div>
+
+    {{-- Grid edge-to-edge --}}
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;">
+        @foreach($newIn as $product)
+        <a href="/catalogo/{{ $product->id }}" style="text-decoration: none; color: inherit; display: block; overflow: hidden; position: relative;">
+            {{-- Imagen --}}
+            <div style="overflow: hidden;">
+                @if($product->image)
+                    <img src="/img/{{ $product->image }}"
+                         style="width: 100%; height: clamp(500px, 55vw, 780px); object-fit: cover; background: var(--border-sub); display: block; transition: transform 0.5s ease;"
+                         onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
+                @else
+                    <div style="width: 100%; height: clamp(500px, 55vw, 780px); background: var(--border-sub);"></div>
+                @endif
             </div>
-            @endforeach
-        </div>
+            {{-- Info --}}
+            <div style="padding: 20px 20px 40px; background: var(--bg-off);">
+                <p style="font-size: 15px; font-weight: 500; letter-spacing: 0.1em; color: var(--text); margin: 0 0 6px;">{{ strtoupper($product->name) }}</p>
+                <p style="font-size: 15px; font-weight: 300; color: var(--text-3); margin: 0;">${{ number_format($product->price, 0, ',', '.') }}</p>
+            </div>
+        </a>
+        @endforeach
     </div>
 </div>
 
@@ -71,26 +77,20 @@
             <hr style="flex: 1; border-color: var(--border); margin: 0;">
         </div>
     </div>
-    <div style="display: flex; animation: cinta 28s linear infinite; width: max-content; margin-top: 2.5rem;">
-        @foreach([
-            ['img' => 'campera2.jpg',   'nombre' => 'CAMPERA CUERO'],
-            ['img' => 'remera2.jpg',    'nombre' => 'REMERA OFF WHITE'],
-            ['img' => 'buzo2.jpg',      'nombre' => 'BUZO ZIP BLANCO'],
-            ['img' => 'pantalon2.jpeg', 'nombre' => 'JEAN WIDE LEG'],
-            ['img' => 'campera3.jpg',   'nombre' => 'CAMPERA DENIM'],
-            ['img' => 'remera3.jpeg',   'nombre' => 'REMERA ESENCIAL'],
-            ['img' => 'campera2.jpg',   'nombre' => 'CAMPERA CUERO'],
-            ['img' => 'remera2.jpg',    'nombre' => 'REMERA OFF WHITE'],
-            ['img' => 'buzo2.jpg',      'nombre' => 'BUZO ZIP BLANCO'],
-            ['img' => 'pantalon2.jpeg', 'nombre' => 'JEAN WIDE LEG'],
-            ['img' => 'campera3.jpg',   'nombre' => 'CAMPERA DENIM'],
-            ['img' => 'remera3.jpeg',   'nombre' => 'REMERA ESENCIAL'],
-        ] as $item)
-        <div style="width: 340px; padding: 0 6px; flex-shrink: 0;">
-            <img src="/img/{{ $item['img'] }}"
-                 style="width: 100%; height: 420px; object-fit: cover; background: var(--bg-off); display: block;">
-            <p style="font-size: 13px; font-weight: 500; letter-spacing: 0.1em; color: var(--text); margin: 14px 0 0;">{{ $item['nombre'] }}</p>
-        </div>
+    <div style="display: flex; animation: cinta 32s linear infinite; width: max-content; margin-top: 2.5rem;">
+        @php $cintaDouble = $cinta->concat($cinta); @endphp
+        @foreach($cintaDouble as $product)
+        <a href="/catalogo/{{ $product->id }}" style="width: 300px; padding: 0 6px; flex-shrink: 0; text-decoration: none; color: inherit; display: block;">
+            @if($product->image)
+                <img src="/img/{{ $product->image }}"
+                     style="width: 100%; height: 400px; object-fit: cover; background: var(--bg-off); display: block; transition: opacity 0.2s;"
+                     onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
+            @else
+                <div style="width: 100%; height: 400px; background: var(--bg-off);"></div>
+            @endif
+            <p style="font-size: 13px; font-weight: 500; letter-spacing: 0.1em; color: var(--text); margin: 14px 0 2px;">{{ strtoupper($product->name) }}</p>
+            <p style="font-size: 13px; font-weight: 300; color: var(--text-3); margin: 0;">${{ number_format($product->price, 0, ',', '.') }}</p>
+        </a>
         @endforeach
     </div>
 </div>

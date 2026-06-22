@@ -73,12 +73,9 @@
                 <p style="font-size: clamp(32px, 5vw, 56px); font-weight: 300; letter-spacing: 0.06em; color: var(--text); margin-bottom: 2rem; line-height: 1;">
                     ${{ number_format($total, 0, ',', '.') }}
                 </p>
-                <form action="/carrito/confirmar" method="POST">
-                    @csrf
-                    <button type="submit" class="btn-lisbon-filled" style="padding: 17px 56px;">
-                        CONFIRMAR COMPRA →
-                    </button>
-                </form>
+                <a href="/carrito/checkout" class="btn-lisbon-filled" style="padding: 17px 56px; display: inline-block;">
+                    PROCEDER AL PAGO →
+                </a>
             </div>
         </div>
     @endif

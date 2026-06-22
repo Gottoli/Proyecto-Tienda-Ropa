@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Consulta;
+use App\Models\Order;
+use App\Models\OrderItem;
 
 class AdminController extends Controller
 {
@@ -38,19 +40,30 @@ class AdminController extends Controller
             'name'        => 'required|string|max:150',
             'description' => 'nullable|string',
             'price'       => 'required|numeric|min:0',
-            'stock'       => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id',
+            'imagen_principal' => 'required|image|max:4096',
+            'imagenes_extra.*' => 'nullable|image|max:4096',
         ]);
 
-       Product::create([
-        'name'        => $request->name,
-        'description' => $request->description,
-        'price'       => $request->price,
-        'stock'       => $request->stock,
-        'talles'      => $request->talles,
-        'category_id' => $request->category_id,
-        'active'      => $request->has('active'),
-    ]);
+        $stockTalles = $this->buildStockTalles($request);
+        $totalStock  = $stockTalles ? array_sum($stockTalles) : (int) $request->input('stock', 0);
+
+        $data = [
+            'name'         => $request->name,
+            'description'  => $request->description,
+            'price'        => $request->price,
+            'stock'        => $totalStock,
+            'stock_talles' => $stockTalles ?: null,
+            'talles'       => $request->talles ?: null,
+            'category_id'  => $request->category_id,
+            'active'       => $request->has('active'),
+        ];
+
+        [$mainImage, $extraImages] = $this->handleImageUploads($request);
+        if ($mainImage)   $data['image']  = $mainImage;
+        if ($extraImages) $data['images'] = $extraImages;
+
+        Product::create($data);
 
         return redirect('/admin/productos')->with('success', 'Producto creado correctamente.');
     }
@@ -67,22 +80,33 @@ class AdminController extends Controller
         $product = Product::findOrFail($id);
 
         $request->validate([
-            'name'        => 'required|string|max:150',
-            'description' => 'nullable|string',
-            'price'       => 'required|numeric|min:0',
-            'stock'       => 'required|integer|min:0',
-            'category_id' => 'required|exists:categories,id',
+            'name'             => 'required|string|max:150',
+            'description'      => 'nullable|string',
+            'price'            => 'required|numeric|min:0',
+            'category_id'      => 'required|exists:categories,id',
+            'imagen_principal' => 'nullable|image|max:4096',
+            'imagenes_extra.*' => 'nullable|image|max:4096',
         ]);
 
-        $product->update([
-        'name'        => $request->name,
-        'description' => $request->description,
-        'price'       => $request->price,
-        'stock'       => $request->stock,
-        'talles'      => $request->talles,
-        'category_id' => $request->category_id,
-        'active'      => $request->has('active'),
-        ]);
+        $stockTalles = $this->buildStockTalles($request);
+        $totalStock  = $stockTalles ? array_sum($stockTalles) : (int) $request->input('stock', $product->stock);
+
+        $data = [
+            'name'         => $request->name,
+            'description'  => $request->description,
+            'price'        => $request->price,
+            'stock'        => $totalStock,
+            'stock_talles' => $stockTalles ?: $product->stock_talles,
+            'talles'       => $request->talles ?: $product->talles,
+            'category_id'  => $request->category_id,
+            'active'       => $request->has('active'),
+        ];
+
+        [$mainImage, $extraImages] = $this->handleImageUploads($request);
+        if ($mainImage)   $data['image']  = $mainImage;
+        if ($extraImages) $data['images'] = $extraImages;
+
+        $product->update($data);
 
         return redirect('/admin/productos')->with('success', 'Producto actualizado correctamente.');
     }
@@ -120,9 +144,73 @@ class AdminController extends Controller
 
     public function usuarios()
     {
-       $usuarios = User::withCount('cartItems')
+        $usuarios = User::withCount('cartItems')
                     ->orderBy('created_at', 'desc')
                     ->get();
-    return view('backend.admin.usuarios', compact('usuarios'));
+        return view('backend.admin.usuarios', compact('usuarios'));
+    }
+
+    public function ventas()
+    {
+        $orders = Order::with(['user', 'items.product'])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $totalIngresos = $orders->sum('total');
+        $totalOrdenes  = $orders->count();
+        $totalItems    = OrderItem::sum('quantity');
+
+        $topProductos = OrderItem::with('product')
+            ->selectRaw('product_id, SUM(quantity) as total_vendido, SUM(price * quantity) as total_ingresos')
+            ->groupBy('product_id')
+            ->orderByDesc('total_vendido')
+            ->take(8)
+            ->get();
+
+        return view('backend.admin.ventas', compact(
+            'orders', 'totalIngresos', 'totalOrdenes', 'totalItems', 'topProductos'
+        ));
+    }
+
+    private function handleImageUploads(Request $request): array
+    {
+        $mainImage   = null;
+        $extraImages = [];
+
+        if ($request->hasFile('imagen_principal')) {
+            $file      = $request->file('imagen_principal');
+            $name      = time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+            $file->move(public_path('img'), $name);
+            $mainImage = $name;
+        }
+
+        if ($request->hasFile('imagenes_extra')) {
+            foreach ($request->file('imagenes_extra') as $file) {
+                $name = time() . '_' . mt_rand(100, 999) . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+                $file->move(public_path('img'), $name);
+                $extraImages[] = $name;
+            }
+        }
+
+        if ($mainImage && !empty($extraImages)) {
+            $extraImages = array_merge([$mainImage], $extraImages);
+        }
+
+        return [$mainImage, !empty($extraImages) ? $extraImages : null];
+    }
+
+    private function buildStockTalles(Request $request): ?array
+    {
+        if (!$request->has('stock_talles') || !is_array($request->stock_talles)) {
+            return null;
+        }
+        $result = [];
+        foreach ($request->stock_talles as $talle => $qty) {
+            $talle = trim($talle);
+            if ($talle !== '') {
+                $result[$talle] = max(0, (int) $qty);
+            }
+        }
+        return !empty($result) ? $result : null;
     }
 }

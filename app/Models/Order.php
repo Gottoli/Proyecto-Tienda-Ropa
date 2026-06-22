@@ -10,6 +10,12 @@ class Order extends Model
         'user_id',
         'total',
         'estado',
+        'nombre_completo',
+        'dni',
+        'direccion',
+        'ciudad',
+        'localidad',
+        'metodo_pago',
     ];
 
     public function user()

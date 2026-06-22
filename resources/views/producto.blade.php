@@ -88,7 +88,10 @@
 
             <hr class="lisbon-hr" style="margin: 1.5rem 0 2rem;">
 
-            @php $tallesArr = $product->talles ? array_map('trim', explode(',', $product->talles)) : []; @endphp
+            @php
+                $tallesArr   = $product->talles ? array_map('trim', explode(',', $product->talles)) : [];
+                $stockTalles = $product->stock_talles ?? [];
+            @endphp
 
             @auth
                 @if(auth()->user()->rol === 'cliente')
@@ -100,12 +103,19 @@
                                 <p class="lisbon-label" style="margin-bottom: 14px;">SELECCIONÁ TALLE</p>
                                 <div class="d-flex gap-2 flex-wrap">
                                     @foreach($tallesArr as $talle)
-                                        <label style="cursor: pointer;">
-                                            <input type="radio" name="talle" value="{{ $talle }}" style="display: none;" required>
-                                            <span class="talle-btn">{{ $talle }}</span>
+                                        @php $stockDisp = $stockTalles[$talle] ?? ($product->stock > 0 ? 1 : 0); @endphp
+                                        <label style="cursor: {{ $stockDisp > 0 ? 'pointer' : 'not-allowed' }};">
+                                            <input type="radio" name="talle" value="{{ $talle }}" style="display: none;"
+                                                   {{ $stockDisp === 0 ? 'disabled' : '' }} required>
+                                            <span class="talle-btn {{ $stockDisp === 0 ? 'talle-agotado' : '' }}">{{ $talle }}</span>
                                         </label>
                                     @endforeach
                                 </div>
+                                @if($stockTalles)
+                                    <p style="font-size:11px; letter-spacing:0.14em; color:var(--text-3); margin-top:10px;">
+                                        STOCK: @foreach($tallesArr as $talle) {{ $talle }}: {{ $stockTalles[$talle] ?? 0 }}{{ !$loop->last ? ' · ' : '' }} @endforeach
+                                    </p>
+                                @endif
                             </div>
                         @endif
 
@@ -114,26 +124,31 @@
                         </button>
                     </form>
                 @else
-                    {{-- Admin: talles visibles, sin compra --}}
+                    {{-- Admin: talles con stock --}}
                     @if($tallesArr)
                         <div class="mb-4">
-                            <p class="lisbon-label" style="margin-bottom: 14px;">TALLES DISPONIBLES</p>
+                            <p class="lisbon-label" style="margin-bottom: 14px;">TALLES Y STOCK</p>
                             <div class="d-flex gap-2 flex-wrap">
                                 @foreach($tallesArr as $talle)
-                                    <span class="talle-btn" style="cursor: default; opacity: .7;">{{ $talle }}</span>
+                                    @php $stockDisp = $stockTalles[$talle] ?? 0; @endphp
+                                    <div style="text-align:center;">
+                                        <span class="talle-btn {{ $stockDisp === 0 ? 'talle-agotado' : '' }}" style="cursor:default; display:block;">{{ $talle }}</span>
+                                        <span style="font-size:10px; color:var(--text-3); letter-spacing:0.1em;">{{ $stockDisp }}</span>
+                                    </div>
                                 @endforeach
                             </div>
                         </div>
                     @endif
                 @endif
             @else
-                {{-- Guest: talles visibles, botón de login --}}
+                {{-- Guest --}}
                 @if($tallesArr)
                     <div class="mb-4">
                         <p class="lisbon-label" style="margin-bottom: 14px;">TALLES DISPONIBLES</p>
                         <div class="d-flex gap-2 flex-wrap">
                             @foreach($tallesArr as $talle)
-                                <span class="talle-btn" style="cursor: default; opacity: .7;">{{ $talle }}</span>
+                                @php $stockDisp = $stockTalles[$talle] ?? ($product->stock > 0 ? 1 : 0); @endphp
+                                <span class="talle-btn {{ $stockDisp === 0 ? 'talle-agotado' : '' }}" style="cursor:default;">{{ $talle }}</span>
                             @endforeach
                         </div>
                     </div>

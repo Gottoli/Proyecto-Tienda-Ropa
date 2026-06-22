@@ -1,4 +1,4 @@
-@extends('layout')
+﻿@extends('layout')
 
 @section('contenido')
 
@@ -7,7 +7,7 @@
         <span class="subnav-label">ADMIN</span>
         <a href="/admin">DASHBOARD</a>
         <a href="/admin/productos" class="is-active">PRODUCTOS</a>
-        <a href="/admin/consultas">CONSULTAS</a>
+        <a href="/admin/ventas">VENTAS</a><a href="/admin/consultas">CONSULTAS</a>
         <a href="/admin/usuarios">USUARIOS</a>
     </div>
 </div>
@@ -31,7 +31,7 @@
             <tr>
                 <th>#</th>
                 <th>NOMBRE</th>
-                <th>CATEGORÍA</th>
+                <th>CATEGORÃA</th>
                 <th>PRECIO</th>
                 <th>STOCK</th>
                 <th>ESTADO</th>
@@ -63,7 +63,7 @@
                                 @method('DELETE')
                                 <button type="submit" class="btn-lisbon-ghost"
                                     style="color: #8A4A3A; border-color: #C4A09A;"
-                                    onclick="return confirm('¿Desactivar este producto?')">
+                                    onclick="return confirm('Â¿Desactivar este producto?')">
                                     DESACTIVAR
                                 </button>
                             </form>
@@ -87,3 +87,4 @@
 </div>
 
 @endsection
+

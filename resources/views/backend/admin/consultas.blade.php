@@ -1,4 +1,4 @@
-@extends('layout')
+﻿@extends('layout')
 
 @section('contenido')
 
@@ -22,7 +22,7 @@
     @endif
 
     @if($consultas->isEmpty())
-        <p style="color: var(--text-3); letter-spacing: 3px; font-size: 0.85rem; margin-top: 2rem;">NO HAY CONSULTAS AÚN.</p>
+        <p style="color: var(--text-3); letter-spacing: 3px; font-size: 0.85rem; margin-top: 2rem;">NO HAY CONSULTAS AÃšN.</p>
     @else
         <table class="lisbon-table">
             <thead>
@@ -48,7 +48,7 @@
                     <td style="color: var(--text-3); white-space: nowrap; font-size: 0.8rem;">{{ $consulta->created_at->format('d/m/Y H:i') }}</td>
                     <td>
                         @if($consulta->leida)
-                            <span class="badge-muted">LEÍDA</span>
+                            <span class="badge-muted">LEÃDA</span>
                         @else
                             <span class="badge-warm">NUEVA</span>
                         @endif
@@ -58,7 +58,7 @@
                             <form action="/admin/consultas/{{ $consulta->id }}/leer" method="POST">
                                 @csrf
                                 @method('PUT')
-                                <button type="submit" class="btn-lisbon-ghost" style="white-space: nowrap;">MARCAR LEÍDA</button>
+                                <button type="submit" class="btn-lisbon-ghost" style="white-space: nowrap;">MARCAR LEÃDA</button>
                             </form>
                         @endif
                     </td>
@@ -71,3 +71,4 @@
 </div>
 
 @endsection
+

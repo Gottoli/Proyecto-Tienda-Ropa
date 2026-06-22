@@ -11,6 +11,7 @@ class Product extends Model
         'description',
         'price',
         'stock',
+        'stock_talles',
         'talles',
         'image',
         'images',
@@ -19,11 +20,20 @@ class Product extends Model
     ];
 
     protected $casts = [
-        'price'  => 'decimal:2',
-        'stock'  => 'integer',
-        'active' => 'boolean',
-        'images' => 'array',
+        'price'        => 'decimal:2',
+        'stock'        => 'integer',
+        'stock_talles' => 'array',
+        'active'       => 'boolean',
+        'images'       => 'array',
     ];
+
+    public function getStockTalleAttribute(string $talle): int
+    {
+        if ($this->stock_talles && isset($this->stock_talles[$talle])) {
+            return (int) $this->stock_talles[$talle];
+        }
+        return 0;
+    }
 
     // Devuelve el array completo de imágenes, o [image] si sólo hay una
     public function getAllImagesAttribute(): array

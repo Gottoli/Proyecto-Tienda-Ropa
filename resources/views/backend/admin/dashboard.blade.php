@@ -1,4 +1,4 @@
-@extends('layout')
+﻿@extends('layout')
 
 @section('contenido')
 
@@ -7,7 +7,7 @@
         <span class="subnav-label">ADMIN</span>
         <a href="/admin" class="is-active">DASHBOARD</a>
         <a href="/admin/productos">PRODUCTOS</a>
-        <a href="/admin/consultas">CONSULTAS</a>
+        <a href="/admin/ventas">VENTAS</a><a href="/admin/consultas">CONSULTAS</a>
         <a href="/admin/usuarios">USUARIOS</a>
     </div>
 </div>
@@ -17,7 +17,7 @@
     <p class="page-eyebrow">PANEL ADMINISTRATIVO</p>
     <h2 class="page-title" style="font-size: 2rem; margin-bottom: 2.5rem;">DASHBOARD</h2>
 
-    {{-- Métricas --}}
+    {{-- MÃ©tricas --}}
     <div class="row g-3 mb-5">
         @foreach([
             ['label' => 'USUARIOS REGISTRADOS', 'valor' => $usuarios],
@@ -37,10 +37,10 @@
     <hr class="lisbon-hr">
 
     {{-- Accesos --}}
-    <p class="page-eyebrow" style="margin-bottom: 1.5rem;">GESTIÓN</p>
+    <p class="page-eyebrow" style="margin-bottom: 1.5rem;">GESTIÃ“N</p>
     <div class="row g-3">
         @foreach([
-            ['titulo' => 'PRODUCTOS',  'desc' => 'Gestionar el catálogo de productos',    'url' => '/admin/productos',  'btn' => 'VER PRODUCTOS'],
+            ['titulo' => 'PRODUCTOS',  'desc' => 'Gestionar el catÃ¡logo de productos',    'url' => '/admin/productos',  'btn' => 'VER PRODUCTOS'],
             ['titulo' => 'CONSULTAS',  'desc' => 'Revisar mensajes de clientes',           'url' => '/admin/consultas',  'btn' => 'VER CONSULTAS'],
             ['titulo' => 'USUARIOS',   'desc' => 'Ver y administrar usuarios registrados', 'url' => '/admin/usuarios',   'btn' => 'VER USUARIOS'],
         ] as $card)
@@ -57,3 +57,4 @@
 </div>
 
 @endsection
+
