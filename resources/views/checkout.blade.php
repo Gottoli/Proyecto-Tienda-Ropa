@@ -43,9 +43,10 @@
 
                     <div class="mb-4">
                         <label class="lisbon-label">DNI</label>
-                        <input type="text" name="dni" value="{{ old('dni') }}"
-                               class="lisbon-input" placeholder="Ej: 38.123.456"
-                               style="font-size: 16px;" maxlength="12">
+                        <input type="text" name="dni" value="{{ old('dni', auth()->user()->dni) }}"
+                               class="lisbon-input" placeholder="Ej: 38123456"
+                               style="font-size: 16px;" maxlength="9" inputmode="numeric"
+                               oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                         @error('dni') <small style="color:#8A4A3A; font-size:13px;">{{ $message }}</small> @enderror
                     </div>
                 </div>
@@ -54,27 +55,67 @@
                 <div style="margin-bottom: 3rem;">
                     <p style="font-size: 12px; font-weight: 500; letter-spacing: 0.28em; color: var(--text); margin-bottom: 1.8rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border);">"DIRECCIÓN DE ENTREGA"</p>
 
-                    <div class="mb-4">
-                        <label class="lisbon-label">DIRECCIÓN</label>
-                        <input type="text" name="direccion" value="{{ old('direccion') }}"
-                               class="lisbon-input" placeholder="Calle, número, piso/depto"
-                               style="font-size: 16px;">
-                        @error('direccion') <small style="color:#8A4A3A; font-size:13px;">{{ $message }}</small> @enderror
-                    </div>
+                    @php
+                        $tieneDireccionGuardada = !empty(auth()->user()->direccion);
+                        $modoDireccion = old('direccion_modo', $tieneDireccionGuardada ? 'guardada' : 'nueva');
+                    @endphp
 
-                    <div class="row">
-                        <div class="col-md-6 mb-4">
-                            <label class="lisbon-label">CIUDAD</label>
-                            <input type="text" name="ciudad" value="{{ old('ciudad') }}"
-                                   class="lisbon-input" placeholder="Ej: Buenos Aires"
+                    @if($tieneDireccionGuardada)
+                    <div class="d-flex flex-column gap-3 mb-4">
+                        <label class="pago-opcion">
+                            <input type="radio" name="direccion_modo" value="guardada" {{ $modoDireccion === 'guardada' ? 'checked' : '' }}
+                                   onchange="toggleDireccionModo(this)" style="display:none;">
+                            <div class="pago-card {{ $modoDireccion === 'guardada' ? 'is-selected' : '' }}" id="card-dir-guardada">
+                                <div style="display:flex; align-items:center; justify-content:space-between;">
+                                    <div>
+                                        <p style="font-size:14px; font-weight:500; letter-spacing:0.12em; margin:0 0 4px;">USAR MI DIRECCIÓN GUARDADA</p>
+                                        <p style="font-size:13px; color:var(--text-3); margin:0; letter-spacing:0.04em;">
+                                            {{ auth()->user()->direccion }}{{ auth()->user()->ciudad ? ', ' . auth()->user()->ciudad : '' }}{{ auth()->user()->localidad ? ', ' . auth()->user()->localidad : '' }}
+                                        </p>
+                                    </div>
+                                    <div class="pago-check" id="check-dir-guardada">✓</div>
+                                </div>
+                            </div>
+                        </label>
+                        <label class="pago-opcion">
+                            <input type="radio" name="direccion_modo" value="nueva" {{ $modoDireccion === 'nueva' ? 'checked' : '' }}
+                                   onchange="toggleDireccionModo(this)" style="display:none;">
+                            <div class="pago-card {{ $modoDireccion === 'nueva' ? 'is-selected' : '' }}" id="card-dir-nueva">
+                                <div style="display:flex; align-items:center; justify-content:space-between;">
+                                    <p style="font-size:14px; font-weight:500; letter-spacing:0.12em; margin:0;">ENVIAR A OTRA DIRECCIÓN</p>
+                                    <div class="pago-check" id="check-dir-nueva">✓</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    @endif
+
+                    <div id="direccionFields" style="{{ $modoDireccion === 'guardada' ? 'display:none;' : '' }}">
+                        <div class="mb-4">
+                            <label class="lisbon-label">DIRECCIÓN</label>
+                            <input type="text" name="direccion" id="inputDireccion"
+                                   value="{{ old('direccion', $modoDireccion === 'guardada' ? auth()->user()->direccion : '') }}"
+                                   class="lisbon-input" placeholder="Calle, número, piso/depto"
                                    style="font-size: 16px;">
-                            @error('ciudad') <small style="color:#8A4A3A; font-size:13px;">{{ $message }}</small> @enderror
+                            @error('direccion') <small style="color:#8A4A3A; font-size:13px;">{{ $message }}</small> @enderror
                         </div>
-                        <div class="col-md-6 mb-4">
-                            <label class="lisbon-label">LOCALIDAD / BARRIO <span style="font-weight:300;">(opcional)</span></label>
-                            <input type="text" name="localidad" value="{{ old('localidad') }}"
-                                   class="lisbon-input" placeholder="Ej: Palermo"
-                                   style="font-size: 16px;">
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label class="lisbon-label">CIUDAD</label>
+                                <input type="text" name="ciudad" id="inputCiudad"
+                                       value="{{ old('ciudad', $modoDireccion === 'guardada' ? auth()->user()->ciudad : '') }}"
+                                       class="lisbon-input" placeholder="Ej: Buenos Aires"
+                                       style="font-size: 16px;">
+                                @error('ciudad') <small style="color:#8A4A3A; font-size:13px;">{{ $message }}</small> @enderror
+                            </div>
+                            <div class="col-md-6 mb-4">
+                                <label class="lisbon-label">LOCALIDAD / BARRIO <span style="font-weight:300;">(opcional)</span></label>
+                                <input type="text" name="localidad" id="inputLocalidad"
+                                       value="{{ old('localidad', $modoDireccion === 'guardada' ? auth()->user()->localidad : '') }}"
+                                       class="lisbon-input" placeholder="Ej: Palermo"
+                                       style="font-size: 16px;">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -232,9 +273,10 @@
 
 <script>
 function selectPago(radio) {
-    document.querySelectorAll('.pago-card').forEach(function(c) { c.classList.remove('is-selected'); });
-    var cardId = 'card-' + radio.value;
-    document.getElementById(cardId).classList.add('is-selected');
+    document.querySelectorAll('input[name="metodo_pago"]').forEach(function(r) {
+        document.getElementById('card-' + r.value).classList.remove('is-selected');
+    });
+    document.getElementById('card-' + radio.value).classList.add('is-selected');
 
     var cuotasInfo = document.getElementById('cuotasInfo');
     cuotasInfo.style.display = radio.value === 'tarjeta' ? 'block' : 'none';
@@ -244,6 +286,31 @@ document.addEventListener('DOMContentLoaded', function() {
     var checked = document.querySelector('input[name="metodo_pago"]:checked');
     if (checked) selectPago(checked);
 });
+
+// ── Dirección de entrega ──
+var savedDireccion = @json(auth()->user()->direccion ?? '');
+var savedCiudad    = @json(auth()->user()->ciudad ?? '');
+var savedLocalidad = @json(auth()->user()->localidad ?? '');
+
+function toggleDireccionModo(radio) {
+    document.querySelectorAll('input[name="direccion_modo"]').forEach(function(r) {
+        document.getElementById('card-dir-' + r.value).classList.remove('is-selected');
+    });
+    document.getElementById('card-dir-' + radio.value).classList.add('is-selected');
+
+    var fields = document.getElementById('direccionFields');
+    if (radio.value === 'guardada') {
+        fields.style.display = 'none';
+        document.getElementById('inputDireccion').value = savedDireccion;
+        document.getElementById('inputCiudad').value = savedCiudad;
+        document.getElementById('inputLocalidad').value = savedLocalidad;
+    } else {
+        fields.style.display = 'block';
+        document.getElementById('inputDireccion').value = '';
+        document.getElementById('inputCiudad').value = '';
+        document.getElementById('inputLocalidad').value = '';
+    }
+}
 </script>
 
 @endsection

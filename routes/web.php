@@ -52,6 +52,7 @@ Route::middleware(['auth', 'rol:admin'])->group(function () {
 Route::middleware(['auth', 'rol:cliente'])->group(function () {
     Route::get('/compra-exitosa', [CartController::class, 'exitosa']);
     Route::get('/cliente', [ClienteController::class, 'index']);
+    Route::put('/cliente/perfil', [ClienteController::class, 'actualizarPerfil']);
     Route::get('/carrito', [CartController::class, 'index']);
     Route::post('/carrito/agregar/{productId}', [CartController::class, 'agregar']);
     Route::delete('/carrito/eliminar/{id}', [CartController::class, 'eliminar']);

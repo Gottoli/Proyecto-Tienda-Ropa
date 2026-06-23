@@ -45,27 +45,60 @@ class CartController extends Controller
     }
 
     if ($request->wantsJson()) {
-        return response()->json(['message' => 'PRODUCTO AGREGADO →']);
+        return response()->json(array_merge(['message' => 'PRODUCTO AGREGADO →'], $this->cartPayload()));
     }
 
     return redirect()->back()->with('success', 'Producto agregado al carrito.');
     }
 
-    public function eliminar($id)
+    public function eliminar(Request $request, $id)
     {
         $cartItem = CartItem::where('id', $id)
                            ->where('user_id', auth()->id())
                            ->firstOrFail();
         $cartItem->delete();
 
+        if ($request->wantsJson()) {
+            return response()->json($this->cartPayload());
+        }
+
         return redirect()->back()->with('success', 'Producto eliminado del carrito.');
     }
 
-    public function vaciar()
+    public function vaciar(Request $request)
     {
         CartItem::where('user_id', auth()->id())->delete();
 
+        if ($request->wantsJson()) {
+            return response()->json($this->cartPayload());
+        }
+
         return redirect()->back()->with('success', 'Carrito vaciado.');
+    }
+
+    private function cartPayload(): array
+    {
+        $cartItems = CartItem::where('user_id', auth()->id())->with('product')->get();
+        $total = $cartItems->sum(fn($item) => $item->product->price * $item->quantity);
+
+        $items = $cartItems->map(function ($item) {
+            return [
+                'id'         => $item->id,
+                'product_id' => $item->product_id,
+                'name'       => $item->product->name,
+                'image'      => $item->product->image,
+                'talle'      => $item->talle,
+                'quantity'   => $item->quantity,
+                'price'      => $item->product->price,
+                'subtotal'   => $item->product->price * $item->quantity,
+            ];
+        })->values();
+
+        return [
+            'items' => $items,
+            'total' => $total,
+            'count' => $cartItems->sum('quantity'),
+        ];
     }
 
     public function checkout()
@@ -87,7 +120,7 @@ class CartController extends Controller
     {
         $request->validate([
             'nombre_completo' => 'required|string|max:150',
-            'dni'             => 'required|string|max:20',
+            'dni'             => 'required|digits_between:7,9',
             'direccion'       => 'required|string|max:200',
             'ciudad'          => 'required|string|max:100',
             'localidad'       => 'nullable|string|max:100',
@@ -148,7 +181,7 @@ class CartController extends Controller
     {
         return view('compra-exitosa');
     }
-        public function restar($id)
+        public function restar(Request $request, $id)
     {
     $cartItem = CartItem::where('id', $id)
                        ->where('user_id', auth()->id())
@@ -159,6 +192,10 @@ class CartController extends Controller
         $cartItem->save();
     } else {
         $cartItem->delete();
+    }
+
+    if ($request->wantsJson()) {
+        return response()->json($this->cartPayload());
     }
 
      return redirect()->back()->with('success', 'Cantidad actualizada.');

@@ -136,6 +136,24 @@
                     @error('category_id') <small style="color: #8A4A3A; font-size: 13px;">{{ $message }}</small> @enderror
                 </div>
 
+                {{-- Género --}}
+                <div class="mb-5">
+                    <label class="lisbon-label">
+                        GÉNERO
+                        <span style="color: #B03020; margin-left: 4px;">*</span>
+                    </label>
+                    <div class="d-flex gap-4" style="margin-top: 10px;">
+                        @foreach(['hombre' => 'HOMBRE', 'mujer' => 'MUJER', 'unisex' => 'UNISEX'] as $value => $label)
+                            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+                                <input type="radio" name="genero" value="{{ $value }}" {{ old('genero', $product->genero) === $value ? 'checked' : '' }}
+                                       style="width: 18px; height: 18px; accent-color: var(--text); cursor: pointer;">
+                                <span style="font-size: 14px; letter-spacing: 0.1em; color: var(--text);">{{ $label }}</span>
+                            </label>
+                        @endforeach
+                    </div>
+                    @error('genero') <small style="color: #8A4A3A; font-size: 13px;">{{ $message }}</small> @enderror
+                </div>
+
                 {{-- Activo --}}
                 <div class="mb-5 d-flex align-items-center gap-3">
                     <input type="checkbox" name="active" id="active" {{ $product->active ? 'checked' : '' }}

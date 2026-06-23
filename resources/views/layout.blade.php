@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LISBON™</title>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>@yield('title', 'LISBON™')</title>
+    <meta name="description" content="@yield('description', 'LISBON™ — Indumentaria con identidad. Camperas, remeras, pantalones y buzos para hombre y mujer.')">
 
     {{-- Space Grotesk: grotesca geométrica limpia, cercana al PP Neue Montreal de Off-White --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -645,6 +647,156 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        /* ── Cart drawer ── */
+        #cartDrawerBackdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 10001;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+        #cartDrawerBackdrop.is-visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #cartDrawer {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: min(560px, 100vw);
+            background: #fff;
+            z-index: 10002;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+            box-shadow: -4px 0 24px rgba(0,0,0,0.08);
+        }
+        #cartDrawer.is-open { transform: translateX(0); }
+        .cart-drawer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 30px 30px 22px;
+            border-bottom: 1px solid var(--border);
+        }
+        .cart-drawer-title {
+            font-size: 19px;
+            font-weight: 500;
+            letter-spacing: 0.2em;
+            margin: 0;
+            color: var(--text);
+        }
+        .cart-drawer-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text);
+            line-height: 1;
+            padding: 4px;
+        }
+        .cart-drawer-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 30px;
+        }
+        .cart-drawer-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 26px 0;
+            border-bottom: 1px solid var(--border-sub);
+        }
+        .cart-drawer-img {
+            width: 110px;
+            height: 130px;
+            background: var(--bg-off);
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .cart-drawer-img img { width: 100%; height: 100%; object-fit: cover; }
+        .cart-drawer-info { flex: 1; min-width: 0; }
+        .cart-drawer-name {
+            font-size: 17px;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            color: var(--text);
+            margin: 0 0 16px;
+            line-height: 1.35;
+        }
+        .cart-drawer-qty {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .qty-btn {
+            width: 32px;
+            height: 32px;
+            border: 1px solid var(--border);
+            background: #fff;
+            cursor: pointer;
+            font-size: 17px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            transition: background 0.15s, color 0.15s;
+        }
+        .qty-btn:hover { background: var(--text); color: #fff; }
+        .cart-drawer-qty span {
+            font-size: 16px;
+            font-weight: 500;
+            min-width: 22px;
+            text-align: center;
+        }
+        .cart-drawer-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 14px;
+            flex-shrink: 0;
+            align-self: stretch;
+        }
+        .cart-drawer-del {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 17px;
+            color: var(--text-3);
+            padding: 0;
+            transition: color 0.15s;
+        }
+        .cart-drawer-del:hover { color: var(--text); }
+        .cart-drawer-subtotal {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text);
+            margin: 0;
+        }
+        .cart-drawer-footer {
+            padding: 26px 30px 30px;
+            border-top: 1px solid var(--border);
+        }
+        .cart-drawer-total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 22px;
+        }
+        .cart-drawer-empty {
+            padding: 60px 24px;
+            text-align: center;
+            font-size: 16px;
+            letter-spacing: 0.16em;
+            color: var(--text-3);
+        }
     </style>
 </head>
 <body>
@@ -801,6 +953,27 @@
 {{-- Toast de notificación global --}}
 <div id="lisbonToast"><span id="lisbonToastMsg"></span></div>
 
+{{-- ── Panel lateral del carrito ── --}}
+<div id="cartDrawerBackdrop"></div>
+<div id="cartDrawer" role="dialog" aria-modal="true">
+    <div class="cart-drawer-header">
+        <p class="cart-drawer-title">CARRITO DE COMPRAS</p>
+        <button type="button" class="cart-drawer-close" id="cartDrawerClose" aria-label="Cerrar carrito">✕</button>
+    </div>
+
+    <div class="cart-drawer-body" id="cartDrawerBody"></div>
+    <p class="cart-drawer-empty" id="cartDrawerEmpty" style="display:none;">TU CARRITO ESTÁ VACÍO.</p>
+
+    <div class="cart-drawer-footer" id="cartDrawerFooter" style="display:none;">
+        <div class="cart-drawer-total-row">
+            <span style="font-size:15px; font-weight:500; letter-spacing:0.2em; color:var(--text);">TOTAL</span>
+            <span id="cartDrawerTotal" style="font-size:32px; font-weight:300; color:var(--text);">$0</span>
+        </div>
+        <a href="/carrito/checkout" class="btn-lisbon-filled d-block text-center" style="padding:19px; font-size:15px;">INICIAR COMPRA →</a>
+        <a href="/catalogo" class="d-block text-center" style="font-size:14px; letter-spacing:0.12em; color:var(--text-3); margin-top:16px; text-decoration:underline;">VER MÁS PRODUCTOS</a>
+    </div>
+</div>
+
 {{-- ── Footer ── --}}
 <footer class="site-footer">
     <div class="container">
@@ -876,8 +1049,92 @@
         .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
         .then(function(data) {
             showToast(data.message || 'PRODUCTO AGREGADO →');
+            renderCartDrawer(data);
+            openCartDrawer();
         })
         .catch(function() { form.submit(); });
+    });
+
+    // ── Panel lateral del carrito ──
+    var csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+
+    function formatMoney(n) {
+        return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    function cartRowHtml(item) {
+        var img = item.image ? '<img src="/img/' + item.image + '" alt="">' : '';
+        var talle = item.talle ? ' (' + String(item.talle).toUpperCase() + ')' : '';
+        return '' +
+            '<div class="cart-drawer-row" data-item-id="' + item.id + '">' +
+                '<div class="cart-drawer-img">' + img + '</div>' +
+                '<div class="cart-drawer-info">' +
+                    '<p class="cart-drawer-name">' + item.name.toUpperCase() + talle + '</p>' +
+                    '<div class="cart-drawer-qty">' +
+                        '<button type="button" class="qty-btn" data-action="restar" data-id="' + item.id + '">−</button>' +
+                        '<span>' + item.quantity + '</span>' +
+                        '<button type="button" class="qty-btn" data-action="agregar" data-id="' + item.product_id + '" data-talle="' + (item.talle || '') + '">+</button>' +
+                    '</div>' +
+                '</div>' +
+                '<div class="cart-drawer-right">' +
+                    '<button type="button" class="cart-drawer-del" data-action="eliminar" data-id="' + item.id + '">✕</button>' +
+                    '<p class="cart-drawer-subtotal">$' + formatMoney(item.subtotal) + '</p>' +
+                '</div>' +
+            '</div>';
+    }
+
+    function renderCartDrawer(data) {
+        var body = document.getElementById('cartDrawerBody');
+        var empty = document.getElementById('cartDrawerEmpty');
+        var footer = document.getElementById('cartDrawerFooter');
+
+        if (!data.items || !data.items.length) {
+            body.innerHTML = '';
+            empty.style.display = 'block';
+            footer.style.display = 'none';
+            return;
+        }
+
+        empty.style.display = 'none';
+        footer.style.display = 'block';
+        body.innerHTML = data.items.map(cartRowHtml).join('');
+        document.getElementById('cartDrawerTotal').textContent = '$' + formatMoney(data.total);
+    }
+
+    function openCartDrawer() {
+        document.getElementById('cartDrawer').classList.add('is-open');
+        document.getElementById('cartDrawerBackdrop').classList.add('is-visible');
+    }
+    function closeCartDrawer() {
+        document.getElementById('cartDrawer').classList.remove('is-open');
+        document.getElementById('cartDrawerBackdrop').classList.remove('is-visible');
+    }
+    document.getElementById('cartDrawerClose').addEventListener('click', closeCartDrawer);
+    document.getElementById('cartDrawerBackdrop').addEventListener('click', closeCartDrawer);
+
+    // Acciones dentro del panel: sumar, restar, eliminar
+    document.getElementById('cartDrawerBody').addEventListener('click', function(e) {
+        var btn = e.target.closest('[data-action]');
+        if (!btn) return;
+        var action = btn.dataset.action;
+        var id = btn.dataset.id;
+        var url, method;
+
+        if (action === 'agregar')  { url = '/carrito/agregar/' + id;  method = 'POST'; }
+        if (action === 'restar')   { url = '/carrito/restar/' + id;   method = 'POST'; }
+        if (action === 'eliminar') { url = '/carrito/eliminar/' + id; method = 'DELETE'; }
+
+        var body = new FormData();
+        if (action === 'agregar' && btn.dataset.talle) body.append('talle', btn.dataset.talle);
+
+        fetch(url, {
+            method: method,
+            body: method === 'DELETE' ? null : body,
+            headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
+        })
+        .then(function(r) { return r.json(); })
+        .then(function(data) { renderCartDrawer(data); })
+        .catch(function() {});
     });
 
     // ── Mega-menu desktop ──

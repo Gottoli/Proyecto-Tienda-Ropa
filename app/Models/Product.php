@@ -16,6 +16,7 @@ class Product extends Model
         'image',
         'images',
         'category_id',
+        'genero',
         'active',
     ];
 

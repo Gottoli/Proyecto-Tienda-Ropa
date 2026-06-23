@@ -29,7 +29,7 @@
     {{-- ── Grid ── --}}
     <div class="row g-0" id="productos" style="max-width: 1400px; margin: 0 auto;">
         @foreach($products as $product)
-        <div class="col-6 col-lg-4 producto" style="padding: 0 3px 56px;" data-categoria="{{ $product->category->slug }}" data-genero="hombre mujer">
+        <div class="col-6 col-lg-4 producto" style="padding: 0 3px 56px;" data-categoria="{{ $product->category->slug }}" data-genero="{{ $product->genero === 'unisex' ? 'hombre mujer' : $product->genero }}">
             <a href="/catalogo/{{ $product->id }}" style="text-decoration: none; color: inherit; display: block;">
                 @if($product->image)
                     <img src="/img/{{ $product->image }}"

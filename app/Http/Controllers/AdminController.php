@@ -41,6 +41,7 @@ class AdminController extends Controller
             'description' => 'nullable|string',
             'price'       => 'required|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
+            'genero'      => 'required|in:hombre,mujer,unisex',
             'imagen_principal' => 'required|image|max:4096',
             'imagenes_extra.*' => 'nullable|image|max:4096',
         ]);
@@ -56,6 +57,7 @@ class AdminController extends Controller
             'stock_talles' => $stockTalles ?: null,
             'talles'       => $request->talles ?: null,
             'category_id'  => $request->category_id,
+            'genero'       => $request->genero,
             'active'       => $request->has('active'),
         ];
 
@@ -84,6 +86,7 @@ class AdminController extends Controller
             'description'      => 'nullable|string',
             'price'            => 'required|numeric|min:0',
             'category_id'      => 'required|exists:categories,id',
+            'genero'           => 'required|in:hombre,mujer,unisex',
             'imagen_principal' => 'nullable|image|max:4096',
             'imagenes_extra.*' => 'nullable|image|max:4096',
         ]);
@@ -99,6 +102,7 @@ class AdminController extends Controller
             'stock_talles' => $stockTalles ?: $product->stock_talles,
             'talles'       => $request->talles ?: $product->talles,
             'category_id'  => $request->category_id,
+            'genero'       => $request->genero,
             'active'       => $request->has('active'),
         ];
 
