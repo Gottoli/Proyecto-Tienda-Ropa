@@ -31,19 +31,27 @@ class ProductSeeder extends Seeder
 
         // ── Actualizar productos existentes con imágenes ──────────────────────
         $existing = [
-            1 => ['image' => 'remera1.jpg',    'images' => null],
-            2 => ['image' => 'remera2.jpg',     'images' => null],
-            3 => ['image' => 'pantalon1.jpeg',  'images' => null],
-            4 => ['image' => 'pantalon2.jpeg',  'images' => null],
-            5 => ['image' => 'buzo1.jpg',       'images' => null],
-            6 => ['image' => null,              'images' => null], // Gorra — sin imagen
-            7 => ['image' => 'remera3.jpeg',    'images' => null],
+            1 => ['image' => 'remera1.jpg',    'images' => null, 'genero' => 'hombre', 'talles' => 'XS,S,M,L,XL'],
+            2 => ['image' => 'remera2.jpg',     'images' => null, 'genero' => 'hombre', 'talles' => 'XS,S,M,L,XL'],
+            3 => ['image' => 'pantalon1.jpeg',  'images' => null, 'genero' => 'hombre', 'talles' => 'S,M,L,XL'],
+            4 => ['image' => 'pantalon2.jpeg',  'images' => null, 'genero' => 'hombre', 'talles' => 'S,M,L,XL'],
+            5 => ['image' => 'buzo1.jpg',       'images' => null, 'genero' => 'hombre', 'talles' => 'S,M,L,XL'],
+            6 => ['image' => null,              'images' => null, 'genero' => 'unisex', 'talles' => 'ÚNICO'], // Gorra — sin imagen
+            7 => ['image' => 'remera3.jpeg',    'images' => null, 'genero' => 'hombre', 'talles' => 'XS,S,M,L,XL'],
         ];
 
         foreach ($existing as $id => $data) {
-            Product::where('id', $id)->update([
-                'image'  => $data['image'],
-                'images' => $data['images'] ? json_encode($data['images']) : null,
+            $product = Product::find($id);
+            if (!$product) continue;
+
+            $stock = $product->stock ?? 10;
+
+            $product->update([
+                'image'        => $data['image'],
+                'images'       => $data['images'] ? json_encode($data['images']) : null,
+                'genero'       => $data['genero'],
+                'talles'       => $data['talles'],
+                'stock_talles' => $this->distribuirStock($data['talles'], $stock),
             ]);
         }
 
@@ -60,6 +68,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'remera4.jpg',
                 'images'      => null,
                 'category_id' => $remId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
             [
@@ -71,6 +80,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'remera5.jpg',
                 'images'      => null,
                 'category_id' => $remId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
             [
@@ -82,6 +92,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'remera7.webp',
                 'images'      => null,
                 'category_id' => $remId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
             [
@@ -93,6 +104,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'remera8.jpg',
                 'images'      => ['remera8.jpg', 'remera8,2.jpg'],
                 'category_id' => $remId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
             [
@@ -104,6 +116,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'remera9.jpg',
                 'images'      => ['remera9.jpg', 'remera9,2.webp'],
                 'category_id' => $remId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
             [
@@ -115,6 +128,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'remera10.webp',
                 'images'      => ['remera10.webp', 'remera10,2.webp'],
                 'category_id' => $remId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
 
@@ -128,6 +142,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'mremera1.jpg',
                 'images'      => null,
                 'category_id' => $remId,
+                'genero'      => 'mujer',
                 'active'      => true,
             ],
             [
@@ -139,6 +154,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'mremera2.jpg',
                 'images'      => null,
                 'category_id' => $remId,
+                'genero'      => 'mujer',
                 'active'      => true,
             ],
             [
@@ -150,6 +166,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'mremera3.jpg',
                 'images'      => null,
                 'category_id' => $remId,
+                'genero'      => 'mujer',
                 'active'      => true,
             ],
             [
@@ -161,6 +178,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'mremera4.jpg',
                 'images'      => null,
                 'category_id' => $remId,
+                'genero'      => 'mujer',
                 'active'      => true,
             ],
             [
@@ -172,6 +190,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'meremera5.jpg',
                 'images'      => null,
                 'category_id' => $remId,
+                'genero'      => 'mujer',
                 'active'      => true,
             ],
 
@@ -185,6 +204,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'pantalon3.jpg',
                 'images'      => null,
                 'category_id' => $pantId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
             [
@@ -196,6 +216,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'pantalon4.jpg',
                 'images'      => ['pantalon4.jpg', 'pantalon4,2.jpg'],
                 'category_id' => $pantId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
             [
@@ -207,6 +228,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'pantalon5.jpg',
                 'images'      => ['pantalon5.jpg', 'pantalon5,2.jpg'],
                 'category_id' => $pantId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
 
@@ -220,6 +242,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'buzo2.jpg',
                 'images'      => null,
                 'category_id' => $buzoId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
             [
@@ -231,6 +254,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'buzo3.jpeg',
                 'images'      => null,
                 'category_id' => $buzoId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
 
@@ -244,6 +268,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'campera1.jpg',
                 'images'      => null,
                 'category_id' => $campId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
             [
@@ -255,6 +280,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'campera2.jpg',
                 'images'      => null,
                 'category_id' => $campId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
             [
@@ -266,6 +292,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'campera3.jpg',
                 'images'      => null,
                 'category_id' => $campId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
             [
@@ -277,6 +304,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'campera4.jpg',
                 'images'      => null,
                 'category_id' => $campId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
             [
@@ -288,6 +316,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'campera5.webp',
                 'images'      => ['campera5.webp', 'campera5,2.webp'],
                 'category_id' => $campId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
             [
@@ -299,6 +328,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'campera6.webp',
                 'images'      => ['campera6.webp', 'campera6,2.webp'],
                 'category_id' => $campId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
             [
@@ -310,6 +340,7 @@ class ProductSeeder extends Seeder
                 'image'       => 'campera7.jpg',
                 'images'      => ['campera7.jpg', 'campera7,2.webp', 'campera7,3.jpg'],
                 'category_id' => $campId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
             [
@@ -321,12 +352,34 @@ class ProductSeeder extends Seeder
                 'image'       => 'campera8.webp',
                 'images'      => null,
                 'category_id' => $campId,
+                'genero'      => 'hombre',
                 'active'      => true,
             ],
         ];
 
         foreach ($nuevos as $data) {
+            $data['stock_talles'] = $this->distribuirStock($data['talles'], $data['stock']);
             Product::create($data);
         }
+    }
+
+    /**
+     * Reparte el stock total en partes iguales entre los talles disponibles.
+     */
+    private function distribuirStock(string $talles, int $stockTotal): array
+    {
+        $lista = array_map('trim', explode(',', $talles));
+        $cantidad = count($lista);
+        if ($cantidad === 0) return [];
+
+        $base  = intdiv($stockTotal, $cantidad);
+        $resto = $stockTotal % $cantidad;
+
+        $resultado = [];
+        foreach ($lista as $i => $talle) {
+            $resultado[$talle] = $base + ($i < $resto ? 1 : 0);
+        }
+
+        return $resultado;
     }
 }
