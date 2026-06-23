@@ -7,6 +7,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\ConsultaController;
+use App\Http\Controllers\NewsletterController;
 
 // Rutas públicas del sitio
 Route::get('/', function () {
@@ -22,6 +23,7 @@ Route::get('/catalogo', [ProductController::class, 'index']);
 Route::get('/catalogo/{id}', [ProductController::class, 'show']);
 Route::get('/consultas', [ConsultaController::class, 'index']);
 Route::post('/consultas', [ConsultaController::class, 'store']);
+Route::post('/newsletter', [NewsletterController::class, 'suscribir']);
 
 // Rutas de autenticación (públicas)
 Route::get('/registro', [AuthController::class, 'formularioRegistro']);

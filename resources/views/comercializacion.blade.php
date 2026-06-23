@@ -1,5 +1,7 @@
 @extends('layout')
 
+@section('title', 'Cómo Comprar | LISBON™')
+
 @section('contenido')
 
 <div class="container py-5">

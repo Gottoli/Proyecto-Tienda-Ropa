@@ -1,5 +1,7 @@
 @extends('layout')
 
+@section('title', 'Quiénes Somos | LISBON™')
+
 @section('contenido')
 
 {{-- HERO --}}

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use App\Models\User;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Consulta;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Mail\ConsultaLeidaMail;
 
 class AdminController extends Controller
 {
@@ -142,6 +144,12 @@ class AdminController extends Controller
     $consulta = Consulta::findOrFail($id);
     $consulta->leida = true;
     $consulta->save();
+
+    try {
+        Mail::to($consulta->email)->send(new ConsultaLeidaMail($consulta));
+    } catch (\Throwable $e) {
+        report($e);
+    }
 
     return redirect()->back()->with('success', 'Consulta marcada como leída.');
     }

@@ -1,5 +1,7 @@
 @extends('layout')
 
+@section('title', 'Mi Cuenta | LISBON™')
+
 @section('contenido')
 
 <div class="admin-subnav">
@@ -213,6 +215,33 @@
         </table>
     </div>
     @endforeach
+    @endif
+
+    {{-- ── Mis consultas ── --}}
+    @if($consultas->count() > 0)
+    <hr class="lisbon-hr">
+    <p class="page-eyebrow" style="margin-bottom: 1.5rem;">SOPORTE</p>
+    <h5 style="font-weight: 300; letter-spacing: 4px; color: var(--text); margin-bottom: 2rem;">MIS CONSULTAS</h5>
+
+    <div class="profile-panel" style="padding: 0;">
+        @foreach($consultas as $consulta)
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:20px; padding:22px 28px; border-bottom:{{ $loop->last ? 'none' : '1px solid var(--border-sub)' }};">
+            <div style="flex:1; min-width:0;">
+                <p style="font-size:13px; font-weight:500; letter-spacing:0.12em; color:var(--text-3); margin:0 0 6px;">
+                    {{ strtoupper($consulta->motivo) }} · {{ $consulta->created_at->format('d/m/Y H:i') }}
+                </p>
+                <p style="font-size:16px; color:var(--text); margin:0; line-height:1.5;">{{ $consulta->consulta }}</p>
+            </div>
+            <div style="flex-shrink:0;">
+                @if($consulta->leida)
+                    <span class="badge-olive">LEÍDA</span>
+                @else
+                    <span class="badge-warm">PENDIENTE</span>
+                @endif
+            </div>
+        </div>
+        @endforeach
+    </div>
     @endif
 
 </div>

@@ -1,5 +1,7 @@
 @extends('layout')
 
+@section('title', 'Términos y Condiciones | LISBON™')
+
 @section('contenido')
 
 <div class="container py-5">

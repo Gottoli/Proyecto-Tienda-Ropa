@@ -1,5 +1,7 @@
 @extends('layout')
 
+@section('title', 'Mi Carrito | LISBON™')
+
 @section('contenido')
 
 <div class="container py-5">

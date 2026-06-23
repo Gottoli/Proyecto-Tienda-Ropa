@@ -1,10 +1,12 @@
 @extends('layout')
 
+@section('title', 'LISBON™ — Indumentaria con Identidad')
+
 @section('contenido')
 
 {{-- ── HERO ── --}}
 <div style="position: relative; width: 100%; height: 92vh; overflow: hidden;">
-    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600"
+    <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1600" alt="LISBON™ — Colección Invierno 2026"
          style="width: 100%; height: 100%; object-fit: cover; object-position: center top;">
     <div style="position: absolute; inset: 0; background: rgba(0,0,0,0.22);"></div>
 
@@ -52,7 +54,7 @@
             {{-- Imagen --}}
             <div style="overflow: hidden;">
                 @if($product->image)
-                    <img src="/img/{{ $product->image }}"
+                    <img src="/img/{{ $product->image }}" alt="{{ $product->name }}" loading="lazy"
                          style="width: 100%; height: clamp(500px, 55vw, 780px); object-fit: cover; background: var(--border-sub); display: block; transition: transform 0.5s ease;"
                          onmouseover="this.style.transform='scale(1.04)'" onmouseout="this.style.transform='scale(1)'">
                 @else
@@ -82,7 +84,7 @@
         @foreach($cintaDouble as $product)
         <a href="/catalogo/{{ $product->id }}" style="width: 300px; padding: 0 6px; flex-shrink: 0; text-decoration: none; color: inherit; display: block;">
             @if($product->image)
-                <img src="/img/{{ $product->image }}"
+                <img src="/img/{{ $product->image }}" alt="{{ $product->name }}" loading="lazy"
                      style="width: 100%; height: 400px; object-fit: cover; background: var(--bg-off); display: block; transition: opacity 0.2s;"
                      onmouseover="this.style.opacity='.8'" onmouseout="this.style.opacity='1'">
             @else
@@ -122,7 +124,7 @@
         <div class="row g-0">
             <div class="col-md-6" style="padding-right: 4px;">
                 <a href="/catalogo?genero=hombre" style="display: block; position: relative; overflow: hidden; text-decoration: none;">
-                    <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=900"
+                    <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=900" alt="Colección Hombre"
                          style="width: 100%; height: 560px; object-fit: cover; display: block; transition: transform 0.5s;"
                          onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
                     <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 32px; background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);">
@@ -133,7 +135,7 @@
             </div>
             <div class="col-md-6" style="padding-left: 4px;">
                 <a href="/catalogo?genero=mujer" style="display: block; position: relative; overflow: hidden; text-decoration: none;">
-                    <img src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=900"
+                    <img src="https://images.unsplash.com/photo-1581044777550-4cfa60707c03?w=900" alt="Colección Mujer"
                          style="width: 100%; height: 560px; object-fit: cover; display: block; transition: transform 0.5s;"
                          onmouseover="this.style.transform='scale(1.03)'" onmouseout="this.style.transform='scale(1)'">
                     <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 32px; background: linear-gradient(to top, rgba(0,0,0,0.55), transparent);">

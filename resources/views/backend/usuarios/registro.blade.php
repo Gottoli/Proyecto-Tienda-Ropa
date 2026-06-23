@@ -1,5 +1,7 @@
 @extends('layout')
 
+@section('title', 'Crear Cuenta | LISBON™')
+
 @section('contenido')
 
 <div style="min-height: 75vh; display: flex; align-items: center; background: var(--bone);">

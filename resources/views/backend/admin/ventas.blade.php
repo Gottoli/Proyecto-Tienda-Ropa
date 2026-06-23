@@ -1,5 +1,7 @@
 @extends('layout')
 
+@section('title', 'Panel de Ventas | LISBON™')
+
 @section('contenido')
 
 <div class="admin-subnav">

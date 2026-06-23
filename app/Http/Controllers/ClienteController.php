@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\CartItem;
 use App\Models\Order;
+use App\Models\Consulta;
 
 class ClienteController extends Controller
 {
@@ -24,7 +25,11 @@ class ClienteController extends Controller
                       ->orderBy('created_at', 'desc')
                       ->get();
 
-        return view('backend.usuarios.cliente', compact('cartItems', 'totalItems', 'totalImporte', 'orders'));
+        $consultas = Consulta::where('email', auth()->user()->email)
+                            ->orderBy('created_at', 'desc')
+                            ->get();
+
+        return view('backend.usuarios.cliente', compact('cartItems', 'totalItems', 'totalImporte', 'orders', 'consultas'));
     }
 
     public function actualizarPerfil(Request $request)

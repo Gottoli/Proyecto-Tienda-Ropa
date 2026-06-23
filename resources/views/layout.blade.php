@@ -1008,11 +1008,12 @@
             </div>
             <div class="col-md-4">
                 <p style="font-size: 12px; font-weight: 500; letter-spacing: 0.28em; color: var(--text); margin-bottom: 1.2rem;">NEWSLETTER</p>
-                <div class="d-flex">
-                    <input type="email" placeholder="Tu email"
+                <form id="newsletterForm" class="d-flex">
+                    <input type="email" name="email" id="newsletterEmail" placeholder="Tu email" required
                         style="flex:1; background:#fff; border:1px solid var(--border); border-right:none; color:var(--text); padding:13px 16px; font-family:'Space Grotesk',sans-serif; font-size:15px; outline:none; border-radius:0;">
-                    <button style="background:var(--text); color:#fff; border:1px solid var(--text); padding:13px 20px; font-family:'Space Grotesk',sans-serif; font-size:15px; cursor:pointer;">→</button>
-                </div>
+                    <button type="submit" id="newsletterBtn" style="background:var(--text); color:#fff; border:1px solid var(--text); padding:13px 20px; font-family:'Space Grotesk',sans-serif; font-size:15px; cursor:pointer;">→</button>
+                </form>
+                <p id="newsletterMsg" style="font-size:12px; letter-spacing:0.08em; color:var(--text-3); margin:10px 0 0; display:none;"></p>
             </div>
         </div>
 
@@ -1041,6 +1042,15 @@
         var form = e.target;
         if (!form.hasAttribute('data-add-to-cart')) return;
         e.preventDefault();
+
+        var btn = form.querySelector('button[type="submit"]');
+        var textoOriginal = btn ? btn.textContent : null;
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = 'AGREGANDO...';
+            btn.style.opacity = '0.6';
+        }
+
         fetch(form.action, {
             method: 'POST',
             body: new FormData(form),
@@ -1052,8 +1062,43 @@
             renderCartDrawer(data);
             openCartDrawer();
         })
-        .catch(function() { form.submit(); });
+        .catch(function() { form.submit(); })
+        .finally(function() {
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = textoOriginal;
+                btn.style.opacity = '1';
+            }
+        });
     });
+
+    // ── Newsletter ──
+    var newsletterForm = document.getElementById('newsletterForm');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            var btn = document.getElementById('newsletterBtn');
+            var msg = document.getElementById('newsletterMsg');
+            var email = document.getElementById('newsletterEmail');
+            btn.disabled = true;
+            fetch('/newsletter', {
+                method: 'POST',
+                body: new FormData(newsletterForm),
+                headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
+            })
+            .then(function(r) { return r.json(); })
+            .then(function(data) {
+                msg.textContent = data.message || '¡GRACIAS POR SUSCRIBIRTE!';
+                msg.style.display = 'block';
+                email.value = '';
+            })
+            .catch(function() {
+                msg.textContent = 'OCURRIÓ UN ERROR. INTENTÁ DE NUEVO.';
+                msg.style.display = 'block';
+            })
+            .finally(function() { btn.disabled = false; });
+        });
+    }
 
     // ── Panel lateral del carrito ──
     var csrfToken = document.querySelector('meta[name="csrf-token"]').content;
@@ -1063,7 +1108,7 @@
     }
 
     function cartRowHtml(item) {
-        var img = item.image ? '<img src="/img/' + item.image + '" alt="">' : '';
+        var img = item.image ? '<img src="/img/' + item.image + '" alt="' + item.name + '">' : '';
         var talle = item.talle ? ' (' + String(item.talle).toUpperCase() + ')' : '';
         return '' +
             '<div class="cart-drawer-row" data-item-id="' + item.id + '">' +
@@ -1127,6 +1172,9 @@
         var body = new FormData();
         if (action === 'agregar' && btn.dataset.talle) body.append('talle', btn.dataset.talle);
 
+        var row = btn.closest('.cart-drawer-row');
+        if (row) row.style.opacity = '0.4';
+
         fetch(url, {
             method: method,
             body: method === 'DELETE' ? null : body,
@@ -1134,7 +1182,7 @@
         })
         .then(function(r) { return r.json(); })
         .then(function(data) { renderCartDrawer(data); })
-        .catch(function() {});
+        .catch(function() { if (row) row.style.opacity = '1'; });
     });
 
     // ── Mega-menu desktop ──

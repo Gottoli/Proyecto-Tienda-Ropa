@@ -1,5 +1,7 @@
 @extends('layout')
 
+@section('title', 'Compra Exitosa | LISBON™')
+
 @section('contenido')
 
 <div class="container py-5" style="min-height: 60vh; display: flex; align-items: center; justify-content: center;">

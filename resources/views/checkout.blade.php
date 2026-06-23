@@ -1,5 +1,7 @@
 @extends('layout')
 
+@section('title', 'Checkout - Finalizar Compra | LISBON™')
+
 @section('contenido')
 
 <div class="container py-5">
@@ -167,6 +169,39 @@
 
                     </div>
                     @error('metodo_pago') <small style="color:#8A4A3A; font-size:13px; margin-top:8px; display:block;">{{ $message }}</small> @enderror
+
+                    {{-- Formulario de tarjeta (visual, no se envía al backend) --}}
+                    <div id="tarjetaFormWrap" style="display:{{ old('metodo_pago') === 'tarjeta' ? 'block' : 'none' }}; border:1px solid var(--border); border-top:none; padding:24px 22px; background:var(--bg-off);">
+
+                        <div class="mb-4">
+                            <label class="lisbon-label">NÚMERO DE TARJETA</label>
+                            <div style="position:relative;">
+                                <input type="text" id="cardNumero" class="lisbon-input" placeholder="0000 0000 0000 0000"
+                                       inputmode="numeric" maxlength="19" style="font-size:16px; letter-spacing:0.06em; padding-right:54px;">
+                                <span id="cardBrand" style="position:absolute; right:14px; top:50%; transform:translateY(-50%); font-size:11px; font-weight:600; letter-spacing:0.1em; color:var(--text-3);"></span>
+                            </div>
+                            <small id="cardNumeroError" style="color:#8A4A3A; font-size:12px; margin-top:5px; display:none;">INGRESÁ LOS 16 DÍGITOS DE LA TARJETA.</small>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="lisbon-label">NOMBRE EN LA TARJETA</label>
+                            <input type="text" id="cardNombre" class="lisbon-input" placeholder="Como figura en la tarjeta"
+                                   style="font-size:16px; text-transform:uppercase;">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <label class="lisbon-label">VENCIMIENTO</label>
+                                <input type="text" id="cardVencimiento" class="lisbon-input" placeholder="MM/AA"
+                                       inputmode="numeric" maxlength="5" style="font-size:16px;">
+                            </div>
+                            <div class="col-6">
+                                <label class="lisbon-label">CVV</label>
+                                <input type="text" id="cardCvv" class="lisbon-input" placeholder="123"
+                                       inputmode="numeric" maxlength="4" style="font-size:16px;">
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -279,13 +314,46 @@ function selectPago(radio) {
     document.getElementById('card-' + radio.value).classList.add('is-selected');
 
     var cuotasInfo = document.getElementById('cuotasInfo');
-    cuotasInfo.style.display = radio.value === 'tarjeta' ? 'block' : 'none';
+    var tarjetaForm = document.getElementById('tarjetaFormWrap');
+    var mostrar = radio.value === 'tarjeta';
+    cuotasInfo.style.display = mostrar ? 'block' : 'none';
+    tarjetaForm.style.display = mostrar ? 'block' : 'none';
 }
 // Inicializar estado al cargar
 document.addEventListener('DOMContentLoaded', function() {
     var checked = document.querySelector('input[name="metodo_pago"]:checked');
     if (checked) selectPago(checked);
 });
+
+// ── Formulario visual de tarjeta ──
+var cardNumeroInput = document.getElementById('cardNumero');
+if (cardNumeroInput) {
+    cardNumeroInput.addEventListener('input', function() {
+        var digits = this.value.replace(/\D/g, '').slice(0, 16);
+        var grupos = digits.match(/.{1,4}/g) || [];
+        this.value = grupos.join(' ');
+
+        var brand = document.getElementById('cardBrand');
+        if (digits.startsWith('4')) brand.textContent = 'VISA';
+        else if (/^5[1-5]/.test(digits)) brand.textContent = 'MASTERCARD';
+        else if (/^3[47]/.test(digits)) brand.textContent = 'AMEX';
+        else brand.textContent = '';
+    });
+    cardNumeroInput.addEventListener('blur', function() {
+        var digits = this.value.replace(/\D/g, '');
+        var error = document.getElementById('cardNumeroError');
+        error.style.display = (digits.length > 0 && digits.length < 16) ? 'block' : 'none';
+    });
+
+    document.getElementById('cardVencimiento').addEventListener('input', function() {
+        var digits = this.value.replace(/\D/g, '').slice(0, 4);
+        this.value = digits.length > 2 ? digits.slice(0, 2) + '/' + digits.slice(2) : digits;
+    });
+
+    document.getElementById('cardCvv').addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g, '').slice(0, 4);
+    });
+}
 
 // ── Dirección de entrega ──
 var savedDireccion = @json(auth()->user()->direccion ?? '');

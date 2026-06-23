@@ -1,5 +1,7 @@
 @extends('layout')
 
+@section('title', $product->name . ' | LISBON™')
+
 @section('contenido')
 
 <div class="container py-5">
@@ -25,9 +27,9 @@
                 {{-- Carousel para múltiples imágenes --}}
                 <div class="product-carousel" id="productCarousel">
                     <div class="carousel-track" id="carouselTrack">
-                        @foreach($allImages as $img)
+                        @foreach($allImages as $i => $img)
                             <div class="carousel-slide">
-                                <img src="/img/{{ $img }}"
+                                <img src="/img/{{ $img }}" alt="{{ $product->name }} - foto {{ $i + 1 }}" loading="{{ $i === 0 ? 'eager' : 'lazy' }}"
                                      style="width: 100%; height: 700px; object-fit: contain; background: var(--bg-off); display: block; user-select: none;">
                             </div>
                         @endforeach
@@ -52,14 +54,14 @@
                     @foreach($allImages as $i => $img)
                         <button class="thumb-btn {{ $i === 0 ? 'is-active' : '' }}"
                                 onclick="goToSlide({{ $i }})">
-                            <img src="/img/{{ $img }}"
+                            <img src="/img/{{ $img }}" alt="Miniatura {{ $i + 1 }}" loading="lazy"
                                  style="width: 100%; height: 100%; object-fit: contain; background: var(--bg-off);">
                         </button>
                     @endforeach
                 </div>
 
             @elseif(count($allImages) === 1)
-                <img src="/img/{{ $allImages[0] }}"
+                <img src="/img/{{ $allImages[0] }}" alt="{{ $product->name }}"
                      style="width: 100%; height: 700px; object-fit: contain; background: var(--bg-off); display: block;">
             @else
                 <div style="width: 100%; height: 700px; background: var(--bg-off); display: flex; align-items: center; justify-content: center;">

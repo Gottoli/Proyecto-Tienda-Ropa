@@ -3,10 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use App\Models\CartItem;
 use App\Models\Product;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Mail\CompraConfirmadaMail;
 
 class CartController extends Controller
 {
@@ -139,40 +142,51 @@ class CartController extends Controller
             return $item->product->price * $item->quantity;
         });
 
-        $order = Order::create([
-            'user_id'         => auth()->id(),
-            'total'           => $total,
-            'estado'          => 'confirmado',
-            'nombre_completo' => $request->nombre_completo,
-            'dni'             => $request->dni,
-            'direccion'       => $request->direccion,
-            'ciudad'          => $request->ciudad,
-            'localidad'       => $request->localidad,
-            'metodo_pago'     => $request->metodo_pago,
-        ]);
-
-        foreach ($cartItems as $item) {
-            OrderItem::create([
-                'order_id'   => $order->id,
-                'product_id' => $item->product_id,
-                'quantity'   => $item->quantity,
-                'talle'      => $item->talle,
-                'price'      => $item->product->price,
+        $order = DB::transaction(function () use ($request, $cartItems, $total) {
+            $order = Order::create([
+                'user_id'         => auth()->id(),
+                'total'           => $total,
+                'estado'          => 'confirmado',
+                'nombre_completo' => $request->nombre_completo,
+                'dni'             => $request->dni,
+                'direccion'       => $request->direccion,
+                'ciudad'          => $request->ciudad,
+                'localidad'       => $request->localidad,
+                'metodo_pago'     => $request->metodo_pago,
             ]);
 
-            $prod = $item->product;
-            if ($prod->stock_talles && $item->talle && isset($prod->stock_talles[$item->talle])) {
-                $st = $prod->stock_talles;
-                $st[$item->talle] = max(0, $st[$item->talle] - $item->quantity);
-                $prod->stock_talles = $st;
-                $prod->stock = array_sum($st);
-            } else {
-                $prod->stock = max(0, $prod->stock - $item->quantity);
-            }
-            $prod->save();
-        }
+            foreach ($cartItems as $item) {
+                OrderItem::create([
+                    'order_id'   => $order->id,
+                    'product_id' => $item->product_id,
+                    'quantity'   => $item->quantity,
+                    'talle'      => $item->talle,
+                    'price'      => $item->product->price,
+                ]);
 
-        CartItem::where('user_id', auth()->id())->delete();
+                $prod = $item->product;
+                if ($prod->stock_talles && $item->talle && isset($prod->stock_talles[$item->talle])) {
+                    $st = $prod->stock_talles;
+                    $st[$item->talle] = max(0, $st[$item->talle] - $item->quantity);
+                    $prod->stock_talles = $st;
+                    $prod->stock = array_sum($st);
+                } else {
+                    $prod->stock = max(0, $prod->stock - $item->quantity);
+                }
+                $prod->save();
+            }
+
+            CartItem::where('user_id', auth()->id())->delete();
+
+            return $order;
+        });
+
+        try {
+            $order->load('items.product');
+            Mail::to(auth()->user()->email)->send(new CompraConfirmadaMail($order));
+        } catch (\Throwable $e) {
+            report($e);
+        }
 
         return redirect('/compra-exitosa')->with('success', $order->id);
     }
