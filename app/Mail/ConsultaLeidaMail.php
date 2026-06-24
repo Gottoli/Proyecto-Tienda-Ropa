@@ -18,7 +18,7 @@ class ConsultaLeidaMail extends Mailable
     public Consulta $consulta;
 
     /**
-     * Create a new message instance.
+     * Crea una nueva instancia del mensaje.
      */
     public function __construct(Consulta $consulta)
     {
@@ -26,7 +26,7 @@ class ConsultaLeidaMail extends Mailable
     }
 
     /**
-     * Get the message envelope.
+     * Obtiene el sobre (envelope) del mensaje.
      */
     public function envelope(): Envelope
     {
@@ -36,7 +36,7 @@ class ConsultaLeidaMail extends Mailable
     }
 
     /**
-     * Get the message content definition.
+     * Obtiene la definición del contenido del mensaje.
      */
     public function content(): Content
     {
@@ -46,7 +46,7 @@ class ConsultaLeidaMail extends Mailable
     }
 
     /**
-     * Get the attachments for the message.
+     * Obtiene los archivos adjuntos del mensaje.
      *
      * @return array<int, Attachment>
      */

@@ -24,10 +24,33 @@ class AdminController extends Controller
         return view('backend.admin.dashboard', compact('usuarios', 'productos', 'consultas', 'itemsCarrito'));
     }
 
-    public function productos()
+    public function productos(Request $request)
     {
-        $products = Product::with('category')->get();
-        return view('backend.admin.productos', compact('products'));
+        $query = Product::with('category');
+
+        if ($request->filled('buscar')) {
+            $query->where('name', 'like', '%' . $request->buscar . '%');
+        }
+
+        if ($request->filled('categoria')) {
+            $query->where('category_id', $request->categoria);
+        }
+
+        if ($request->filled('genero')) {
+            $query->where('genero', $request->genero);
+        }
+
+        if ($request->filled('estado')) {
+            $query->where('active', $request->estado === 'activo');
+        }
+
+        $products = $query->orderBy('id', 'desc')
+                         ->paginate(20)
+                         ->withQueryString();
+
+        $categories = Category::orderBy('name')->get();
+
+        return view('backend.admin.productos', compact('products', 'categories'));
     }
 
     public function crearProducto()

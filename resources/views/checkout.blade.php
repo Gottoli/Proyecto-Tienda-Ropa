@@ -16,6 +16,10 @@
         <h1 class="page-title" style="font-size: clamp(30px, 4vw, 52px); margin-bottom: 0;">CHECKOUT</h1>
     </div>
 
+    @if(session('error'))
+        <div class="lisbon-error" style="margin-bottom: 2rem;">{{ session('error') }}</div>
+    @endif
+
     @if($errors->any())
         <div class="lisbon-error" style="margin-bottom: 2rem;">
             @foreach($errors->all() as $error)

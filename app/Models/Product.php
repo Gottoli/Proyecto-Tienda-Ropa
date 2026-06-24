@@ -36,6 +36,14 @@ class Product extends Model
         return 0;
     }
 
+    public function disponibleParaTalle(?string $talle): int
+    {
+        if ($talle && $this->stock_talles && isset($this->stock_talles[$talle])) {
+            return (int) $this->stock_talles[$talle];
+        }
+        return (int) $this->stock;
+    }
+
     // Devuelve el array completo de imágenes, o [image] si sólo hay una
     public function getAllImagesAttribute(): array
     {

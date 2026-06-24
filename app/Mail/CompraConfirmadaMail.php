@@ -18,7 +18,7 @@ class CompraConfirmadaMail extends Mailable
     public Order $order;
 
     /**
-     * Create a new message instance.
+     * Crea una nueva instancia del mensaje.
      */
     public function __construct(Order $order)
     {
@@ -26,7 +26,7 @@ class CompraConfirmadaMail extends Mailable
     }
 
     /**
-     * Get the message envelope.
+     * Obtiene el sobre (envelope) del mensaje.
      */
     public function envelope(): Envelope
     {
@@ -36,7 +36,7 @@ class CompraConfirmadaMail extends Mailable
     }
 
     /**
-     * Get the message content definition.
+     * Obtiene la definición del contenido del mensaje.
      */
     public function content(): Content
     {
@@ -46,7 +46,7 @@ class CompraConfirmadaMail extends Mailable
     }
 
     /**
-     * Get the attachments for the message.
+     * Obtiene los archivos adjuntos del mensaje.
      *
      * @return array<int, Attachment>
      */

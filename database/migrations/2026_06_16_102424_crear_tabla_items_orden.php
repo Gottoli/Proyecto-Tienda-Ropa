@@ -7,24 +7,24 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Ejecuta las migraciones.
      */
-   public function up(): void
-{
-    Schema::create('cart_items', function (Blueprint $table) {
+    public function up(): void
+    {
+    Schema::create('order_items', function (Blueprint $table) {
         $table->id();
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
+        $table->foreignId('order_id')->constrained()->onDelete('cascade');
         $table->foreignId('product_id')->constrained()->onDelete('cascade');
-        $table->integer('quantity')->default(1);
+        $table->integer('quantity');
+        $table->decimal('price', 10, 2);
         $table->timestamps();
     });
-}
-
+    }
     /**
-     * Reverse the migrations.
+     * Revierte las migraciones.
      */
     public function down(): void
     {
-        Schema::dropIfExists('cart_items');
+        Schema::dropIfExists('order_items');
     }
 };

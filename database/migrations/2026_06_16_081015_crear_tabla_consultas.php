@@ -20,7 +20,7 @@ public function up(): void
 }
 
     /**
-     * Reverse the migrations.
+     * Revierte las migraciones.
      */
     public function down(): void
     {

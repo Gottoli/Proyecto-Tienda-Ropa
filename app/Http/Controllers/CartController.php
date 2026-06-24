@@ -35,6 +35,21 @@ class CartController extends Controller
                        ->where('talle', $request->talle)
                        ->first();
 
+    $cantidadActual = $cartItem ? $cartItem->quantity : 0;
+    $disponible     = $product->disponibleParaTalle($request->talle);
+
+    if ($cantidadActual + 1 > $disponible) {
+        $msg = $disponible > 0
+            ? "Solo quedan {$disponible} unidades disponibles."
+            : 'No hay stock disponible para este producto.';
+
+        if ($request->wantsJson()) {
+            return response()->json(array_merge(['error' => true, 'message' => $msg], $this->cartPayload()), 422);
+        }
+
+        return redirect()->back()->with('error', $msg);
+    }
+
     if ($cartItem) {
         $cartItem->quantity += 1;
         $cartItem->save();
@@ -142,44 +157,64 @@ class CartController extends Controller
             return $item->product->price * $item->quantity;
         });
 
-        $order = DB::transaction(function () use ($request, $cartItems, $total) {
-            $order = Order::create([
-                'user_id'         => auth()->id(),
-                'total'           => $total,
-                'estado'          => 'confirmado',
-                'nombre_completo' => $request->nombre_completo,
-                'dni'             => $request->dni,
-                'direccion'       => $request->direccion,
-                'ciudad'          => $request->ciudad,
-                'localidad'       => $request->localidad,
-                'metodo_pago'     => $request->metodo_pago,
-            ]);
+        try {
+            $order = DB::transaction(function () use ($request, $cartItems, $total) {
+                // Bloqueamos las filas de productos y validamos stock real antes de tocar nada
+                $productos = [];
+                foreach ($cartItems as $item) {
+                    $prod = Product::lockForUpdate()->find($item->product_id);
+                    $disponible = $prod->disponibleParaTalle($item->talle);
 
-            foreach ($cartItems as $item) {
-                OrderItem::create([
-                    'order_id'   => $order->id,
-                    'product_id' => $item->product_id,
-                    'quantity'   => $item->quantity,
-                    'talle'      => $item->talle,
-                    'price'      => $item->product->price,
+                    if ($item->quantity > $disponible) {
+                        $talleTxt = $item->talle ? ' (talle ' . strtoupper($item->talle) . ')' : '';
+                        throw new \RuntimeException(
+                            "\"{$prod->name}\"{$talleTxt} ya no tiene stock suficiente. Disponible: {$disponible}."
+                        );
+                    }
+
+                    $productos[$item->id] = $prod;
+                }
+
+                $order = Order::create([
+                    'user_id'         => auth()->id(),
+                    'total'           => $total,
+                    'estado'          => 'confirmado',
+                    'nombre_completo' => $request->nombre_completo,
+                    'dni'             => $request->dni,
+                    'direccion'       => $request->direccion,
+                    'ciudad'          => $request->ciudad,
+                    'localidad'       => $request->localidad,
+                    'metodo_pago'     => $request->metodo_pago,
                 ]);
 
-                $prod = $item->product;
-                if ($prod->stock_talles && $item->talle && isset($prod->stock_talles[$item->talle])) {
-                    $st = $prod->stock_talles;
-                    $st[$item->talle] = max(0, $st[$item->talle] - $item->quantity);
-                    $prod->stock_talles = $st;
-                    $prod->stock = array_sum($st);
-                } else {
-                    $prod->stock = max(0, $prod->stock - $item->quantity);
+                foreach ($cartItems as $item) {
+                    OrderItem::create([
+                        'order_id'   => $order->id,
+                        'product_id' => $item->product_id,
+                        'quantity'   => $item->quantity,
+                        'talle'      => $item->talle,
+                        'price'      => $item->product->price,
+                    ]);
+
+                    $prod = $productos[$item->id];
+                    if ($prod->stock_talles && $item->talle && isset($prod->stock_talles[$item->talle])) {
+                        $st = $prod->stock_talles;
+                        $st[$item->talle] -= $item->quantity;
+                        $prod->stock_talles = $st;
+                        $prod->stock = array_sum($st);
+                    } else {
+                        $prod->stock -= $item->quantity;
+                    }
+                    $prod->save();
                 }
-                $prod->save();
-            }
 
-            CartItem::where('user_id', auth()->id())->delete();
+                CartItem::where('user_id', auth()->id())->delete();
 
-            return $order;
-        });
+                return $order;
+            });
+        } catch (\RuntimeException $e) {
+            return redirect('/carrito/checkout')->with('error', $e->getMessage());
+        }
 
         try {
             $order->load('items.product');

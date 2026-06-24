@@ -29,9 +29,63 @@
         <div class="lisbon-success">{{ session('success') }}</div>
     @endif
 
+    {{-- ── Filtros y búsqueda ── --}}
+    <form action="/admin/productos" method="GET" class="admin-filtros mb-4" id="filtrosProductos">
+        <input type="text" name="buscar" value="{{ request('buscar') }}" placeholder="BUSCAR POR NOMBRE..."
+               class="lisbon-input" style="font-size: 15px; flex: 2; min-width: 220px;"
+               oninput="buscarConDebounce()" autocomplete="off">
+
+        <select name="categoria" class="lisbon-input" style="font-size: 15px; flex: 1; min-width: 160px; appearance: none; cursor: pointer;" onchange="document.getElementById('filtrosProductos').submit()">
+            <option value="">TODAS LAS CATEGORÍAS</option>
+            @foreach($categories as $category)
+                <option value="{{ $category->id }}" {{ request('categoria') == $category->id ? 'selected' : '' }}>
+                    {{ strtoupper($category->name) }}
+                </option>
+            @endforeach
+        </select>
+
+        <select name="genero" class="lisbon-input" style="font-size: 15px; flex: 1; min-width: 140px; appearance: none; cursor: pointer;" onchange="document.getElementById('filtrosProductos').submit()">
+            <option value="">TODOS LOS GÉNEROS</option>
+            <option value="hombre" {{ request('genero') === 'hombre' ? 'selected' : '' }}>HOMBRE</option>
+            <option value="mujer" {{ request('genero') === 'mujer' ? 'selected' : '' }}>MUJER</option>
+            <option value="unisex" {{ request('genero') === 'unisex' ? 'selected' : '' }}>UNISEX</option>
+        </select>
+
+        <select name="estado" class="lisbon-input" style="font-size: 15px; flex: 1; min-width: 140px; appearance: none; cursor: pointer;" onchange="document.getElementById('filtrosProductos').submit()">
+            <option value="">TODOS LOS ESTADOS</option>
+            <option value="activo" {{ request('estado') === 'activo' ? 'selected' : '' }}>ACTIVO</option>
+            <option value="inactivo" {{ request('estado') === 'inactivo' ? 'selected' : '' }}>INACTIVO</option>
+        </select>
+
+        <button type="submit" class="btn-lisbon-filled" style="font-size: 14px; padding: 13px 26px; white-space: nowrap;">BUSCAR</button>
+        @if(request('buscar') || request('categoria') || request('genero') || request('estado'))
+            <a href="/admin/productos" class="btn-lisbon-ghost" style="font-size: 14px; padding: 13px 22px; white-space: nowrap;">LIMPIAR</a>
+        @endif
+    </form>
+
+    <script>
+        let temporizadorBusqueda;
+        function buscarConDebounce() {
+            clearTimeout(temporizadorBusqueda);
+            temporizadorBusqueda = setTimeout(function() {
+                document.getElementById('filtrosProductos').submit();
+            }, 450);
+        }
+    </script>
+
+    <p style="font-size: 14px; color: var(--text-3); letter-spacing: 0.06em; margin-bottom: 1.5rem;">
+        {{ $products->total() }} {{ $products->total() === 1 ? 'PRODUCTO ENCONTRADO' : 'PRODUCTOS ENCONTRADOS' }}
+    </p>
+
+    @if($products->isEmpty())
+        <div style="border: 1px solid var(--border); padding: 4rem; text-align: center;">
+            <p style="font-size: 16px; letter-spacing: 0.14em; color: var(--text-3);">NO ENCONTRAMOS PRODUCTOS CON ESOS FILTROS.</p>
+        </div>
+    @else
     <table class="lisbon-table" style="font-size: 16px;">
         <thead>
             <tr>
+                <th style="font-size: 14px;"></th>
                 <th style="font-size: 14px;">#</th>
                 <th style="font-size: 14px;">NOMBRE</th>
                 <th style="font-size: 14px;">CATEGORÍA</th>
@@ -44,6 +98,16 @@
         <tbody>
             @foreach($products as $product)
             <tr>
+                <td style="width: 64px;">
+                    @if($product->image)
+                        <img src="/img/{{ $product->image }}" alt="{{ $product->name }}"
+                             style="width:50px; height:50px; object-fit:cover; background:var(--bg-off);">
+                    @else
+                        <div style="width:50px; height:50px; background:var(--bg-off); display:flex; align-items:center; justify-content:center;">
+                            <span style="font-size:9px; color:var(--border); letter-spacing:0.05em;">S/IMG</span>
+                        </div>
+                    @endif
+                </td>
                 <td style="color: var(--text-3); font-size: 15px;">{{ $product->id }}</td>
                 <td style="color: var(--text-1); letter-spacing: 1px; font-size: 16px;">{{ $product->name }}</td>
                 <td style="font-size: 16px;">{{ $product->category->name }}</td>
@@ -87,6 +151,23 @@
         </tbody>
     </table>
 
+    <div class="mt-4">
+        {{ $products->links('pagination::bootstrap-5') }}
+    </div>
+    @endif
+
 </div>
+
+<style>
+.admin-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    border: 1px solid var(--border);
+    padding: 18px;
+    background: var(--bg-off);
+}
+</style>
 
 @endsection

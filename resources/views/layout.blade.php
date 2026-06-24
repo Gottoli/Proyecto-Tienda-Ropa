@@ -1056,10 +1056,11 @@
             body: new FormData(form),
             headers: { 'Accept': 'application/json' },
         })
-        .then(function(r) { return r.ok ? r.json() : Promise.reject(); })
-        .then(function(data) {
-            showToast(data.message || 'PRODUCTO AGREGADO →');
-            renderCartDrawer(data);
+        .then(function(r) { return r.json().then(function(data) { return { ok: r.ok, data: data }; }); })
+        .then(function(res) {
+            showToast(res.data.message || (res.ok ? 'PRODUCTO AGREGADO →' : 'NO SE PUDO AGREGAR.'));
+            if (!res.ok) return;
+            renderCartDrawer(res.data);
             openCartDrawer();
         })
         .catch(function() { form.submit(); })
@@ -1180,8 +1181,11 @@
             body: method === 'DELETE' ? null : body,
             headers: { 'Accept': 'application/json', 'X-CSRF-TOKEN': csrfToken },
         })
-        .then(function(r) { return r.json(); })
-        .then(function(data) { renderCartDrawer(data); })
+        .then(function(r) { return r.json().then(function(data) { return { ok: r.ok, data: data }; }); })
+        .then(function(res) {
+            renderCartDrawer(res.data);
+            if (!res.ok) showToast(res.data.message || 'NO HAY MÁS STOCK DISPONIBLE.');
+        })
         .catch(function() { if (row) row.style.opacity = '1'; });
     });
 

@@ -13,6 +13,9 @@
     @if(session('success'))
         <div class="lisbon-success">{{ session('success') }}</div>
     @endif
+    @if(session('error'))
+        <div class="lisbon-error">{{ session('error') }}</div>
+    @endif
 
     @if($cartItems->isEmpty())
         <p style="font-size: 15px; font-weight: 500; letter-spacing: 0.2em; color: var(--text-3); margin: 4rem 0 2rem;">TU CARRITO ESTÁ VACÍO.</p>
