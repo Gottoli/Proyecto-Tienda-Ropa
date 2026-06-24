@@ -20,7 +20,7 @@
 
 -- Volcando datos para la tabla lisbon.cart_items: ~0 rows (aproximadamente)
 
--- Volcando datos para la tabla lisbon.categories: ~4 rows (aproximadamente)
+-- Volcando datos para la tabla lisbon.categories: ~5 rows (aproximadamente)
 INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `active`, `created_at`, `updated_at`) VALUES
 	(1, 'Remeras', 'remeras', 'Remeras de todo tipo', 1, '2026-06-16 09:31:20', '2026-06-16 09:31:20'),
 	(2, 'Pantalones', 'pantalones', 'Jeans y pantalones', 1, '2026-06-16 09:31:20', '2026-06-18 14:59:40'),
@@ -38,29 +38,31 @@ INSERT INTO `consultas` (`id`, `nombre`, `email`, `motivo`, `consulta`, `leida`,
 
 -- Volcando datos para la tabla lisbon.jobs: ~0 rows (aproximadamente)
 
--- Volcando datos para la tabla lisbon.migrations: ~12 rows (aproximadamente)
+-- Volcando datos para la tabla lisbon.migrations: ~19 rows (aproximadamente)
 INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
-	(1, '0001_01_01_000000_create_users_table', 1),
-	(2, '0001_01_01_000001_create_cache_table', 1),
-	(3, '0001_01_01_000002_create_jobs_table', 1),
-	(4, '2026_06_16_044000_create_categories_table', 1),
-	(5, '2026_06_16_044242_create_products_table', 1),
-	(6, '2026_06_16_052245_add_rol_to_users_table', 2),
-	(7, '2026_06_16_070724_create_cart_items_table', 3),
-	(8, '2026_06_16_081015_create_consultas_table', 4),
-	(9, '2026_06_16_102423_create_orders_table', 5),
-	(10, '2026_06_16_102424_create_order_items_table', 5),
-	(11, '2026_06_16_110620_add_talle_to_products_table', 6),
-	(12, '2026_06_16_110621_add_talle_to_cart_items_table', 6),
-	(13, '2026_06_18_115708_add_images_to_products_table', 7),
-	(14, '2026_06_21_221805_add_stock_talles_to_products_table', 8),
-	(15, '2026_06_21_221807_add_talle_to_order_items_table', 8),
-	(16, '2026_06_21_235633_add_checkout_fields_to_orders_table', 9),
-	(17, '2026_06_23_014223_add_genero_to_products_table', 10),
-	(18, '2026_06_23_020946_add_profile_fields_to_users_table', 11),
-	(19, '2026_06_23_035137_create_newsletter_subscribers_table', 12);
+	(1, '0001_01_01_000000_crear_tabla_usuarios', 1),
+	(2, '0001_01_01_000001_crear_tabla_cache', 1),
+	(3, '0001_01_01_000002_crear_tabla_trabajos', 1),
+	(4, '2026_06_16_044000_crear_tabla_categorias', 1),
+	(5, '2026_06_16_044242_crear_tabla_productos', 1),
+	(6, '2026_06_16_052245_agregar_rol_a_usuarios', 2),
+	(7, '2026_06_16_070724_crear_tabla_items_carrito', 3),
+	(8, '2026_06_16_081015_crear_tabla_consultas', 4),
+	(9, '2026_06_16_102423_crear_tabla_ordenes', 5),
+	(10, '2026_06_16_102424_crear_tabla_items_orden', 5),
+	(11, '2026_06_16_110620_agregar_talle_a_productos', 6),
+	(12, '2026_06_16_110621_agregar_talle_a_items_carrito', 6),
+	(13, '2026_06_18_115708_agregar_imagenes_a_productos', 7),
+	(14, '2026_06_21_221805_agregar_stock_talles_a_productos', 8),
+	(15, '2026_06_21_221807_agregar_talle_a_items_orden', 8),
+	(16, '2026_06_21_235633_agregar_campos_checkout_a_ordenes', 9),
+	(17, '2026_06_23_014223_agregar_genero_a_productos', 10),
+	(18, '2026_06_23_020946_agregar_campos_perfil_a_usuarios', 11),
+	(19, '2026_06_23_035137_crear_tabla_suscriptores_newsletter', 12);
 
--- Volcando datos para la tabla lisbon.order_items: ~13 rows (aproximadamente)
+-- Volcando datos para la tabla lisbon.newsletter_subscribers: ~0 rows (aproximadamente)
+
+-- Volcando datos para la tabla lisbon.order_items: ~21 rows (aproximadamente)
 INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `quantity`, `talle`, `price`, `created_at`, `updated_at`) VALUES
 	(1, 1, 1, 2, NULL, 50000.00, '2026-06-16 13:36:22', '2026-06-16 13:36:22'),
 	(2, 1, 3, 1, NULL, 12000.00, '2026-06-16 13:36:22', '2026-06-16 13:36:22'),
@@ -84,7 +86,7 @@ INSERT INTO `order_items` (`id`, `order_id`, `product_id`, `quantity`, `talle`, 
 	(20, 14, 2, 1, 'S', 6500.00, '2026-06-23 05:24:59', '2026-06-23 05:24:59'),
 	(21, 15, 1, 1, 'M', 50000.00, '2026-06-23 06:55:38', '2026-06-23 06:55:38');
 
--- Volcando datos para la tabla lisbon.orders: ~10 rows (aproximadamente)
+-- Volcando datos para la tabla lisbon.orders: ~15 rows (aproximadamente)
 INSERT INTO `orders` (`id`, `user_id`, `total`, `estado`, `nombre_completo`, `dni`, `direccion`, `ciudad`, `localidad`, `metodo_pago`, `created_at`, `updated_at`) VALUES
 	(1, 3, 112000.00, 'confirmado', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-16 13:36:22', '2026-06-16 13:36:22'),
 	(2, 3, 150000.00, 'confirmado', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-16 13:37:15', '2026-06-16 13:37:15'),
@@ -104,7 +106,7 @@ INSERT INTO `orders` (`id`, `user_id`, `total`, `estado`, `nombre_completo`, `dn
 
 -- Volcando datos para la tabla lisbon.password_reset_tokens: ~0 rows (aproximadamente)
 
--- Volcando datos para la tabla lisbon.products: ~7 rows (aproximadamente)
+-- Volcando datos para la tabla lisbon.products: ~32 rows (aproximadamente)
 INSERT INTO `products` (`id`, `name`, `description`, `price`, `stock`, `stock_talles`, `talles`, `image`, `images`, `category_id`, `genero`, `active`, `created_at`, `updated_at`) VALUES
 	(1, 'Remera Negra Básica', 'Remera de algodón 100%, corte regular, oversize', 50000.00, 3, '{"XS":1,"S":1,"M":0,"L":0,"XL":1}', 'XS,S,M,L,XL', 'remera1.jpg', NULL, 1, 'hombre', 1, '2026-06-16 09:32:11', '2026-06-23 06:55:38'),
 	(2, 'Remera Blanca Oversize', 'Remera oversize, tela premium', 6500.00, 3, '{"XS":1,"S":0,"M":1,"L":0,"XL":1}', 'XS,S,M,L,XL', 'remera2.jpg', NULL, 1, 'hombre', 1, '2026-06-16 09:32:11', '2026-06-23 05:24:59'),
@@ -139,12 +141,13 @@ INSERT INTO `products` (`id`, `name`, `description`, `price`, `stock`, `stock_ta
 	(31, 'Campera Básica', 'Campera esencial de la colección. Sin capucha, corte recto.', 19000.00, 12, '{"S":2,"M":2,"L":2,"XL":2,"XXL":2}', 'S,M,L,XL,XXL', 'campera8.webp', NULL, 5, 'hombre', 1, '2026-06-18 14:59:40', '2026-06-23 04:47:17'),
 	(32, 'Bernie Tee', 'Camiseta Estampada con Logo Bernie en grande', 140000.00, 10, '{"S":5,"M":2,"L":1,"XL":2}', 'S,M,L,XL', '1782082477_image0.jpeg', NULL, 1, 'hombre', 1, '2026-06-22 01:48:59', '2026-06-23 04:47:17');
 
--- Volcando datos para la tabla lisbon.sessions: ~3 rows (aproximadamente)
+-- Volcando datos para la tabla lisbon.sessions: ~12 rows (aproximadamente)
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
 	('2BWUvIrJSe8GH9s3YhAog7ihjdTRl8U4W1bYKTGs', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJaS09nb2U2ck50MDhGRFFlOXJHMmhWWHRFZ0dWWlI1WkNYUjk4WFN5IiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL3Byb3llY3RvLXRpZW5kYS1yb3BhLnRlc3RcL2xvZ2luIiwicm91dGUiOiJsb2dpbiJ9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX0sInVybCI6eyJpbnRlbmRlZCI6Imh0dHA6XC9cL3Byb3llY3RvLXRpZW5kYS1yb3BhLnRlc3RcL2FkbWluXC9wcm9kdWN0b3MifX0=', 1781785780),
 	('7c3I5CSwA2VQxNAqFYHqtOznEfKuhsc90N5vFXmG', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJNRkFsbnh0aFJKdnpLbjlsTmY5Q2U4RjFNbXozSWo2eDRMMzB0SXZDIiwidXJsIjp7ImludGVuZGVkIjoiaHR0cDpcL1wvcHJveWVjdG8tdGllbmRhLXJvcGEudGVzdFwvYWRtaW5cL3Byb2R1Y3RvcyJ9LCJfcHJldmlvdXMiOnsidXJsIjoiaHR0cDpcL1wvcHJveWVjdG8tdGllbmRhLXJvcGEudGVzdFwvbG9naW4iLCJyb3V0ZSI6ImxvZ2luIn0sIl9mbGFzaCI6eyJvbGQiOltdLCJuZXciOltdfX0=', 1782104559),
 	('c297Ct7R0mEuGS6IehXaky84JJ6RV83fDoeKcGHi', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiI4dnNQck5CbndMNHNMWmpiMVUzMUV5WHJJYktQbDB0VU5sTjRZcHZOIiwidXJsIjp7ImludGVuZGVkIjoiaHR0cDpcL1wvcHJveWVjdG8tdGllbmRhLXJvcGEudGVzdFwvYWRtaW4ifSwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL3Byb3llY3RvLXRpZW5kYS1yb3BhLnRlc3RcL2FkbWluIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX0sImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjoxfQ==', 1782214461),
 	('FtUeqBFgBEkiH25OSJhvzrArNb9YCx3Rc5rCngI5', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJOVWFlUXptQkZGTU5KS1VrM2lpem5uNHRVME5qZ0JTdm8zUnJNN2RBIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL3Byb3llY3RvLXRpZW5kYS1yb3BhLnRlc3RcL2FkbWluIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX0sImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjoxfQ==', 1781761346),
+	('hdoPF8GZUJ0ROpwrO9Rat94rJ5kobtMIamoka9vr', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJFaFFrWml0ekpwRjBTbllsY1lKT0RLcjNhM1pIcE1UcWFrNHVWTjVkIiwidXJsIjp7ImludGVuZGVkIjoiaHR0cDpcL1wvcHJveWVjdG8tdGllbmRhLXJvcGEudGVzdFwvYWRtaW4ifSwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL3Byb3llY3RvLXRpZW5kYS1yb3BhLnRlc3RcL2FkbWluXC9wcm9kdWN0b3M/YnVzY2FyPXJlbWVyYSZjYXRlZ29yaWE9JmVzdGFkbz0mZ2VuZXJvPSIsInJvdXRlIjpudWxsfSwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119LCJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI6MX0=', 1782282363),
 	('lCggrcN6iUBNCPL7M58xJ7GsfzboGTVWxvWlMSX4', 1, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiI0OWFwMWIyMnkwOXBvdzZXcTl5OFpuUE5SYnVDZ2FadmZua2JEOUx5IiwiX2ZsYXNoIjp7Im9sZCI6W10sIm5ldyI6W119LCJfcHJldmlvdXMiOnsidXJsIjoiaHR0cDpcL1wvcHJveWVjdG8tdGllbmRhLXJvcGEudGVzdFwvY29uc3VsdGFzIiwicm91dGUiOm51bGx9LCJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI6MX0=', 1781744898),
 	('PA7f4DEYeH6IUol4oBEbl6PqIlzPZaleagCYOiVc', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJJbGlTcFJnZ0hSY2QwbWNtOXM2Q2R1MW5SWGJZS0NoQkVqcVlMSnVoIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL3Byb3llY3RvLXRpZW5kYS1yb3BhLnRlc3RcL2FkbWluIiwicm91dGUiOm51bGx9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1781784638),
 	('r2rcav3vtCqUF28TQcBlNT3RlJHcen46uejZMUnh', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36', 'eyJfdG9rZW4iOiJhODVUR2xNVENvaGNzMm1kTEZBU281SWdxSVFhN0RWbk93Wk8yaTBFIiwiX3ByZXZpb3VzIjp7InVybCI6Imh0dHA6XC9cL3Byb3llY3RvLXRpZW5kYS1yb3BhLnRlc3RcL2xvZ2luIiwicm91dGUiOiJsb2dpbiJ9LCJfZmxhc2giOnsib2xkIjpbXSwibmV3IjpbXX19', 1781940966),
